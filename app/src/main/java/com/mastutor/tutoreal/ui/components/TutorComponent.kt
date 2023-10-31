@@ -49,9 +49,10 @@ fun MatchTutorComponent(
                 contentDescription = "User Photo",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(98.dp)
                     .padding(end = 20.dp)
                     .clip(CircleShape)
+                    .size(78.dp)
+
             )
             Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier){
                 Text(
@@ -82,7 +83,7 @@ fun MatchTutorComponent(
                 .weight(1F))
             Box(contentAlignment = Alignment.Center,modifier = Modifier
                 .clip(CircleShape).background(color = MaterialTheme.colorScheme.primary)
-                .size(98.dp)
+                .size(78.dp)
             ){
                 Text(text = "$percentage%", color = Color.White)
             }
@@ -106,9 +107,9 @@ fun TutorComponent(
                 contentDescription = "User Photo",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(98.dp)
                     .padding(end = 20.dp)
                     .clip(CircleShape)
+                    .size(78.dp)
             )
             Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier){
                 Text(

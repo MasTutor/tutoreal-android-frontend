@@ -25,29 +25,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TutorealTheme {
-                Column(modifier = Modifier.background(color = MaterialTheme.colorScheme.secondary)) {
-                    TutorComponent(
-                        photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
-                        name = "Jim Burton",
-                        job = "Con Artist",
-                        price = 200000,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(160.dp)
-                            .padding(20.dp)
-                    )
-                    MatchTutorComponent(
-                        photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
-                        name = "Jim Burton",
-                        job = "Con Artist",
-                        price = 200000,
-                        percentage = 98.0,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(160.dp)
-                            .padding(10.dp)
-                    )
-                }
             }
         }
     }
