@@ -15,7 +15,7 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val fontName = GoogleFont(name = "Urbaninst")
+val fontName = GoogleFont(name = "Urbanist")
 val fontFamily = FontFamily(
     Font(googleFont = fontName, fontProvider =  provider)
 )
@@ -24,11 +24,28 @@ val fontFamily = FontFamily(
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = fontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    bodySmall =
+    TextStyle(
+        fontFamily = fontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    bodyMedium =
+    TextStyle(
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
+
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
