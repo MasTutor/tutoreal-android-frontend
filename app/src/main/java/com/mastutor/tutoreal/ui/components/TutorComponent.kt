@@ -39,7 +39,9 @@ fun MatchTutorComponent(
     price: Long,
     percentage: Double,
 ){
-    Card(modifier = modifier, colors = CardDefaults.cardColors(containerColor = Color.White), shape = CircleShape){
+    Card(modifier = modifier.fillMaxWidth()
+        .height(140.dp)
+        .padding(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White), shape = CircleShape){
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start, modifier = Modifier
             .fillMaxSize()
             .padding(vertical = 20.dp, horizontal = 10.dp)) {
@@ -97,7 +99,9 @@ fun TutorComponent(
     job: String,
     price: Long
 ){
-    Card(shape = RoundedCornerShape(24.dp), modifier = modifier, colors = CardDefaults.cardColors(containerColor = Color.White)){
+    Card(shape = RoundedCornerShape(24.dp), modifier = modifier.fillMaxWidth()
+        .height(140.dp)
+        .padding(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White)){
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start, modifier = Modifier
             .fillMaxSize()
             .padding(vertical = 20.dp, horizontal = 10.dp)) {
@@ -143,16 +147,18 @@ fun TutorComponent(
 @Composable
 fun TutorComponentPreview(){
     TutorealTheme {
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.primary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ){
             TutorComponent(
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
                 name = "Jim Burton",
                 job = "Con Artist",
                 price = 200000,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp)
-                    .padding(10.dp)
             )
             MatchTutorComponent(
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
@@ -160,10 +166,6 @@ fun TutorComponentPreview(){
                 job = "Con Artist",
                 price = 200000,
                 percentage = 98.0,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(160.dp)
-                    .padding(10.dp)
             )
         }
     }
