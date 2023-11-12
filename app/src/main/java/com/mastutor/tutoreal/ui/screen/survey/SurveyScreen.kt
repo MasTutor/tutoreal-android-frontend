@@ -103,6 +103,7 @@ fun SurveyContent(
                 )
             }
         }
+        //is this good? what if user's screen is small? better use scrollable with padding or stay like this?
         Spacer(modifier = Modifier
             .size(8.dp)
             .weight(1F))
