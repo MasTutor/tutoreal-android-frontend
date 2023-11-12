@@ -37,32 +37,75 @@ fun UserEditComponent(
     icon: ImageVector,
     data: String,
     modifier: Modifier = Modifier
-){
-    Card(colors = CardDefaults.cardColors(containerColor = Color.White), modifier = modifier
-        .fillMaxWidth()
-        .height(88.dp)) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxSize()) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start){
-                Icon(imageVector = icon, contentDescription = icon.name, modifier = Modifier
-                    .padding(end = 20.dp, start = 10.dp)
-                    .size(64.dp), tint = MaterialTheme.colorScheme.primary)
-                Text(text = data, style = MaterialTheme.typography.bodySmall.copy(fontSize = 16.sp, fontWeight = FontWeight.SemiBold))
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color.White), modifier = modifier
+            .fillMaxWidth()
+            .height(88.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    imageVector = icon, contentDescription = icon.name, modifier = Modifier
+                        .padding(end = 20.dp, start = 10.dp)
+                        .size(64.dp), tint = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = data,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
             }
 
-            Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = stringResource(
-                R.string.keyboard_arrow_right), modifier = Modifier.size(64.dp))
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = stringResource(
+                    R.string.keyboard_arrow_right
+                ), modifier = Modifier.size(64.dp)
+            )
         }
     }
 }
 
-@Preview(device = "id:pixel_5", showSystemUi = true, backgroundColor = 0xFFE8F0F9, showBackground = true)
+@Preview(
+    device = "id:pixel_5",
+    showSystemUi = true,
+    backgroundColor = 0xFFE8F0F9,
+    showBackground = true
+)
 @Composable
-fun UserEditComponentPreview(){
+fun UserEditComponentPreview() {
     TutorealTheme {
-        Column(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primary), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            UserEditComponent(icon = Icons.Rounded.Person, data = "John Madden", modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 20.dp) )
-            UserEditComponent(icon = Icons.Rounded.Call, data = "+6285965434232", modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp) )
-            UserEditComponent(icon = Icons.Rounded.Face, data = "Male", modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp) )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.primary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            UserEditComponent(
+                icon = Icons.Rounded.Person,
+                data = "John Madden",
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 20.dp)
+            )
+            UserEditComponent(
+                icon = Icons.Rounded.Call,
+                data = "+6285965434232",
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp)
+            )
+            UserEditComponent(
+                icon = Icons.Rounded.Face,
+                data = "Male",
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp)
+            )
         }
     }
 }

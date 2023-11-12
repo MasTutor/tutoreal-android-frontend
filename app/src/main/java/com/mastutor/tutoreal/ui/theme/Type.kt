@@ -17,7 +17,7 @@ val provider = GoogleFont.Provider(
 
 val fontName = GoogleFont(name = "Urbanist")
 val fontFamily = FontFamily(
-    Font(googleFont = fontName, fontProvider =  provider)
+    Font(googleFont = fontName, fontProvider = provider)
 )
 
 // Set of Material typography styles to start with

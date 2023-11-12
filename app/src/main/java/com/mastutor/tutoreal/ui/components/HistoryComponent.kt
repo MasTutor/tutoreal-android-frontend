@@ -1,5 +1,5 @@
 package com.mastutor.tutoreal.ui.components
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,12 +46,20 @@ fun HistoryComponent(
     date: String,
     status: StatusData,
     modifier: Modifier = Modifier
-){
-    Card(shape = RoundedCornerShape(24.dp), modifier = modifier, colors = CardDefaults.cardColors(containerColor = Color.White)){
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier
-            .fillMaxWidth()
-            .height(140.dp)
-            .padding(vertical = 20.dp, horizontal = 10.dp)) {
+) {
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(140.dp)
+                .padding(vertical = 20.dp, horizontal = 10.dp)
+        ) {
             AsyncImage(
                 model = photoUrl,
                 contentDescription = "User Photo",
@@ -68,40 +75,78 @@ fun HistoryComponent(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 10.dp).width(160.dp)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .width(160.dp)
                 )
-                Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Filled.Person, contentDescription = "Person ", modifier = Modifier
-                        .padding(end = 10.dp, start = 10.dp)
-                        .size(32.dp), tint = MaterialTheme.colorScheme.primary)
-                    Text(text = tutorName, style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp))
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Person ",
+                        modifier = Modifier
+                            .padding(end = 10.dp, start = 10.dp)
+                            .size(32.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = tutorName,
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp)
+                    )
                 }
-                Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Person ", modifier = Modifier
-                        .padding(end = 10.dp, start = 10.dp)
-                        .size(32.dp), tint = MaterialTheme.colorScheme.primary)
-                    Text(text = date, style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp))
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.DateRange,
+                        contentDescription = "Person ",
+                        modifier = Modifier
+                            .padding(end = 10.dp, start = 10.dp)
+                            .size(32.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = date,
+                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp)
+                    )
                 }
             }
-            Spacer(modifier = Modifier
-                .size(8.dp)
-                .weight(1F))
+            Spacer(
+                modifier = Modifier
+                    .size(8.dp)
+                    .weight(1F)
+            )
 
             Column {
-                Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = stringResource(
-                    R.string.keyboard_arrow_right), modifier = Modifier.size(64.dp))
-                Spacer(modifier = Modifier
-                    .size(8.dp)
-                    .weight(1F))
-                TagComponent(name = status.status, color = status.color )
+                Icon(
+                    imageVector = Icons.Filled.KeyboardArrowRight,
+                    contentDescription = stringResource(
+                        R.string.keyboard_arrow_right
+                    ),
+                    modifier = Modifier.size(64.dp)
+                )
+                Spacer(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .weight(1F)
+                )
+                TagComponent(name = status.status, color = status.color)
             }
         }
     }
 }
 
-@Preview(device = "id:pixel_5", showSystemUi = true, backgroundColor = 0xFFE8F0F9, showBackground = true)
+@Preview(
+    device = "id:pixel_5",
+    showSystemUi = true,
+    backgroundColor = 0xFFE8F0F9,
+    showBackground = true
+)
 @Composable
-fun HistoryComponentPreview(){
+fun HistoryComponentPreview() {
     TutorealTheme {
         Column(
             modifier = Modifier
@@ -109,8 +154,15 @@ fun HistoryComponentPreview(){
                 .background(color = MaterialTheme.colorScheme.primary),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
-            HistoryComponent(photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg", title = "Scamming People" , tutorName = "Tim Burton" , date = "12/09/2023" , status = StatusData(status = "Pending", color = Color.Yellow), modifier = Modifier.padding(10.dp) )
+        ) {
+            HistoryComponent(
+                photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
+                title = "Scamming People",
+                tutorName = "Tim Burton",
+                date = "12/09/2023",
+                status = StatusData(status = "Pending", color = Color.Yellow),
+                modifier = Modifier.padding(10.dp)
+            )
         }
     }
 }
