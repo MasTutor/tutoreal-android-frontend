@@ -3,7 +3,6 @@ package com.mastutor.tutoreal.ui.screen.survey
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +34,7 @@ import com.mastutor.tutoreal.ui.theme.TutorealTheme
 
 //Stateful
 @Composable
-fun SurveyScreen(){
+fun SurveyScreen() {
 
 }
 
@@ -49,7 +47,7 @@ fun SurveyContent(
     onChoiceSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     onNextClicked: () -> Unit,
-){
+) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = modifier
@@ -73,28 +71,30 @@ fun SurveyContent(
                 .size(160.dp)
 
         )
-        choices.forEach {choice ->
+        choices.forEach { choice ->
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
-                .height(44.dp)
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+                    .height(44.dp)
 
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(8.dp)
-                )
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(8.dp)
+                    )
 
-                .background(
-                    color = if (choice == selectedChoice) MaterialTheme.colorScheme.primary else Color.Transparent,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .selectable(selected = (choice == selectedChoice), onClick = {onChoiceSelected(choice)})
+                    .background(
+                        color = if (choice == selectedChoice) MaterialTheme.colorScheme.primary else Color.Transparent,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .selectable(
+                        selected = (choice == selectedChoice),
+                        onClick = { onChoiceSelected(choice) })
 
-            ){
+            ) {
                 Text(
                     text = choice,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
@@ -103,27 +103,39 @@ fun SurveyContent(
                 )
             }
         }
-        //is this good? what if user's screen is small? better use scrollable with padding or stay like this?
-        Spacer(modifier = Modifier
-            .size(8.dp)
-            .weight(1F))
-        Button(onClick = onNextClicked, modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)) {
+//is this good? what if user's screen is small? better use scrollable with padding or stay like this?
+        Spacer(
+            modifier = Modifier
+                .size(8.dp)
+                .weight(1F)
+        )
+        Button(
+            onClick = onNextClicked, modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)
+        ) {
             Text("Next")
         }
     }
 }
 
-@Preview(device = "id:pixel_5", showSystemUi = true, backgroundColor = 0xFFE8F0F9, showBackground = true)
+@Preview(
+    device = "id:pixel_5",
+    showSystemUi = true,
+    backgroundColor = 0xFFE8F0F9,
+    showBackground = true
+)
 @Composable
-fun SurveyContentPreview(){
+fun SurveyContentPreview() {
     TutorealTheme {
         val choices = listOf("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree")
-        var (selectedChoice, onChoiceSelected) = remember {
+        val (selectedChoice, onChoiceSelected) = remember {
             mutableStateOf(choices[0])
         }
-        SurveyContent(question = QuestionData(question = "Apa kamu furry?", questionImg = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg"),
+        SurveyContent(question = QuestionData(
+            question = "Apa kamu furry?",
+            questionImg = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg"
+        ),
             choices = choices,
             selectedChoice = selectedChoice,
             onChoiceSelected = onChoiceSelected,

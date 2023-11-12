@@ -38,13 +38,22 @@ fun MatchTutorComponent(
     job: String,
     price: Long,
     percentage: Double,
-){
-    Card(modifier = modifier.fillMaxWidth()
-        .height(140.dp)
-        .padding(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White), shape = CircleShape){
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start, modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 20.dp, horizontal = 10.dp)) {
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .padding(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = CircleShape
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 20.dp, horizontal = 10.dp)
+        ) {
             AsyncImage(
                 model = photoUrl,
                 contentDescription = "User Photo",
@@ -55,7 +64,7 @@ fun MatchTutorComponent(
                     .size(78.dp)
 
             )
-            Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier){
+            Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier) {
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
@@ -70,27 +79,35 @@ fun MatchTutorComponent(
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
-                Spacer(modifier = Modifier
-                    .size(8.dp)
-                    .weight(1F))
+                Spacer(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .weight(1F)
+                )
                 Text(
                     text = "IDR $price/Session",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,)
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
-            Spacer(modifier = Modifier
-                .size(8.dp)
-                .weight(1F))
-            Box(contentAlignment = Alignment.Center,modifier = Modifier
-                .clip(CircleShape).background(color = MaterialTheme.colorScheme.primary)
-                .size(78.dp)
-            ){
+            Spacer(
+                modifier = Modifier
+                    .size(8.dp)
+                    .weight(1F)
+            )
+            Box(
+                contentAlignment = Alignment.Center, modifier = Modifier
+                    .clip(CircleShape)
+                    .background(color = MaterialTheme.colorScheme.primary)
+                    .size(78.dp)
+            ) {
                 Text(text = "$percentage%", color = Color.White)
             }
         }
     }
 }
+
 @Composable
 fun TutorComponent(
     modifier: Modifier = Modifier,
@@ -98,13 +115,20 @@ fun TutorComponent(
     name: String,
     job: String,
     price: Long
-){
-    Card(shape = RoundedCornerShape(24.dp), modifier = modifier.fillMaxWidth()
-        .height(140.dp)
-        .padding(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White)){
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start, modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 20.dp, horizontal = 10.dp)) {
+) {
+    Card(
+        shape = RoundedCornerShape(24.dp), modifier = modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .padding(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 20.dp, horizontal = 10.dp)
+        ) {
             AsyncImage(
                 model = photoUrl,
                 contentDescription = "User Photo",
@@ -114,7 +138,7 @@ fun TutorComponent(
                     .clip(CircleShape)
                     .size(78.dp)
             )
-            Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier){
+            Column(verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier) {
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
@@ -129,23 +153,31 @@ fun TutorComponent(
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
-                Spacer(modifier = Modifier
-                    .size(8.dp)
-                    .weight(1F))
+                Spacer(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .weight(1F)
+                )
                 Text(
                     text = "IDR $price/Session",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,)
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
 }
 
 
-@Preview(device = "id:pixel_5", showSystemUi = true, backgroundColor = 0xFFE8F0F9, showBackground = true)
+@Preview(
+    device = "id:pixel_5",
+    showSystemUi = true,
+    backgroundColor = 0xFFE8F0F9,
+    showBackground = true
+)
 @Composable
-fun TutorComponentPreview(){
+fun TutorComponentPreview() {
     TutorealTheme {
         Column(
             modifier = Modifier
@@ -153,7 +185,7 @@ fun TutorComponentPreview(){
                 .background(color = MaterialTheme.colorScheme.primary),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
+        ) {
             TutorComponent(
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
                 name = "Jim Burton",
