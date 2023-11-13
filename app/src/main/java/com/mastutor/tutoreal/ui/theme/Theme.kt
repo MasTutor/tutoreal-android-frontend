@@ -10,10 +10,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColorScheme = lightColorScheme(
+private val lightColorScheme = lightColorScheme(
     primary = bluePrimary,
     secondary = secondaryPrimary,
-    tertiary = tertiaryPrimary
+    tertiary = tertiaryPrimary,
+    error = errorPrimary
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -33,7 +34,7 @@ fun TutorealTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = LightColorScheme
+    val colorScheme = lightColorScheme
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
