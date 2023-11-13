@@ -1,6 +1,7 @@
 package com.mastutor.tutoreal.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,12 +37,14 @@ import com.mastutor.tutoreal.ui.theme.TutorealTheme
 fun UserEditComponent(
     icon: ImageVector,
     data: String,
+    onClick:() -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = Color.White), modifier = modifier
             .fillMaxWidth()
             .height(88.dp)
+            .clickable {onClick}
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -94,17 +97,20 @@ fun UserEditComponentPreview() {
             UserEditComponent(
                 icon = Icons.Rounded.Person,
                 data = "John Madden",
-                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 20.dp)
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 20.dp),
+                onClick = {}
             )
             UserEditComponent(
                 icon = Icons.Rounded.Call,
                 data = "+6285965434232",
-                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp)
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp),
+                onClick = {}
             )
             UserEditComponent(
                 icon = Icons.Rounded.Face,
                 data = "Male",
-                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp)
+                modifier = Modifier.padding(start = 40.dp, end = 40.dp, top = 10.dp),
+                onClick = {}
             )
         }
     }
