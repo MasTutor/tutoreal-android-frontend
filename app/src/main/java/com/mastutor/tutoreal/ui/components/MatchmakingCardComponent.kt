@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -51,13 +52,14 @@ fun MatchmakingCardComponent(
                 .align(Alignment.BottomStart)
                 .padding(start = 10.dp)){
                 Text(
-                    text = "Try Our Matchmaking",
+                    text = "Coba Pencocokan Kita",
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 2.dp)
                 )
                 Text(
-                    text = "Find the most suitable tutor",
+                    text = "Temukan pembimbing yang cocok untukmu",
                     style = MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Icon(
