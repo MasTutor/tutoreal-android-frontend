@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -46,7 +47,7 @@ fun MatchmakingOnboardingScreen(
             model = "https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg",
             contentDescription = "Teaching",
             contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary, blendMode = BlendMode.Multiply),
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
@@ -82,7 +83,7 @@ fun MatchmakingOnboardingScreen(
             modifier = Modifier.fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(start = 20.dp)
-                .offset(y = -60.dp)){
+                .offset(y = (-40).dp)){
             Text(
                 text = "Survey Kepribadian",
                 style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
@@ -91,7 +92,7 @@ fun MatchmakingOnboardingScreen(
                     .align(Alignment.Start)
             )
             Text(
-                text = "Sebelum pencocokan dengan pembimbing dimulai kamu akan diarahkan untuk mengisi 25 pertanyaan seputar kepribadian. Klik tombol dibawah untuk melanjutkan",
+                text = "Sebelum pencocokan dengan pembimbing dimulai kamu akan diarahkan untuk mengisi 25 pertanyaan seputar kepribadian. Klik tombol dibawah untuk melanjutkan.",
                 style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 5,
