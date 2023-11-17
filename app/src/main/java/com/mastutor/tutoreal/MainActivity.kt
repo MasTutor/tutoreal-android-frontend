@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import com.mastutor.tutoreal.ui.screen.home.HomeContent
+import com.mastutor.tutoreal.ui.screen.login.LoginScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TutorealTheme {
-                RegisterScreen(modifier = Modifier.fillMaxSize())
+                MainJetpack(modifier = Modifier.fillMaxSize())
             }
         }
     }
