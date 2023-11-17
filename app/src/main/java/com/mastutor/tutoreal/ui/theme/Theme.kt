@@ -14,7 +14,9 @@ private val lightColorScheme = lightColorScheme(
     primary = bluePrimary,
     secondary = secondaryPrimary,
     tertiary = tertiaryPrimary,
-    error = errorPrimary
+    error = errorPrimary,
+    background = secondaryPrimary,
+    surface = secondaryPrimary
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

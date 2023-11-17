@@ -1,6 +1,7 @@
 package com.mastutor.tutoreal.ui.screen.register
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +12,13 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -271,8 +274,8 @@ fun RegisterContent(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp)) {
+                .fillMaxWidth()
+                .padding(bottom = 10.dp)) {
             genders.forEach { gender ->
                 Row(
                     horizontalArrangement = Arrangement.Start,
@@ -289,7 +292,11 @@ fun RegisterContent(
                             onGenderSelected(gender)
 
                                   },
-                        modifier = Modifier.padding(end = 4.dp)
+                        modifier = Modifier.padding(end = 4.dp),
+                        colors = RadioButtonDefaults.colors(
+                            unselectedColor = MaterialTheme.colorScheme.primary,
+                            selectedColor = MaterialTheme.colorScheme.primary
+                        )
                     )
                     Text(
                         text = gender,
@@ -297,6 +304,7 @@ fun RegisterContent(
                             fontWeight = FontWeight.Normal,
                             fontSize = 16.sp
                         ),
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -391,13 +399,18 @@ fun RegisterContent(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp),
+                .padding(bottom = 20.dp),
             visualTransformation = PasswordVisualTransformation()
         )
         Button(
             onClick = onNextClicked, modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp), shape = RoundedCornerShape(16.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.primary
+            ),
+            border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
         ) {
             Text("Register")
         }
