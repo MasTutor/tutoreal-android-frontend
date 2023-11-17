@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastutor.tutoreal.data.remote.LoginResponse
 import com.mastutor.tutoreal.data.remote.RegisterResponse
 import com.mastutor.tutoreal.data.repository.Repository
 import com.mastutor.tutoreal.util.AuthUiState
@@ -15,6 +16,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val repository: Repository): ViewModel(){
+    private val _loginResponse: MutableStateFlow<AuthUiState<LoginResponse>> = MutableStateFlow(AuthUiState.Idle)
+    val loginResponse: StateFlow<AuthUiState<LoginResponse>>
+        get() = _loginResponse
+
+    private val _emailLogin = mutableStateOf("")
+    val emailLogin: State<String> get() = _emailLogin
+
+    private val _passwordLogin = mutableStateOf("")
+    val passwordLogin: State<String> get() = _passwordLogin
+
+    fun changeEmailLogin(email: String){
+        _emailLogin.value = email
+    }
+
+    fun changePasswordLogin(password: String){
+        _passwordLogin.value = password
+    }
+
+    fun login(){
+        viewModelScope.launch {
+            repository.login(email = emailLogin.value, password = passwordLogin.value).collect {
+                _loginResponse.value = it
+            }
+        }
+    }
+
+
     private val _registerResponse: MutableStateFlow<AuthUiState<RegisterResponse>> = MutableStateFlow(AuthUiState.Idle)
     val registerResponse: StateFlow<AuthUiState<RegisterResponse>>
         get() = _registerResponse

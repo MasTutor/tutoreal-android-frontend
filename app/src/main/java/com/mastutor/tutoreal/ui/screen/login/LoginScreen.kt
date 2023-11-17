@@ -1,34 +1,148 @@
 package com.mastutor.tutoreal.ui.screen.login
 
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
+import com.mastutor.tutoreal.util.AuthUiState
+import com.mastutor.tutoreal.util.isEmailValid
+import com.mastutor.tutoreal.viewmodel.AuthViewModel
 
 //Stateful
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AuthViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val email by viewModel.emailLogin
+    val password by viewModel.passwordLogin
 
+    viewModel.loginResponse.collectAsState(initial = AuthUiState.Idle).value.let {uiState ->
+        when(uiState){
+            is AuthUiState.Idle -> {
+                LoginContent(
+                    email = email,
+                    password = password,
+                    onEmailChanged = viewModel::changeEmailLogin,
+                    onPasswordChanged = viewModel::changePasswordLogin,
+                    onLoginClicked = {
+                        if(email.isEmpty() || !isEmailValid(email)){
+                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
+                        }
+                        else if(password.isEmpty()){
+                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            viewModel.login()
+                        }
+                    }
+
+                )
+            }
+            is AuthUiState.Load -> {
+                LoginContent(
+                    email = email,
+                    password = password,
+                    onEmailChanged = {  },
+                    onPasswordChanged = { },
+                    onLoginClicked = {},
+                    modifier = modifier.alpha(0.3f),
+
+                )
+                Column(
+                    modifier = modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Loading")
+                    CircularProgressIndicator(color = Color.Black)
+                }
+            }
+            is AuthUiState.Success -> {
+                LoginContent(
+                    email = email,
+                    password = password,
+                    onEmailChanged = viewModel::changeEmailLogin,
+                    onPasswordChanged = viewModel::changePasswordLogin,
+                    onLoginClicked = {
+                        if(email.isEmpty() || !isEmailValid(email)){
+                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
+                        }
+                        else if(password.isEmpty()){
+                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            viewModel.login()
+                        }
+                    }
+
+                )
+                LaunchedEffect(key1 = true) {
+                    Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                }
+            }
+            is AuthUiState.Failure -> {
+                LoginContent(
+                    email = email,
+                    password = password,
+                    onEmailChanged = viewModel::changeEmailLogin,
+                    onPasswordChanged = viewModel::changePasswordLogin,
+                    onLoginClicked = {
+                        if(email.isEmpty() || !isEmailValid(email)){
+                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
+                        }
+                        else if(password.isEmpty()){
+                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            viewModel.login()
+                        }
+                    }
+
+                )
+                LaunchedEffect(key1 = true) {
+                    Toast.makeText(context, "Gagal cek input, atau cek koneksi internet", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 }
 
 //Stateless
@@ -49,17 +163,25 @@ fun LoginContent(
             .fillMaxSize()
             .padding(start = 10.dp, end = 10.dp, top = 20.dp)
     ) {
-        OutlinedTextField(
+        TextField(
             value = email,
             onValueChange = onEmailChanged,
-            shape = RoundedCornerShape(16.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = MaterialTheme.colorScheme.primary),
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                disabledLabelColor = MaterialTheme.colorScheme.primary,
+                cursorColor = Color.LightGray,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                textColor = Color.White
+            ),
             placeholder = {
                 Text(
-                    text = "email",
+                    text = "Email",
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        color = Color.White
                     )
                 )
             },
@@ -68,22 +190,29 @@ fun LoginContent(
                 fontSize = 16.sp
             ),
             modifier = Modifier
-                .scale(scaleX = 0.9F, scaleY = 0.9F)
                 .fillMaxWidth()
                 .padding(bottom = 10.dp)
 
         )
-        OutlinedTextField(
+        TextField(
             value = password,
             onValueChange = onPasswordChanged,
-            shape = RoundedCornerShape(16.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = MaterialTheme.colorScheme.primary),
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                disabledLabelColor = MaterialTheme.colorScheme.primary,
+                cursorColor = Color.LightGray,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                textColor = Color.White
+            ),
             placeholder = {
                 Text(
-                    text = "password",
+                    text = "Password",
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        color = Color.White
                     )
                 )
             },
@@ -92,9 +221,9 @@ fun LoginContent(
                 fontSize = 16.sp
             ),
             modifier = Modifier
-                .scale(scaleX = 0.9F, scaleY = 0.9F)
                 .fillMaxWidth()
-                .padding(bottom = 10.dp)
+                .padding(bottom = 10.dp),
+            visualTransformation = PasswordVisualTransformation()
         )
         Button(
             onClick = onLoginClicked,
