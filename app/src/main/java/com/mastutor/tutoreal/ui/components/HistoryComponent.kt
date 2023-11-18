@@ -2,15 +2,18 @@ package com.mastutor.tutoreal.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -139,6 +142,67 @@ fun HistoryComponent(
     }
 }
 
+@Composable
+fun ScheduleComponent(
+    title: String,
+    tutorName: String,
+    date: String,
+    status: StatusData,
+    modifier: Modifier = Modifier
+){
+    Row(modifier = modifier
+
+        .clip(RoundedCornerShape(16.dp))
+        .fillMaxWidth()
+        .height(120.dp)
+    ){
+        Box(modifier = Modifier
+            .fillMaxHeight()
+            .width(40.dp)
+            .background(color = MaterialTheme.colorScheme.primary))
+        Spacer(modifier = Modifier.width(4.dp))
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(8.dp)
+        ){
+            Text(text = title, style = MaterialTheme.typography.bodySmall, color = Color.LightGray, modifier = Modifier.padding(bottom = 4.dp))
+            Text(text = "Meeting with $tutorName",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 20.dp).width(220.dp),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Row(modifier = Modifier.padding(end = 4.dp), verticalAlignment = Alignment.CenterVertically){
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(color = MaterialTheme.colorScheme.primary)
+                    .padding(vertical = 4.dp, horizontal = 8.dp)
+                ) {
+                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Date", tint = Color.White, modifier = Modifier.padding(end = 4.dp))
+                    Text(text = date, style = MaterialTheme.typography.bodySmall, color = Color.White)
+                }
+                Spacer(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .weight(1F)
+                )
+                TagComponent(name = status.status, color = status.color)
+
+            }
+        }
+
+    }
+}
+
+
+
 @Preview(
     device = "id:pixel_5",
     showSystemUi = true,
@@ -151,7 +215,7 @@ fun HistoryComponentPreview() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.primary),
+                .background(color = MaterialTheme.colorScheme.secondary),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -163,6 +227,8 @@ fun HistoryComponentPreview() {
                 status = StatusData(status = "Pending", color = Color.Yellow),
                 modifier = Modifier.padding(10.dp)
             )
+            ScheduleComponent(title = "Scamming People", tutorName = "Tim Burton", date = "12/09/2023", status = StatusData(status = "Pending", color = Color.Yellow), modifier = Modifier.padding(10.dp))
+
         }
     }
 }

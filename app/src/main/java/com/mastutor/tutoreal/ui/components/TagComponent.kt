@@ -33,7 +33,7 @@ fun TagComponent(
                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(top = 2.dp, bottom = 2.dp, start = 10.dp, end = 10.dp)
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 10.dp, end = 10.dp)
             )
         }
     }
