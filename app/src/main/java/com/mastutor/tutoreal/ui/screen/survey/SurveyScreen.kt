@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.mastutor.tutoreal.data.local.QuestionData
+import com.mastutor.tutoreal.data.local.Question
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 
 //Stateful
@@ -41,7 +41,7 @@ fun SurveyScreen() {
 //Stateless and please don't make this shit stateful
 @Composable
 fun SurveyContent(
-    question: QuestionData,
+    question: Question,
     choices: List<String>,
     selectedChoice: String,
     onChoiceSelected: (String) -> Unit,
@@ -132,7 +132,7 @@ fun SurveyContentPreview() {
         val (selectedChoice, onChoiceSelected) = remember {
             mutableStateOf(choices[0])
         }
-        SurveyContent(question = QuestionData(
+        SurveyContent(question = Question(
             question = "Apa kamu furry?",
             questionImg = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg"
         ),
