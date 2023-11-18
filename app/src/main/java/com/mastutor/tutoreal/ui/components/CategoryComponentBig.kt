@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,14 +73,14 @@ fun CategoryComponentSmall(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .height(40.dp)
-            .background(color = if(!isSelected) Color.White else MaterialTheme.colorScheme.primary)
+            .background(color = if (!isSelected) Color.White else MaterialTheme.colorScheme.primary)
             .clickable { onClick() }
     )
     {
         Box(modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .clip(CircleShape)
-            .background(color = if(!isSelected) MaterialTheme.colorScheme.primary else Color.White)
+            .background(color = if (!isSelected) MaterialTheme.colorScheme.primary else Color.White)
             ) {
             Icon(imageVector = category.icon, contentDescription = "Category", tint = if(!isSelected) Color.White else MaterialTheme.colorScheme.primary, modifier = Modifier.padding(4.dp))
         }
@@ -100,6 +101,9 @@ fun CategoryComponentPreview(){
         val selectedCategoryIdx = remember{ mutableIntStateOf(4) }
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
+        LaunchedEffect(key1 = true){
+            lazyListState.animateScrollToItem(selectedCategoryIdx.intValue)
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize(),
