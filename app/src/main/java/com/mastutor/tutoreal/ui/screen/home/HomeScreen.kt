@@ -76,27 +76,38 @@ fun HomeContent(
         Row(modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
-            .background(color = MaterialTheme.colorScheme.tertiary)){
-            Column(modifier = Modifier.padding(10.dp)){
-                Text(text = "Halo,", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(bottom = 8.dp))
-                Text(text = name, style = MaterialTheme.typography.bodyLarge)
+            .background(color = MaterialTheme.colorScheme.tertiary),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Row(Modifier.padding(top = 20.dp)){
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Text(
+                        text = "Halo,",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                    Text(text = name, style = MaterialTheme.typography.bodyLarge)
 
+                }
+                Spacer(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .weight(1F)
+                )
+                AsyncImage(model = imageUrl,
+                    contentDescription = "User Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.padding(end = 10.dp)
+                        .clip(CircleShape).size(50.dp).clickable { onUserClicked() })
             }
-            Spacer(
-                modifier = Modifier
-                    .size(8.dp)
-                    .weight(1F)
-            )
-            AsyncImage(model = imageUrl, contentDescription = "User Image", contentScale = ContentScale.Crop,modifier = Modifier
-                .clip(CircleShape).size(60.dp).clickable {onUserClicked()})
         }
         Column(modifier = Modifier
-            .padding(10.dp)
             .verticalScroll(rememberScrollState())) {
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(top = 10.dp)
+                .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth()
                 .height(50.dp)
                 .clip(RoundedCornerShape(10.dp))
@@ -112,7 +123,7 @@ fun HomeContent(
                     .alpha(0.6F)
             )
             Text(
-                text = "Search Your Tutor",
+                text = "Cari Tutor Kamu",
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = Color.DarkGray,
                     fontWeight = FontWeight.Bold
@@ -121,19 +132,19 @@ fun HomeContent(
             )
         }
         Text(
-            text = "Cari Tutor Idealmu",
+            text = "Pencocokan Tutor Idealmu",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp, top = 10.dp)
+            modifier = Modifier.padding(bottom = 8.dp, top = 20.dp, start = 10.dp, end = 10.dp)
         )
-        MatchmakingCardComponent(height = 240, modifier = Modifier.padding(bottom = 10.dp))
+        MatchmakingCardComponent(height = 180, modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp))
         Text(
             text = "Jadwal Terbaru",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
         Box(
             modifier = Modifier
-                .padding(bottom = 10.dp)
+                .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .border(
                     width = 1.dp,
@@ -156,9 +167,9 @@ fun HomeContent(
         Text(
             text = "Kategori",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-        LazyRow(modifier = Modifier.padding(bottom = 10.dp)) {
+        LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
             items(categories) { category ->
                 CategoryComponentBig(category = category, modifier = Modifier
                     .clickable { onCategoryClicked(category.id) }
@@ -168,7 +179,7 @@ fun HomeContent(
         Text(
             text = "Random Tutor",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
             //Implement random tutor grabber
         Text(
