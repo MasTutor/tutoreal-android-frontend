@@ -26,8 +26,19 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     private val _passwordLogin = mutableStateOf("")
     val passwordLogin: State<String> get() = _passwordLogin
 
+    private val _userExist = mutableStateOf(false)
+    val userExist: State<Boolean> get() = _userExist
+
     fun changeEmailLogin(email: String){
         _emailLogin.value = email
+    }
+
+    fun tryUserExist(){
+        viewModelScope.launch {
+            repository.getUserExist().collect(){
+                _userExist.value = it
+            }
+        }
     }
 
     fun changePasswordLogin(password: String){

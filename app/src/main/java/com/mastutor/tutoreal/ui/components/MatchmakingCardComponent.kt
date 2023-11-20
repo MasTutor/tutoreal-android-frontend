@@ -36,7 +36,6 @@ fun MatchmakingCardComponent(
         modifier = modifier
             .fillMaxWidth()
             .height(height.dp)
-            .padding(10.dp)
     )
     {
         Box {

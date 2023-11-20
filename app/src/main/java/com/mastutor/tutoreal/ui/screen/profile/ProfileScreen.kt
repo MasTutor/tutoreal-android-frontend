@@ -2,10 +2,12 @@ package com.mastutor.tutoreal.ui.screen.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -18,20 +20,48 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.components.UserEditComponent
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
+import com.mastutor.tutoreal.viewmodel.ProfileViewModel
 
 //Stateful
 @Composable
-fun ProfileScreen(){
+fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()){
+    val userExist by viewModel.userExist
+    SideEffect {
+        viewModel.tryUserExist()
+    }
 
+    LaunchedEffect(userExist){
+        if(!userExist){
+            navHostController.navigate(Screen.Chooser.route){
+                popUpTo(0)
+            }
+        }
+    }
+    ProfileContent(
+        fullName = "John Madden",
+        phoneNumber = "+6285965434232",
+        gender = "Male",
+        photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
+        onFullNameClicked = { },
+        onPhoneNumberClicked = { },
+        onGenderClicked = { },
+        onLogoutClicked = {viewModel.deleteSession()},
+        onHistoryClicked = {})
 }
 
 //Stateless
@@ -46,6 +76,7 @@ fun ProfileContent(
     onPhoneNumberClicked: () -> Unit,
     onGenderClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
+    onHistoryClicked: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -71,14 +102,25 @@ fun ProfileContent(
         UserEditComponent(icon = Icons.Rounded.Person, data = fullName, onClick = onFullNameClicked, modifier = Modifier.padding(bottom = 10.dp))
         UserEditComponent(icon = Icons.Rounded.Call, data = phoneNumber, onClick = onPhoneNumberClicked, modifier = Modifier.padding(bottom = 10.dp))
         UserEditComponent(icon = Icons.Rounded.Face, data = gender, onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
-        Button(
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-            onClick = onLogoutClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)
-        ) {
-            Text("Logout")
+        Row {
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                onClick = onHistoryClicked,
+                modifier = Modifier
+                    .width(190.dp)
+                    .padding(bottom = 20.dp, end = 10.dp), shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Jadwal")
+            }
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                onClick = onLogoutClicked,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Logout")
+            }
         }
     }
 }
@@ -96,9 +138,10 @@ fun ProfileContentPreview(){
             phoneNumber = "+6285965434232",
             gender = "Male",
             photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
-            onFullNameClicked = { /*TODO*/ },
-            onPhoneNumberClicked = { /*TODO*/ },
-            onGenderClicked = { /*TODO*/ },
-            onLogoutClicked = { /*TODO*/ })
+            onFullNameClicked = { },
+            onPhoneNumberClicked = { },
+            onGenderClicked = { },
+            onLogoutClicked = {  },
+            onHistoryClicked = {})
     }
 }

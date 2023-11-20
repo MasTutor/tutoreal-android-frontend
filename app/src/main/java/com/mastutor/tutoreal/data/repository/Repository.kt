@@ -75,11 +75,11 @@ class Repository @Inject constructor(
                 emit(AuthUiState.Idle)
                 emit(AuthUiState.Load)
                 val responseLogin = tutorealApiService.login(requestBody)
-/*                responseLogin.loginResult?.token?.accessToken.let {
+                responseLogin.loginResult?.token?.accessToken.let {
                     if (it != null) {
                         sessionPreferences.startSession(true, it)
                     }
-                }*/
+                }
                 emit(AuthUiState.Success(responseLogin))
             }catch (e: Exception){
                 emit(AuthUiState.Failure(e))
