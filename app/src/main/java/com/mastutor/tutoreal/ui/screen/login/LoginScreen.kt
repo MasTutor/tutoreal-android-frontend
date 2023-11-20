@@ -22,6 +22,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.util.isEmailValid
@@ -49,11 +52,25 @@ import com.mastutor.tutoreal.viewmodel.AuthViewModel
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
+    navHostController: NavHostController
 ) {
     val context = LocalContext.current
     val email by viewModel.emailLogin
     val password by viewModel.passwordLogin
+    val userExist by viewModel.userExist
+
+    SideEffect {
+        viewModel.tryUserExist()
+    }
+
+    LaunchedEffect(userExist){
+        if(userExist){
+            navHostController.navigate(Screen.Home.route){
+                popUpTo(0)
+            }
+        }
+    }
 
     viewModel.loginResponse.collectAsState(initial = AuthUiState.Idle).value.let {uiState ->
         when(uiState){

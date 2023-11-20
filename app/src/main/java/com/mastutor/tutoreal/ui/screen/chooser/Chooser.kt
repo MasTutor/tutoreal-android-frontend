@@ -20,19 +20,43 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
+import com.mastutor.tutoreal.viewmodel.AuthViewModel
 
 @Composable
 fun ChooserScreen(
     modifier: Modifier = Modifier,
     onLoginClicked: () -> Unit,
     onRegisterClicked: () -> Unit,
+    //delete later
+    viewModel: AuthViewModel = hiltViewModel(),
+    navHostController: NavHostController
 ){
+    //delete later
+    val userExist by viewModel.userExist
+
+    SideEffect {
+        viewModel.tryUserExist()
+    }
+
+    LaunchedEffect(userExist){
+        if(userExist){
+            navHostController.navigate(Screen.Home.route){
+                popUpTo(0)
+            }
+        }
+    }
     Box(modifier = modifier
         .fillMaxSize()
         .background(color = MaterialTheme.colorScheme.secondary)){
