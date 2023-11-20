@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -169,6 +170,48 @@ fun TutorComponent(
     }
 }
 
+@Composable
+fun TutorComponentBig(
+    modifier: Modifier = Modifier,
+    photoUrl: String,
+    name: String,
+    job: String,
+){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .width(198.dp)
+            .height(218.dp)
+            .background(Color.White)
+    ){
+        AsyncImage(
+            model = photoUrl,
+            contentDescription = "User Photo",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .clip(CircleShape)
+                .size(116.dp)
+        )
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = job,
+            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+    }
+}
+
 
 @Preview(
     device = "id:pixel_5",
@@ -199,6 +242,7 @@ fun TutorComponentPreview() {
                 price = 200000,
                 percentage = 98.0,
             )
+            TutorComponentBig(photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg", name = "Jim Burton", job = "Con Artist")
         }
     }
 }
