@@ -68,11 +68,9 @@ fun SurveyScreen(
                 onChoiceSelected(choices[2])
                 answer.intValue = 3
                 currentPageIndex.intValue++
-                Toast.makeText(context, "${viewModel.answers.toList()}", Toast.LENGTH_SHORT).show()
             }
             else{
                 viewModel.addAnswers(answer, currentPageIndex)
-                Toast.makeText(context, "${viewModel.answers.toList()}", Toast.LENGTH_SHORT).show()
                 //TODO: add post answer afterwards
             }
         },
