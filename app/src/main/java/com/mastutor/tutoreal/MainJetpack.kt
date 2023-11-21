@@ -18,8 +18,10 @@ import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.chooser.ChooserScreen
 import com.mastutor.tutoreal.ui.screen.home.HomeScreen
 import com.mastutor.tutoreal.ui.screen.login.LoginScreen
+import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
 import com.mastutor.tutoreal.ui.screen.profile.ProfileScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
+import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,8 +35,8 @@ fun MainJetpack(
     Scaffold {innerPadding ->
         NavHost(navController = navHostController, startDestination = Screen.Chooser.route, modifier = Modifier.padding(
             //for edge to edge
-            top = if(currentRoute == Screen.Home.route) 0.dp else innerPadding.calculateTopPadding(),
-            bottom = if(currentRoute == Screen.Chooser.route) 0.dp else innerPadding.calculateBottomPadding()
+            top = if(currentRoute == Screen.Home.route || currentRoute == Screen.Matchmaking.route) 0.dp else innerPadding.calculateTopPadding(),
+            bottom = if(currentRoute == Screen.Chooser.route || currentRoute == Screen.Matchmaking.route) 0.dp else innerPadding.calculateBottomPadding()
 
         )){
             composable(Screen.Chooser.route){
@@ -51,6 +53,16 @@ fun MainJetpack(
             }
             composable(Screen.Profile.route){
                 ProfileScreen(navHostController = navHostController)
+            }
+            composable(Screen.Matchmaking.route){
+                MatchmakingOnboardingScreen(
+                    onBackClicked = { /*TODO*/ },
+                    onNextClicked = { navHostController.navigate(Screen.Survey.route) },
+                    navHostController = navHostController
+                )
+            }
+            composable(Screen.Survey.route){
+                SurveyScreen()
             }
         }
 

@@ -1,5 +1,6 @@
 package com.mastutor.tutoreal.ui.screen.survey
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,18 +28,54 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.local.Question
+import com.mastutor.tutoreal.data.local.QuestionsData
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
+import com.mastutor.tutoreal.viewmodel.SurveyViewModel
 
 //Stateful
 @Composable
-fun SurveyScreen() {
+fun SurveyScreen(
+    viewModel: SurveyViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val currentPageIndex = remember{
+        mutableIntStateOf(0)
+    }
+    val visibleQuestion = QuestionsData.questions[currentPageIndex.intValue]
+    val answer = remember{mutableIntStateOf(3)}
+    val choices = listOf("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree")
+    val (selectedChoice, onChoiceSelected) = remember {
+        mutableStateOf(choices[2])
+    }
+    SurveyContent(
+        question = visibleQuestion,
+        choices = choices, selectedChoice = selectedChoice,
+        onChoiceSelected ={ choice, idx ->
+            onChoiceSelected(choice)
+            answer.intValue = idx + 1
+    },
+        onNextClicked = {
+            if(currentPageIndex.value != 24) {
+                viewModel.addAnswers(answer, currentPageIndex)
+                onChoiceSelected(choices[2])
+                answer.intValue = 3
+                currentPageIndex.intValue++
+            }
+            else{
+                viewModel.addAnswers(answer, currentPageIndex)
+                //TODO: add post answer afterwards
+            }
+        },
 
+    )
 }
 
 //Stateless and please don't make this shit stateful
@@ -44,7 +84,7 @@ fun SurveyContent(
     question: Question,
     choices: List<String>,
     selectedChoice: String,
-    onChoiceSelected: (String) -> Unit,
+    onChoiceSelected: (String, Int) -> Unit,
     modifier: Modifier = Modifier,
     onNextClicked: () -> Unit,
 ) {
@@ -71,7 +111,7 @@ fun SurveyContent(
                 .size(160.dp)
 
         )
-        choices.forEach { choice ->
+        choices.forEachIndexed{ idx ,choice ->
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
@@ -92,7 +132,9 @@ fun SurveyContent(
                     )
                     .selectable(
                         selected = (choice == selectedChoice),
-                        onClick = { onChoiceSelected(choice) })
+                        onClick = {
+                            onChoiceSelected(choice, idx)
+                        })
 
             ) {
                 Text(
@@ -132,14 +174,6 @@ fun SurveyContentPreview() {
         val (selectedChoice, onChoiceSelected) = remember {
             mutableStateOf(choices[0])
         }
-        SurveyContent(question = Question(
-            question = "Apa kamu furry?",
-            questionImg = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg"
-        ),
-            choices = choices,
-            selectedChoice = selectedChoice,
-            onChoiceSelected = onChoiceSelected,
-            onNextClicked = {}
-        )
+        val answers = listOf<Int>(1, 2, 3, 4)
     }
 }

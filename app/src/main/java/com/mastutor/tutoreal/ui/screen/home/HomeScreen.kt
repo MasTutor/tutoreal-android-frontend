@@ -56,7 +56,8 @@ fun HomeScreen(
         categories = CategoriesData.categories,
         name = "John Madden",
         imageUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
-        onUserClicked = {navHostController.navigate(Screen.Profile.route)}
+        onUserClicked = {navHostController.navigate(Screen.Profile.route)},
+        onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route)}
     )
 }
 
@@ -69,6 +70,7 @@ fun HomeContent(
     categories: List<Category>,
     name: String,
     imageUrl: String,
+    onMatchmakingClicked: () -> Unit
 ){
     Column(modifier = modifier
         .fillMaxSize()
@@ -136,7 +138,9 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, top = 20.dp, start = 10.dp, end = 10.dp)
         )
-        MatchmakingCardComponent(height = 180, modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp))
+        MatchmakingCardComponent(height = 180, modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp).clickable {
+            onMatchmakingClicked()
+        })
         Text(
             text = "Jadwal Terbaru",
             style = MaterialTheme.typography.bodyLarge,
@@ -155,7 +159,7 @@ fun HomeContent(
                 .height(120.dp)
 
         ) {
-            //Implement Jadwal user jika sudah jadi
+            //TODO: Implement Jadwal user jika sudah jadi
             Text(
                 text = "Jadwal Kosong",
                 style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
@@ -172,8 +176,7 @@ fun HomeContent(
         LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
             items(categories) { category ->
                 CategoryComponentBig(category = category, modifier = Modifier
-                    .clickable { onCategoryClicked(category.id) }
-                    .padding(start = 5.dp, end = 5.dp))
+                    .padding(start = 5.dp, end = 5.dp), onClick = {})
             }
         }
         Text(
@@ -181,7 +184,7 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-            //Implement random tutor grabber
+            //TODO: Implement random tutor grabber
         Text(
             text = "Not Yet Implemented",
             style = MaterialTheme.typography.bodyLarge,
@@ -206,7 +209,8 @@ fun HomeContentPreview(){
             categories = CategoriesData.categories,
             name = "John Madden",
             imageUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
-            onUserClicked = {}
+            onUserClicked = {},
+            onMatchmakingClicked = {}
             )
     }
 }

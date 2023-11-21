@@ -7,4 +7,6 @@ sealed class Screen(val route: String){
     object Chooser : Screen("chooser")
     //TODO: Change Profile Route Later
     object Profile: Screen("profile")
+    object Matchmaking: Screen("matchmaking")
+    object Survey: Screen("survey")
 }

@@ -18,9 +18,8 @@ private val lightColorScheme = lightColorScheme(
     error = errorPrimary,
     background = secondaryPrimary,
     surface = secondaryPrimary,
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
-    onBackground = Color.Black
+    onBackground = Color.Black,
+    onSecondary = Color.Black
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
