@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.data.local.Category
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
@@ -43,19 +44,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun CategoryComponentBig(
     category: Category,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .size(120.dp)
+            .size(100.dp)
             .background(color = MaterialTheme.colorScheme.primary)
+            .clickable {onClick()}
         ) {
         Icon(imageVector = category.icon, contentDescription = "Category", tint = Color.White, modifier = Modifier
-            .size(78.dp))
-        Text(text = category.name, color = Color.White, style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+            .size(50.dp))
+        Text(text = category.name, color = Color.White, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold, fontSize = 14.sp))
 
     }
 }
@@ -112,7 +115,7 @@ fun CategoryComponentPreview(){
 
             LazyRow(){
                 items(CategoriesData.categories){category ->
-                    CategoryComponentBig(category = category, modifier = Modifier.padding(start = 5.dp, end = 5.dp))
+                    CategoryComponentBig(category = category, modifier = Modifier.padding(start = 5.dp, end = 5.dp), onClick = {})
                 }
             }
             LazyRow(

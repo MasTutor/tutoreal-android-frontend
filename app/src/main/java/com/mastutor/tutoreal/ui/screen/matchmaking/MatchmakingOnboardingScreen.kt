@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 
@@ -38,7 +39,8 @@ import com.mastutor.tutoreal.ui.theme.TutorealTheme
 fun MatchmakingOnboardingScreen(
     onBackClicked: () -> Unit,
     onNextClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController
 ){
     Box(modifier = modifier
         .fillMaxSize()
@@ -55,7 +57,7 @@ fun MatchmakingOnboardingScreen(
         Row(
             modifier = Modifier
             .padding(start = 10.dp, top = 10.dp)
-            .align(Alignment.TopStart)
+            .align(Alignment.TopStart).offset(y = 20.dp)
             .clickable { onBackClicked() },
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -128,6 +130,5 @@ fun MatchmakingOnboardingScreen(
 @Composable
 fun MatchmakingOnboardingScreenPreview(){
     TutorealTheme {
-        MatchmakingOnboardingScreen(onBackClicked = {}, onNextClicked = {})
     }
 }
