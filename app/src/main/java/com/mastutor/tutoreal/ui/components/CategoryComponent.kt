@@ -100,7 +100,7 @@ fun CategoryComponentSmall(
 @Composable
 fun CategoryComponentPreview(){
     TutorealTheme {
-        val selectedCategoryIdx = remember{ mutableIntStateOf(4) }
+        val selectedCategoryIdx = remember{ mutableIntStateOf(0) }
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
         LaunchedEffect(key1 = true){

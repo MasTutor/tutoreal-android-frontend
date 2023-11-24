@@ -10,10 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.chooser.ChooserScreen
 import com.mastutor.tutoreal.ui.screen.home.HomeScreen
@@ -21,6 +23,7 @@ import com.mastutor.tutoreal.ui.screen.login.LoginScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
 import com.mastutor.tutoreal.ui.screen.profile.ProfileScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
+import com.mastutor.tutoreal.ui.screen.search.SearchScreen
 import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +38,7 @@ fun MainJetpack(
     Scaffold {innerPadding ->
         NavHost(navController = navHostController, startDestination = Screen.Chooser.route, modifier = Modifier.padding(
             //for edge to edge
-            top = if(currentRoute == Screen.Home.route || currentRoute == Screen.Matchmaking.route) 0.dp else innerPadding.calculateTopPadding(),
+            top = if(currentRoute == Screen.Home.route || currentRoute == Screen.Matchmaking.route || currentRoute == Screen.Search.route) 0.dp else innerPadding.calculateTopPadding(),
             bottom = if(currentRoute == Screen.Chooser.route || currentRoute == Screen.Matchmaking.route) 0.dp else innerPadding.calculateBottomPadding()
 
         )){
@@ -63,6 +66,10 @@ fun MainJetpack(
             }
             composable(Screen.Survey.route){
                 SurveyScreen()
+            }
+            composable(route = Screen.Search.route, arguments = listOf(navArgument("categoryIdx"){type = NavType.IntType}),){
+                val categoryIdx = it.arguments?.getInt("categoryIdx") ?: 0
+                SearchScreen(categoryIdx = categoryIdx, onBackClicked = {navHostController.navigateUp()})
             }
         }
 
