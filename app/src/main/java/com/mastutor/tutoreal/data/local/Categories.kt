@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Translate
@@ -19,6 +20,12 @@ data class Category(
 
 object CategoriesData{
     val categories = listOf(
+        Category(
+            id = "",
+            name = "All",
+            icon = Icons.Filled.List
+        ),
+
         Category(
             id = "Technology",
             name = "Teknologi",

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,8 +52,8 @@ fun HomeScreen(
     navHostController: NavHostController,
 ){
     HomeContent(
-        searchOnClick = {},
-        onCategoryClicked = {},
+        searchOnClick = {navHostController.navigate(Screen.Search.createRoute(0))},
+        onCategoryClicked = {navHostController.navigate(Screen.Search.createRoute(it + 1))},
         categories = CategoriesData.categories,
         name = "John Madden",
         imageUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
@@ -65,7 +66,7 @@ fun HomeScreen(
 fun HomeContent(
     modifier: Modifier = Modifier,
     searchOnClick: () -> Unit,
-    onCategoryClicked:(String) -> Unit,
+    onCategoryClicked:(Int) -> Unit,
     onUserClicked:() -> Unit,
     categories: List<Category>,
     name: String,
@@ -174,9 +175,9 @@ fun HomeContent(
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
         LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
-            items(categories) { category ->
+            itemsIndexed(categories.subList(fromIndex = 1, toIndex = 8)) { idx, category ->
                 CategoryComponentBig(category = category, modifier = Modifier
-                    .padding(start = 5.dp, end = 5.dp), onClick = {})
+                    .padding(start = 5.dp, end = 5.dp), onClick = {onCategoryClicked(idx)})
             }
         }
         Text(

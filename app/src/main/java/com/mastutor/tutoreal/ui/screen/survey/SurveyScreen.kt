@@ -63,7 +63,7 @@ fun SurveyScreen(
             answer.intValue = idx + 1
     },
         onNextClicked = {
-            if(currentPageIndex.value != 24) {
+            if(currentPageIndex.intValue != 24) {
                 viewModel.addAnswers(answer, currentPageIndex)
                 onChoiceSelected(choices[2])
                 answer.intValue = 3

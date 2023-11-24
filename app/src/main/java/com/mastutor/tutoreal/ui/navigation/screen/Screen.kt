@@ -5,8 +5,10 @@ sealed class Screen(val route: String){
     object Register : Screen("register")
     object Home : Screen("home")
     object Chooser : Screen("chooser")
-    //TODO: Change Profile Route Later
     object Profile: Screen("profile")
     object Matchmaking: Screen("matchmaking")
     object Survey: Screen("survey")
+    object Search: Screen("search/{categoryIdx}"){
+        fun createRoute(categoryIdx: Int) = "search/$categoryIdx"
+    }
 }
