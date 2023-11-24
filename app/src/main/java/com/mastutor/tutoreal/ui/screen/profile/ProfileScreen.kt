@@ -107,7 +107,7 @@ fun ProfileContent(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 onClick = onHistoryClicked,
                 modifier = Modifier
-                    .width(190.dp)
+                    .width(180.dp)
                     .padding(bottom = 20.dp, end = 10.dp), shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Jadwal")

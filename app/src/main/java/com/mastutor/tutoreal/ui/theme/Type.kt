@@ -16,7 +16,7 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val fontName = GoogleFont(name = "Urbanist")
+val fontName = GoogleFont(name = "Poppins")
 val fontFamily = FontFamily(
     Font(googleFont = fontName, fontProvider = provider)
 )
