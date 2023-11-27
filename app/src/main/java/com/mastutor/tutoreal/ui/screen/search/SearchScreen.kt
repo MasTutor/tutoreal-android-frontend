@@ -42,8 +42,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mastutor.tutoreal.data.dummy.TutorData
+import com.mastutor.tutoreal.data.dummy.TutorDummy
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.ui.components.CategoryComponentSmall
+import com.mastutor.tutoreal.ui.components.TutorComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 @Composable
@@ -70,7 +73,9 @@ fun SearchScreen(
         selectedCategoryIdx = selectedCategoryIdx,
         coroutineScope = coroutineScope,
         onBackClicked = onBackClicked,
-        focusRequester = focusRequester
+        focusRequester = focusRequester,
+        tutorData = TutorData.tutors,
+        moveToTutorDetail = {  }
     )
 }
 
@@ -79,6 +84,8 @@ fun SearchScreen(
 fun SearchContent(
     search: String,
     onSearchChanged: (String) -> Unit,
+    tutorData: List<TutorDummy>,
+    moveToTutorDetail: (String) -> Unit,
     lazyListState: LazyListState,
     selectedCategoryIdx: MutableIntState,
     coroutineScope: CoroutineScope,
@@ -97,9 +104,11 @@ fun SearchContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 30.dp)
             ){
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Arrow Back", modifier = Modifier.clickable {
-                    onBackClicked()
-                }.padding(end = 10.dp))
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Arrow Back", modifier = Modifier
+                    .clickable {
+                        onBackClicked()
+                    }
+                    .padding(end = 10.dp))
                 TextField(
                     maxLines = 1,
                     value = search,
