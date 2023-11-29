@@ -115,7 +115,7 @@ fun TutorComponent(
     photoUrl: String,
     name: String,
     job: String,
-    price: Long
+    price: String
 ) {
     Card(
         shape = RoundedCornerShape(24.dp), modifier = modifier
@@ -160,7 +160,7 @@ fun TutorComponent(
                         .weight(1F)
                 )
                 Text(
-                    text = "IDR $price/Session",
+                    text = "$price/Session",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -233,7 +233,7 @@ fun TutorComponentPreview() {
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
                 name = "Jim Burton",
                 job = "Con Artist",
-                price = 200000,
+                price = "Rp. 20.000",
             )
             MatchTutorComponent(
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",

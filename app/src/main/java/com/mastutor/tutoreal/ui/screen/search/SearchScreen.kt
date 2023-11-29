@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -18,6 +20,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,21 +42,33 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.mastutor.tutoreal.data.local.CategoriesData
+import com.mastutor.tutoreal.data.remote.TutorItem
 import com.mastutor.tutoreal.ui.components.CategoryComponentSmall
+import com.mastutor.tutoreal.ui.components.TutorComponent
+import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
+import com.mastutor.tutoreal.viewmodel.SearchViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
     categoryIdx: Int,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    viewModel: SearchViewModel = hiltViewModel()
     )
 {
     var search by remember { mutableStateOf("") }
+    var selectedCategory: String? by remember {
+        mutableStateOf(null)
+    }
     val selectedCategoryIdx = remember{ mutableIntStateOf(categoryIdx) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -70,7 +85,10 @@ fun SearchScreen(
         selectedCategoryIdx = selectedCategoryIdx,
         coroutineScope = coroutineScope,
         onBackClicked = onBackClicked,
-        focusRequester = focusRequester
+        focusRequester = focusRequester,
+        tutors = viewModel.searchTutors(specialization = search, category = selectedCategory).collectAsLazyPagingItems(),
+        moveToTutorDetail = {},
+        onSelectedCategoryChanged = {id -> selectedCategory}
     )
 }
 
@@ -84,7 +102,10 @@ fun SearchContent(
     coroutineScope: CoroutineScope,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit,
-    focusRequester: FocusRequester
+    focusRequester: FocusRequester,
+    tutors: LazyPagingItems<TutorItem>,
+    moveToTutorDetail: (String) -> Unit,
+    onSelectedCategoryChanged: (String) -> Unit
 ){
     Column(modifier = modifier.fillMaxWidth()) {
         Box(modifier = Modifier
@@ -97,9 +118,11 @@ fun SearchContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 30.dp)
             ){
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Arrow Back", modifier = Modifier.clickable {
-                    onBackClicked()
-                }.padding(end = 10.dp))
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Arrow Back", modifier = Modifier
+                    .clickable {
+                        onBackClicked()
+                    }
+                    .padding(end = 10.dp))
                 TextField(
                     maxLines = 1,
                     value = search,
@@ -136,7 +159,7 @@ fun SearchContent(
         }
 
         LazyRow(
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
             state = lazyListState,
             flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
         ){
@@ -145,12 +168,82 @@ fun SearchContent(
                     isSelected = index == selectedCategoryIdx.intValue,
                     onClick = {
                         selectedCategoryIdx.intValue = index
+                        if(index != 0) {
+                            onSelectedCategoryChanged(category.id)
+                        }
                         coroutineScope.launch {
                             lazyListState.animateScrollToItem(index)
                         }
                     }
                 )
             }
+        }
+        SearchPaging(tutors = tutors, moveToTutorDetail = moveToTutorDetail)
+
+    }
+}
+
+@Composable
+fun SearchPaging(
+    tutors: LazyPagingItems<TutorItem>,
+    modifier: Modifier = Modifier,
+    moveToTutorDetail: (String) -> Unit,
+){
+    LazyColumn(modifier = modifier.padding(horizontal = 10.dp)){
+        items(items = tutors, key = {it.id}){ tutor ->
+            if (tutor != null){
+                TutorComponent(
+                    photoUrl = tutor.picture.ifEmpty { "https://www.nicepng.com/png/full/202-2024580_png-file-profile-icon-vector-png.png" },
+                    name = tutor.nama,
+                    job = tutor.specialization,
+                    price = tutor.price.ifEmpty { "Rp. 30.000" })
+            }
+            else{
+                //TODO
+            }
+
+        }
+        when(val state = tutors.loadState.refresh){
+            is LoadState.Error ->{
+                item {
+                    FailureScreen(onRefreshClicked = {tutors.refresh()})
+                }
+            }
+            is LoadState.Loading -> {
+                item {
+                    Column(
+                        modifier = modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "Loading")
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+            }
+            else -> {}
+        }
+        when(val state = tutors.loadState.append){
+            is LoadState.Error -> {
+                item {
+                    FailureScreen(onRefreshClicked = {tutors.retry()})
+                }
+            }
+            is LoadState.Loading -> {
+                item {
+                    Column(
+                        modifier = modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "Loading")
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+            }
+            else -> {}
         }
     }
 }

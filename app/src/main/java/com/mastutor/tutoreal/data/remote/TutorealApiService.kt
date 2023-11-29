@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface TutorealApiService {
     @POST("/user/signup")
@@ -17,4 +18,12 @@ interface TutorealApiService {
     suspend fun getProfile(
         @Header("Authorization") token: String,
     ):ProfileResponse
+
+    @GET("/tutor/alltutors")
+    suspend fun searchTutor(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("specialization") specialization: String,
+        @Query("category") category: String? = null
+    ): TutorsResponse
 }

@@ -1,5 +1,8 @@
 package com.mastutor.tutoreal.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.mastutor.tutoreal.data.pagingsource.TutorPagingSource
 import com.mastutor.tutoreal.data.preferences.SessionPreferences
 import com.mastutor.tutoreal.data.remote.LoginResponse
 import com.mastutor.tutoreal.data.remote.ProfileResponse
@@ -20,6 +23,17 @@ class Repository @Inject constructor(
     private val tutorealApiService: TutorealApiService,
     private val sessionPreferences: SessionPreferences
 ){
+    fun searchTutors(
+        specialization: String,
+        category: String? = null
+    ) = Pager(
+        config = PagingConfig(pageSize = 20),
+        pagingSourceFactory = {
+            TutorPagingSource(
+                tutorealApiService, specialization, category
+            )
+        }
+    ).flow
 
     fun getUserExist(): Flow<Boolean>{
         return sessionPreferences.getUserExist()
