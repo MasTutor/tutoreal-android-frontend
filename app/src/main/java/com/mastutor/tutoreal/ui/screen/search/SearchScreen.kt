@@ -193,7 +193,7 @@ fun SearchPaging(
         items(items = tutors, key = {it.id}){ tutor ->
             if (tutor != null){
                 TutorComponent(
-                    photoUrl = tutor.picture.ifEmpty { "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg" },
+                    photoUrl = tutor.picture.ifEmpty { "https://www.nicepng.com/png/full/202-2024580_png-file-profile-icon-vector-png.png" },
                     name = tutor.nama,
                     job = tutor.specialization,
                     price = tutor.price.ifEmpty { "Rp. 30.000" })
