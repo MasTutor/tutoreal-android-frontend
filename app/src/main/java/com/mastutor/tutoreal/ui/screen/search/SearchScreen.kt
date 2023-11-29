@@ -105,7 +105,7 @@ fun SearchContent(
     focusRequester: FocusRequester,
     tutors: LazyPagingItems<TutorItem>,
     moveToTutorDetail: (String) -> Unit,
-    onSelectedCategoryChanged: (String) -> Unit
+    onSelectedCategoryChanged: (String?) -> Unit
 ){
     Column(modifier = modifier.fillMaxWidth()) {
         Box(modifier = Modifier
@@ -171,6 +171,9 @@ fun SearchContent(
                         if(index != 0) {
                             onSelectedCategoryChanged(category.id)
                         }
+                        else{
+                            onSelectedCategoryChanged(null)
+                        }
                         coroutineScope.launch {
                             lazyListState.animateScrollToItem(index)
                         }
@@ -193,7 +196,7 @@ fun SearchPaging(
         items(items = tutors, key = {it.id}){ tutor ->
             if (tutor != null){
                 TutorComponent(
-                    photoUrl = tutor.picture.ifEmpty { "https://www.nicepng.com/png/full/202-2024580_png-file-profile-icon-vector-png.png" },
+                    photoUrl = tutor.picture.ifEmpty { "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg" },
                     name = tutor.nama,
                     job = tutor.specialization,
                     price = tutor.price.ifEmpty { "Rp. 30.000" })
