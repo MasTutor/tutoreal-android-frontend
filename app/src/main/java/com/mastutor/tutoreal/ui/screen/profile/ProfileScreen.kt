@@ -15,7 +15,6 @@ import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -78,7 +76,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                 if (userData != null) {
                     ProfileContent(
                         fullName = userData.nama,
-                        phoneNumber = userData.noTelp.ifEmpty { "Not yet set" },
+                        phoneNumber =if(userData.noTelp.isNullOrEmpty()){"Not Yet Implemented"} else{userData.noTelp},
                         gender = userData.gender,
                         photoUrl = userData.photoURL,
                         onFullNameClicked = {},

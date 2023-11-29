@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -44,7 +42,6 @@ import com.mastutor.tutoreal.ui.components.CategoryComponentBig
 import com.mastutor.tutoreal.ui.components.MatchmakingCardComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
-import kotlin.reflect.typeOf
 
 @Composable
 fun HomeScreen(
@@ -71,7 +68,7 @@ fun HomeContent(
     categories: List<Category>,
     name: String,
     imageUrl: String,
-    onMatchmakingClicked: () -> Unit
+    onMatchmakingClicked: () -> Unit,
 ){
     Column(modifier = modifier
         .fillMaxSize()
@@ -101,8 +98,11 @@ fun HomeContent(
                 AsyncImage(model = imageUrl,
                     contentDescription = "User Image",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.padding(end = 10.dp)
-                        .clip(CircleShape).size(50.dp).clickable { onUserClicked() })
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .clip(CircleShape)
+                        .size(50.dp)
+                        .clickable { onUserClicked() })
             }
         }
         Column(modifier = Modifier
@@ -139,9 +139,11 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, top = 20.dp, start = 10.dp, end = 10.dp)
         )
-        MatchmakingCardComponent(height = 180, modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp).clickable {
-            onMatchmakingClicked()
-        })
+        MatchmakingCardComponent(height = 180, modifier = Modifier
+            .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+            .clickable {
+                onMatchmakingClicked()
+            })
         Text(
             text = "Jadwal Terbaru",
             style = MaterialTheme.typography.bodyLarge,
