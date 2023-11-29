@@ -13,6 +13,7 @@ import com.mastutor.tutoreal.ui.screen.home.HomeContent
 import com.mastutor.tutoreal.ui.screen.login.LoginScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingResultScreen
+import com.mastutor.tutoreal.ui.screen.register.RegisterPictureScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
 import com.mastutor.tutoreal.ui.screen.tutor.TutorScreen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
@@ -29,10 +30,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TutorealTheme {
-//                 MainJetpack(modifier = Modifier.fillMaxSize())
+                 MainJetpack(modifier = Modifier.fillMaxSize())
 //                For lazy development,
 //                TutorScreen(onBackClicked = {})
-                MatchmakingResultScreen(modifier = Modifier, onBackClicked = {})
+//                MatchmakingResultScreen(modifier = Modifier, onBackClicked = {})
+//                RegisterPictureScreen()
             }
         }
     }

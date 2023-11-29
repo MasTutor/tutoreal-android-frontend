@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.util.isEmailValid
@@ -52,7 +54,8 @@ import com.mastutor.tutoreal.viewmodel.AuthViewModel
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = hiltViewModel()
+    navHostController: NavHostController,
+    viewModel: AuthViewModel
 ) {
     val context = LocalContext.current
     val email by viewModel.emailRegister
@@ -101,7 +104,7 @@ fun RegisterScreen(
                             Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            viewModel.register()
+                            navHostController.navigate(Screen.RegisterPicture.route)
                         }
                     },
                 )
@@ -133,6 +136,7 @@ fun RegisterScreen(
                 }
             }
             is AuthUiState.Success -> {
+                // TODO: Hapus ini
                 RegisterContent(
                     fullName = fullName,
                     email = email,
@@ -163,7 +167,7 @@ fun RegisterScreen(
                             Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            viewModel.register()
+                            navHostController.navigate(Screen.RegisterPicture.route)
                         }
                     },
                 )
@@ -202,7 +206,7 @@ fun RegisterScreen(
                             Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
                         }
                         else{
-                            viewModel.register()
+                            navHostController.navigate(Screen.RegisterPicture.route)
                         }
                     },
                 )
@@ -412,7 +416,7 @@ fun RegisterContent(
             ),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Register")
+            Text("Next")
         }
     }
 }
