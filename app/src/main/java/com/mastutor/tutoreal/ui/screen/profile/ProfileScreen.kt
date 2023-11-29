@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.components.UserEditComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
+import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.viewmodel.ProfileViewModel
@@ -88,32 +89,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                 }
             }
             is UiState.Failure -> {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "There's something wrong, please check your internet", textAlign = TextAlign.Center)
-                    Row {
-                        Button(
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                            onClick = { viewModel.getProfile() },
-                            modifier = Modifier
-                                .padding(bottom = 20.dp, end = 10.dp), shape = RoundedCornerShape(8.dp)
-                        ) {
-                            Text("Refresh")
-                        }
-                        Button(
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                            onClick = { viewModel.deleteSession() },
-                            modifier = Modifier
-                                .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)
-                        ) {
-                            Text("Logout")
-                        }
-                    }
-                }
-
+                FailureScreen(onRefreshClicked = {viewModel.getProfile()}, logoutExist = true, onLogoutClicked = {viewModel.deleteSession()})
             }
         }
     }
