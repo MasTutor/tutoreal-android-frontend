@@ -75,10 +75,10 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                 val userData = uiState.data
                 if (userData != null) {
                     ProfileContent(
-                        fullName = userData.nama,
-                        phoneNumber =if(userData.noTelp.isNullOrEmpty()){"Not Yet Implemented"} else{userData.noTelp},
-                        gender = userData.gender,
-                        photoUrl = userData.photoURL,
+                        fullName = userData.profile.nama,
+                        phoneNumber =userData.profile.noTelp.ifEmpty { "Not yet set" },
+                        gender = userData.profile.gender,
+                        photoUrl = userData.profile.photoURL,
                         onFullNameClicked = {},
                         onPhoneNumberClicked = {},
                         onGenderClicked = {},

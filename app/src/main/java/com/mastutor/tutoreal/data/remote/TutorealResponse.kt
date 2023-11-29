@@ -43,6 +43,16 @@ data class Tutors(
 	val items: List<TutorItem>
 )
 data class ProfileResponse(
+	@field:SerializedName("user_data")
+	val profile: Profile,
+
+	@field:SerializedName("error")
+	val error: String,
+
+	@field:SerializedName("message")
+	val message: String
+)
+data class Profile(
 
 	@field:SerializedName("uid")
 	val uid: String,
@@ -60,7 +70,7 @@ data class ProfileResponse(
 	val email: String,
 
 	@field:SerializedName("noTelp")
-	val noTelp: String? = "Not set yet"
+	val noTelp: String
 )
 data class RegisterResponse(
 
