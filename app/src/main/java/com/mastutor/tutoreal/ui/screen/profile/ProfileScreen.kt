@@ -17,16 +17,20 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,7 +38,9 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.components.UserEditComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
+import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
+import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.viewmodel.ProfileViewModel
 
 //Stateful
@@ -43,6 +49,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
     val userExist by viewModel.userExist
     SideEffect {
         viewModel.tryUserExist()
+        viewModel.getToken()
     }
 
     LaunchedEffect(userExist){
@@ -51,17 +58,41 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                 popUpTo(0)
             }
         }
+        viewModel.getProfile()
     }
-    ProfileContent(
-        fullName = "John Madden",
-        phoneNumber = "+6285965434232",
-        gender = "Male",
-        photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
-        onFullNameClicked = { },
-        onPhoneNumberClicked = { },
-        onGenderClicked = { },
-        onLogoutClicked = {viewModel.deleteSession()},
-        onHistoryClicked = {})
+    viewModel.profileResponse.collectAsState(initial = UiState.Loading).value.let { uiState ->
+        when(uiState){
+            is UiState.Loading -> {
+                Column(
+                    modifier = modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Loading")
+                    CircularProgressIndicator(color = Color.Black)
+                }
+            }
+            is UiState.Success -> {
+                val userData = uiState.data
+                if (userData != null) {
+                    ProfileContent(
+                        fullName = userData.nama,
+                        phoneNumber = userData.noTelp.ifEmpty { "Not yet set" },
+                        gender = userData.gender,
+                        photoUrl = userData.photoURL,
+                        onFullNameClicked = {},
+                        onPhoneNumberClicked = {},
+                        onGenderClicked = {},
+                        onLogoutClicked = {viewModel.deleteSession()},
+                        onHistoryClicked = { })
+                }
+            }
+            is UiState.Failure -> {
+                FailureScreen(onRefreshClicked = {viewModel.getProfile()}, logoutExist = true, onLogoutClicked = {viewModel.deleteSession()})
+            }
+        }
+    }
 }
 
 //Stateless
@@ -70,7 +101,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
 fun ProfileContent(
     fullName: String,
     phoneNumber: String,
-    gender: String,
+    gender: Int,
     photoUrl: String,
     onFullNameClicked: () -> Unit,
     onPhoneNumberClicked: () -> Unit,
@@ -101,7 +132,7 @@ fun ProfileContent(
         Text(text = fullName, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(bottom = 20.dp))
         UserEditComponent(icon = Icons.Rounded.Person, data = fullName, onClick = onFullNameClicked, modifier = Modifier.padding(bottom = 10.dp))
         UserEditComponent(icon = Icons.Rounded.Call, data = phoneNumber, onClick = onPhoneNumberClicked, modifier = Modifier.padding(bottom = 10.dp))
-        UserEditComponent(icon = Icons.Rounded.Face, data = gender, onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
+        UserEditComponent(icon = Icons.Rounded.Face, data = if(gender == 1) "Male" else "Female", onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
         Row {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
@@ -136,7 +167,7 @@ fun ProfileContentPreview(){
         ProfileContent(
             fullName = "John Madden",
             phoneNumber = "+6285965434232",
-            gender = "Male",
+            gender = 1,
             photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
             onFullNameClicked = { },
             onPhoneNumberClicked = { },
