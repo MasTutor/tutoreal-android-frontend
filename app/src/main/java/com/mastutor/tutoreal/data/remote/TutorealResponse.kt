@@ -60,7 +60,7 @@ data class ProfileResponse(
 	val email: String,
 
 	@field:SerializedName("noTelp")
-	val noTelp: String = "Not set yet"
+	val noTelp: String? = "Not set yet"
 )
 data class RegisterResponse(
 

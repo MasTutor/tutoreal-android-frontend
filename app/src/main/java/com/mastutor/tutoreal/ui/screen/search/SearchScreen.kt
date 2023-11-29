@@ -42,6 +42,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -201,16 +202,24 @@ fun SearchPaging(
                     job = tutor.specialization,
                     price = tutor.price.ifEmpty { "Rp. 30.000" })
             }
-            else{
-                //TODO
-            }
 
         }
         when(val state = tutors.loadState.refresh){
             is LoadState.Error ->{
                 item {
-                    FailureScreen(onRefreshClicked = {tutors.refresh()})
+                    if (state.error.message == "Null Pointer Nih"){
+                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()){
+                            Text(text = "No Data", textAlign = TextAlign.Center)
+                        }
+                    }
+                    else {
+                        Column {
+                            FailureScreen(onRefreshClicked = { tutors.refresh() })
+                            Text(text = "${state.error.message}")
+                        }
+                    }
                 }
+
             }
             is LoadState.Loading -> {
                 item {
@@ -230,7 +239,17 @@ fun SearchPaging(
         when(val state = tutors.loadState.append){
             is LoadState.Error -> {
                 item {
-                    FailureScreen(onRefreshClicked = {tutors.retry()})
+                    if (state.error.message == "null"){
+                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Text(text = "No Data")
+                        }
+                    }
+                    else {
+                        Column {
+                            FailureScreen(onRefreshClicked = { tutors.retry()})
+                            Text(text = "${state.error.cause}")
+                        }
+                    }
                 }
             }
             is LoadState.Loading -> {
