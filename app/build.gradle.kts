@@ -81,6 +81,9 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("androidx.paging:paging-common-ktx:3.1.1")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
+    implementation("androidx.paging:paging-runtime:3.1.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
 
     testImplementation("junit:junit:4.13.2")

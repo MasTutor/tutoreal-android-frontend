@@ -1,6 +1,47 @@
 package com.mastutor.tutoreal.data.remote
 
 import com.google.gson.annotations.SerializedName
+data class TutorsResponse(
+
+	@field:SerializedName("tutors")
+	val tutors: Tutors,
+
+	@field:SerializedName("error")
+	val error: String,
+
+	@field:SerializedName("message")
+	val message: String
+)
+
+data class TutorItem(
+
+	@field:SerializedName("Specialization")
+	val specialization: String,
+
+	@field:SerializedName("Nama")
+	val nama: String,
+
+	@field:SerializedName("Categories")
+	val categories: String,
+
+	@field:SerializedName("UserId")
+	val userId: String,
+
+	@field:SerializedName("price")
+	val price: String,
+
+	@field:SerializedName("id")
+	val id: String,
+
+	@field:SerializedName("picture")
+	val picture: String
+)
+
+data class Tutors(
+
+	@field:SerializedName("items")
+	val items: List<TutorItem>
+)
 data class ProfileResponse(
 
 	@field:SerializedName("uid")
