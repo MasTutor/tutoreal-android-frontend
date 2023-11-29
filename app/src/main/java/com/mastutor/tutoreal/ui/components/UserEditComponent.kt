@@ -44,7 +44,7 @@ fun UserEditComponent(
         colors = CardDefaults.cardColors(containerColor = Color.White), modifier = modifier
             .fillMaxWidth()
             .height(88.dp)
-            .clickable {onClick}
+            .clickable {onClick()}
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

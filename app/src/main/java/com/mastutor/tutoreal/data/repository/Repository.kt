@@ -2,9 +2,11 @@ package com.mastutor.tutoreal.data.repository
 
 import com.mastutor.tutoreal.data.preferences.SessionPreferences
 import com.mastutor.tutoreal.data.remote.LoginResponse
+import com.mastutor.tutoreal.data.remote.ProfileResponse
 import com.mastutor.tutoreal.data.remote.RegisterResponse
 import com.mastutor.tutoreal.data.remote.TutorealApiService
 import com.mastutor.tutoreal.util.AuthUiState
+import com.mastutor.tutoreal.util.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -28,6 +30,18 @@ class Repository @Inject constructor(
 
     suspend fun deleteSession(){
         sessionPreferences.deleteSession()
+    }
+    fun getProfile(token: String):Flow<UiState<ProfileResponse>>{
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val responseProfile = tutorealApiService.getProfile(token)
+                emit(UiState.Success(responseProfile))
+            }
+            catch (e: Exception){
+                emit(UiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
     }
     fun register(
         fullName: String,

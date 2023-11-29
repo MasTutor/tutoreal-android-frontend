@@ -1,7 +1,26 @@
 package com.mastutor.tutoreal.data.remote
 
 import com.google.gson.annotations.SerializedName
+data class ProfileResponse(
 
+	@field:SerializedName("uid")
+	val uid: String,
+
+	@field:SerializedName("photoURL")
+	val photoURL: String,
+
+	@field:SerializedName("nama")
+	val nama: String,
+
+	@field:SerializedName("gender")
+	val gender: Int,
+
+	@field:SerializedName("email")
+	val email: String,
+
+	@field:SerializedName("noTelp")
+	val noTelp: String = "Not set yet"
+)
 data class RegisterResponse(
 
 	@field:SerializedName("signupToken")
