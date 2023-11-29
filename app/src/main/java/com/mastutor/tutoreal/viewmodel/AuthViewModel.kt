@@ -41,6 +41,12 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
         }
     }
 
+    fun deleteSession(){
+        viewModelScope.launch {
+            repository.deleteSession()
+        }
+    }
+
     fun changePasswordLogin(password: String){
         _passwordLogin.value = password
     }

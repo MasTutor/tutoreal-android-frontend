@@ -34,8 +34,13 @@ class TutorPagingSource(
                 prevKey = if(position == INITIAL_PAGE_INDEX) null else position -1,
                 nextKey = if(responseData.tutors.items.isEmpty()) null else position + 1
             )
-        }catch (e: Exception){
+        }
+        catch (e: NullPointerException){
+            LoadResult.Error(Throwable(message = "Null Pointer Nih"))
+        }
+        catch (e: Exception){
             LoadResult.Error(e)
+
         }
     }
 }
