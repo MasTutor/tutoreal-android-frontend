@@ -77,6 +77,9 @@ fun SearchScreen(
     LaunchedEffect(key1 = true){
         lazyListState.animateScrollToItem(selectedCategoryIdx.intValue)
         focusRequester.requestFocus()
+        if(categoryIdx != 0){
+            selectedCategory = CategoriesData.categories[categoryIdx].id
+        }
     }
 
     SearchContent(
