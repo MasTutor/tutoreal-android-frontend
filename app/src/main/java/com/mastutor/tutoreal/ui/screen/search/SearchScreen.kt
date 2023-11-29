@@ -209,7 +209,7 @@ fun SearchPaging(
         when(val state = tutors.loadState.refresh){
             is LoadState.Error ->{
                 item {
-                    FailureScreen(onRefreshClicked = {tutors.retry()})
+                    FailureScreen(onRefreshClicked = {tutors.refresh()})
                 }
             }
             is LoadState.Loading -> {
@@ -230,7 +230,7 @@ fun SearchPaging(
         when(val state = tutors.loadState.append){
             is LoadState.Error -> {
                 item {
-                    FailureScreen(onRefreshClicked = {tutors.refresh()})
+                    FailureScreen(onRefreshClicked = {tutors.retry()})
                 }
             }
             is LoadState.Loading -> {
