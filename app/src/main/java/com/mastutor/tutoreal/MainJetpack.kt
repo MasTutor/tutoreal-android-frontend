@@ -31,6 +31,7 @@ import com.mastutor.tutoreal.ui.screen.register.RegisterPictureScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
 import com.mastutor.tutoreal.ui.screen.search.SearchScreen
 import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
+import com.mastutor.tutoreal.ui.screen.tutor.TutorScreen
 import com.mastutor.tutoreal.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,9 +56,6 @@ fun MainJetpack(
             composable(Screen.Login.route){
                 LoginScreen(navHostController = navHostController)
             }
-//            composable(Screen.Register.route){
-//                RegisterScreen()
-//            }
             registerGraph(navHostController)
             composable(Screen.Home.route){
                 HomeScreen(navHostController = navHostController)
@@ -77,7 +75,25 @@ fun MainJetpack(
             }
             composable(route = Screen.Search.route, arguments = listOf(navArgument("categoryIdx"){type = NavType.IntType}),){
                 val categoryIdx = it.arguments?.getInt("categoryIdx") ?: 0
-                SearchScreen(categoryIdx = categoryIdx, onBackClicked = {navHostController.navigateUp()})
+                SearchScreen(
+                    categoryIdx = categoryIdx,
+                    onBackClicked = {
+                        navHostController.navigateUp()
+                    },
+                    moveToTutorDetail = { id ->
+                        navHostController.navigate(Screen.Tutor.createRoute(id))
+                    }
+                )
+            }
+            composable(
+                route = Screen.Tutor.route,
+                arguments = listOf(navArgument("tutorId") { type = NavType.StringType }),
+            ) {
+                val id = it.arguments?.getString("tutorId") ?: ""
+                TutorScreen(
+                    id = id,
+                    navHostController = navHostController,
+                )
             }
         }
     }

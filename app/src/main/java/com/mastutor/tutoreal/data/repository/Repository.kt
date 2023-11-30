@@ -11,6 +11,7 @@ import com.mastutor.tutoreal.data.remote.ImgurResponse
 import com.mastutor.tutoreal.data.remote.LoginResponse
 import com.mastutor.tutoreal.data.remote.ProfileResponse
 import com.mastutor.tutoreal.data.remote.RegisterResponse
+import com.mastutor.tutoreal.data.remote.TutorResponse
 import com.mastutor.tutoreal.data.remote.TutorealApiService
 import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.util.UiState
@@ -162,5 +163,18 @@ class Repository @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    fun getTutor(id: String):Flow<UiState<TutorResponse>>{
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val responseProfile = tutorealApiService.getTutor(id)
+                emit(UiState.Success(responseProfile))
+            }
+            catch (e: Exception){
+                emit(UiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
     }
 }

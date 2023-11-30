@@ -11,6 +11,10 @@ data class TutorDummy (
     val percentage: Double
 )
 
+object SillyText {
+    val lorem = "\"Lorem ipsum dolor sit amet, consectetura dipiscing elit. Cras sem nulla, mollis sed lorem ut, dictum dignissim justo. Donec consequat risus vel ligula condimentum maximus. Integer non tortor turpis. Suspendisse nisl augue, pulvinar ut rutrum fermentum, bibendum ultricies tellus. Aenean tristique ex vel tellus fringilla, in pretium dolor sollicitudin. vel rutrum.\","
+}
+
 object TutorData {
     val tutors = listOf(
         // make 10 of this.

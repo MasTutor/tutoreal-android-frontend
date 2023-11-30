@@ -26,4 +26,9 @@ interface TutorealApiService {
         @Query("specialization") specialization: String,
         @Query("category") category: String? = null
     ): TutorsResponse
+
+    @GET("/tutor/detail")
+    suspend fun getTutor(
+        @Query("tutor_id") tutorId: String
+    ): TutorResponse
 }

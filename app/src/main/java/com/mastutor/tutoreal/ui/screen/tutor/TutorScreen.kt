@@ -36,37 +36,77 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.mastutor.tutoreal.data.dummy.SillyText
 import com.mastutor.tutoreal.data.dummy.TutorData
 import com.mastutor.tutoreal.data.dummy.TutorDummy
 import com.mastutor.tutoreal.data.local.CategoriesData
+import com.mastutor.tutoreal.data.remote.TutorDetail
+import com.mastutor.tutoreal.data.remote.TutorItem
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
+import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
+import com.mastutor.tutoreal.util.UiState
+import com.mastutor.tutoreal.viewmodel.TutorViewModel
 import java.text.NumberFormat
 import java.util.Locale
 
-// TODO: Add inner padding for this route (MainJetpack).
 @Composable
 fun TutorScreen(
+    id: String,
+    navHostController: NavHostController,
     modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit
+    viewModel: TutorViewModel = hiltViewModel()
 ) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
     val tabs = listOf("About", "Reviews")
-    TutorContent(modifier = modifier,
-        onBackClicked = onBackClicked,
-        dataTutor = TutorData.tutors[1],
-        tabs = tabs,
-        tabIndex = tabIndex,
-        onTabSelected = { index -> tabIndex = index })
+
+    viewModel.tutorResponse.collectAsState(UiState.Loading).value.let { uiState ->
+        when(uiState) {
+            is UiState.Loading -> {
+                viewModel.getTutor(id)
+                Column(
+                    modifier = modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Loading")
+                    CircularProgressIndicator(color = Color.Black)
+                }
+            }
+
+            is UiState.Success -> {
+                // TODO: Why tf is the response is on ArrayList. Tell backend later.
+                uiState.data?.detailTutor!![0].let {
+                    TutorContent(modifier = modifier,
+                        onBackClicked = {
+                            navHostController.navigateUp()
+                        },
+                        dataTutor = it,
+                        tabs = tabs,
+                        tabIndex = tabIndex,
+                        onTabSelected = { index -> tabIndex = index }
+                    )
+                }
+            }
+
+            is UiState.Failure -> {
+                FailureScreen(onRefreshClicked = { viewModel.getTutor(id) })
+            }
+        }
+    }
 }
 
 @Composable
 fun TutorContent(
     modifier: Modifier,
     onBackClicked: () -> Unit,
-    dataTutor: TutorDummy,
+    dataTutor: TutorDetail,
     tabs: List<String>,
     tabIndex: Int,
     onTabSelected: (Int) -> Unit
@@ -75,6 +115,7 @@ fun TutorContent(
         .fillMaxSize()
         .verticalScroll(rememberScrollState())
         .background(color = MaterialTheme.colorScheme.tertiary)
+        .padding(bottom = 10.dp)
     ) {
         Box(modifier = modifier
             .fillMaxWidth()
@@ -84,7 +125,7 @@ fun TutorContent(
         ) {
             Row(
                 modifier = Modifier
-                    .padding(start = 10.dp, top = 15.dp)
+                    .padding(start = 10.dp)
                     .align(Alignment.TopStart)
                     .offset(y = 20.dp)
                     .clickable { onBackClicked() },
@@ -108,7 +149,7 @@ fun TutorContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 AsyncImage(
-                    model = dataTutor.photoUrl,
+                    model = dataTutor.picture.ifEmpty { "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg" },
                     contentDescription = "User Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -116,12 +157,12 @@ fun TutorContent(
                         .size(150.dp)
                 )
                 Text(
-                    text = dataTutor.name,
+                    text = dataTutor.nama,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(top = 15.dp)
                 )
                 Text(
-                    text = dataTutor.job,
+                    text = dataTutor.specialization,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(top = 3.dp)
@@ -130,7 +171,7 @@ fun TutorContent(
                     shape = RoundedCornerShape(15),
                     modifier = modifier.padding(top = 20.dp)
                 ) {
-                    Text("Book A Session IDR ${dataTutor.price}",
+                    Text("Book A Session IDR ...",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold))
                 }
             }
@@ -142,7 +183,7 @@ fun TutorContent(
             Row(horizontalArrangement = Arrangement.spacedBy(15.dp) ,modifier = modifier.align(Alignment.Center)) {
                 tabs.forEachIndexed { index, title ->
                     // TODO: For non-selected, remove background
-                    Button(onClick = { onTabSelected(index) }, // this doesn't work (val could not be reassigned)
+                    Button(onClick = { onTabSelected(index) },
                         shape = RoundedCornerShape(20.dp)
                     ) {
                         Text(title, style = MaterialTheme.typography.bodySmall)
@@ -160,17 +201,19 @@ fun TutorContent(
 }
 
 @Composable
-fun AboutSection(modifier: Modifier, dataTutor: TutorDummy) {
+fun AboutSection(modifier: Modifier, dataTutor: TutorDetail) {
     Box(modifier = modifier
         .fillMaxWidth()
         .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
         Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("About ${dataTutor.name}", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            Text("About ${dataTutor.nama}", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            // TODO: GET Nama
             Text(dataTutor.about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
 
             Text("Speciality", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
             // TODO: Lazy Row, maybe
-            CategoryComponentBig(category = CategoriesData.categories[2],
+            val selectedCategory = CategoriesData.categories.firstOrNull { it.id == dataTutor.categories }
+            CategoryComponentBig(category = selectedCategory ?: CategoriesData.categories.first(), // TODO: Temporary handling
                 onClick = {}, modifier = modifier.padding(bottom = 5.dp))
 
             Text("Skills and Experience", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))

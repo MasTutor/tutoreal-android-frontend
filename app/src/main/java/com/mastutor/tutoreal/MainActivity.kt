@@ -31,10 +31,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             TutorealTheme {
                  MainJetpack(modifier = Modifier.fillMaxSize())
-//                For lazy development,
-//                TutorScreen(onBackClicked = {})
-//                MatchmakingResultScreen(modifier = Modifier, onBackClicked = {})
-//                RegisterPictureScreen()
             }
         }
     }

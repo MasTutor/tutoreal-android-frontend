@@ -8,7 +8,7 @@ sealed class Screen(val route: String){
     object Chooser : Screen("chooser")
     object Profile: Screen("profile")
     object Tutor : Screen("tutor/{tutorId}") {
-        fun createRoute(tutorId: String) = "detail/$tutorId"
+        fun createRoute(tutorId: String) = "tutor/$tutorId"
     }
     object Matchmaking: Screen("matchmaking")
     object MatchmakingResult : Screen("matchmakingResult")

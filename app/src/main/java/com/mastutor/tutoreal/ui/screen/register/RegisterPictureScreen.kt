@@ -193,7 +193,7 @@ fun RegisterPictureContent(
 
         Spacer(
             modifier = Modifier
-                .height(72.dp)
+                .height(50.dp)
         )
 
         Box(modifier = modifier

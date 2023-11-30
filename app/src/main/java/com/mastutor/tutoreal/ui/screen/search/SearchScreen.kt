@@ -63,9 +63,9 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     categoryIdx: Int,
     onBackClicked: () -> Unit,
+    moveToTutorDetail: (String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
-    )
-{
+) {
     var search by remember { mutableStateOf("") }
     var selectedCategory: String? by remember {
         mutableStateOf(null)
@@ -91,7 +91,7 @@ fun SearchScreen(
         onBackClicked = onBackClicked,
         focusRequester = focusRequester,
         tutors = viewModel.searchTutors(specialization = search, category = selectedCategory).collectAsLazyPagingItems(),
-        moveToTutorDetail = {},
+        moveToTutorDetail = moveToTutorDetail,
         onSelectedCategoryChanged = {id -> selectedCategory = id}
     )
 }
@@ -203,7 +203,8 @@ fun SearchPaging(
                     photoUrl = tutor.picture.ifEmpty { "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg" },
                     name = tutor.nama,
                     job = tutor.specialization,
-                    price = tutor.price.ifEmpty { "Rp. 30.000" })
+                    price = tutor.price.ifEmpty { "Rp. 30.000" },
+                    modifier = modifier.clickable { moveToTutorDetail(tutor.id) })
             }
 
         }
