@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.util.isEmailValid
@@ -52,7 +54,8 @@ import com.mastutor.tutoreal.viewmodel.AuthViewModel
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = hiltViewModel()
+    navHostController: NavHostController,
+    viewModel: AuthViewModel
 ) {
     val context = LocalContext.current
     val email by viewModel.emailRegister
@@ -66,152 +69,42 @@ fun RegisterScreen(
         mutableStateOf(genders[0])
     }
 
-    viewModel.registerResponse.collectAsState(initial = AuthUiState.Idle).value.let {uiState ->
-        when(uiState){
-            is AuthUiState.Idle -> {
-                RegisterContent(
-                    fullName = fullName,
-                    email = email,
-                    password = password,
-                    confirmPassword = passwordConfirm,
-                    onFullNameChanged = viewModel::changeFullNameRegister,
-                    onEmailChanged = viewModel::changeEmailRegister,
-                    onPasswordChanged = viewModel::changePasswordRegister,
-                    onConfirmPasswordChanged = viewModel::changePasswordConfirm,
-                    genders = genders,
-                    selectedGender = selectedGender,
-                    onGenderSelected =
-                    {gender ->
-                        onGenderSelected(gender)
-                        if(gender == "Male") viewModel.changeGender(true) else viewModel.changeGender(false)
-                        Toast.makeText(context, "Aslinya: $gender Lah Kok: $male", Toast.LENGTH_SHORT).show()
-                    },
-                    onNextClicked =
-                    {
-                        if(fullName.isEmpty()){
-                            Toast.makeText(context, "Full name kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(email.isEmpty() || !isEmailValid(email)){
-                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password.isEmpty()){
-                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password != passwordConfirm){
-                            Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
-                            viewModel.register()
-                        }
-                    },
-                )
+    RegisterContent(
+        fullName = fullName,
+        email = email,
+        password = password,
+        confirmPassword = passwordConfirm,
+        onFullNameChanged = viewModel::changeFullNameRegister,
+        onEmailChanged = viewModel::changeEmailRegister,
+        onPasswordChanged = viewModel::changePasswordRegister,
+        onConfirmPasswordChanged = viewModel::changePasswordConfirm,
+        genders = genders,
+        selectedGender = selectedGender,
+        onGenderSelected =
+        {gender ->
+            onGenderSelected(gender)
+            if(gender == "Male") viewModel.changeGender(true) else viewModel.changeGender(false)
+            Toast.makeText(context, "Aslinya: $gender Lah Kok: $male", Toast.LENGTH_SHORT).show()
+        },
+        onNextClicked =
+        {
+            if(fullName.isEmpty()){
+                Toast.makeText(context, "Full name kosong", Toast.LENGTH_SHORT).show()
             }
-            is AuthUiState.Load -> {
-                RegisterContent(
-                    fullName = fullName,
-                    email = email,
-                    password = password,
-                    confirmPassword = passwordConfirm,
-                    onFullNameChanged = {},
-                    onEmailChanged ={} ,
-                    onPasswordChanged = {},
-                    onConfirmPasswordChanged = {},
-                    genders = genders,
-                    selectedGender = selectedGender,
-                    onGenderSelected = {},
-                    onNextClicked = {},
-                    modifier = modifier.alpha(0.3f),
-                )
-                Column(
-                    modifier = modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "Loading")
-                    CircularProgressIndicator(color = Color.Black)
-                }
+            else if(email.isEmpty() || !isEmailValid(email)){
+                Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
             }
-            is AuthUiState.Success -> {
-                RegisterContent(
-                    fullName = fullName,
-                    email = email,
-                    password = password,
-                    confirmPassword = passwordConfirm,
-                    onFullNameChanged = viewModel::changeFullNameRegister,
-                    onEmailChanged = viewModel::changeEmailRegister,
-                    onPasswordChanged = viewModel::changePasswordRegister,
-                    onConfirmPasswordChanged = viewModel::changePasswordConfirm,
-                    genders = genders,
-                    selectedGender = selectedGender,
-                    onGenderSelected =
-                    {gender ->
-                        onGenderSelected(gender)
-                        if(gender == "Male") viewModel.changeGender(true) else viewModel.changeGender(false)
-                    },
-                    onNextClicked = {
-                        if(fullName.isEmpty()){
-                            Toast.makeText(context, "Full name kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(email.isEmpty() || !isEmailValid(email)){
-                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password.isEmpty()){
-                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password != passwordConfirm){
-                            Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
-                            viewModel.register()
-                        }
-                    },
-                )
-                LaunchedEffect(key1 = true) {
-                    Toast.makeText(context, "Register Berhasil", Toast.LENGTH_SHORT).show()
-                }
+            else if(password.isEmpty()){
+                Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
             }
-            is AuthUiState.Failure -> {
-                RegisterContent(
-                    fullName = fullName,
-                    email = email,
-                    password = password,
-                    confirmPassword = passwordConfirm,
-                    onFullNameChanged = viewModel::changeFullNameRegister,
-                    onEmailChanged = viewModel::changeEmailRegister,
-                    onPasswordChanged = viewModel::changePasswordRegister,
-                    onConfirmPasswordChanged = viewModel::changePasswordConfirm,
-                    genders = genders,
-                    selectedGender = selectedGender,
-                    onGenderSelected =
-                    {gender ->
-                        onGenderSelected(gender)
-                        if(gender == "Male") viewModel.changeGender(true) else viewModel.changeGender(false)
-                    },
-                    onNextClicked = {
-                        if(fullName.isEmpty()){
-                            Toast.makeText(context, "Full name kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(email.isEmpty() || !isEmailValid(email)){
-                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password.isEmpty()){
-                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password != passwordConfirm){
-                            Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
-                            viewModel.register()
-                        }
-                    },
-                )
-                LaunchedEffect(key1 = true) {
-                    Toast.makeText(context, "Gagal cek input, atau cek koneksi internet", Toast.LENGTH_SHORT).show()
-                }
+            else if(password != passwordConfirm){
+                Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
+            else{
+                navHostController.navigate(Screen.RegisterPicture.route)
+            }
+        },
+    )
 
 }
 
@@ -412,7 +305,7 @@ fun RegisterContent(
             ),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
         ) {
-            Text("Register")
+            Text("Next")
         }
     }
 }

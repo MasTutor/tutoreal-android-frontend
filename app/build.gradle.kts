@@ -17,11 +17,13 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
         buildConfigField("String", "BASEURL", "\"https://tutoreal-backend2-7h6kysqpgq-uc.a.run.app\"")
+        buildConfigField("String", "CLIENT_ID", "\"3bc735ced126e46\"")
     }
 
     buildTypes {

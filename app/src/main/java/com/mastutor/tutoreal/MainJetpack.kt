@@ -7,13 +7,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
@@ -22,9 +27,12 @@ import com.mastutor.tutoreal.ui.screen.home.HomeScreen
 import com.mastutor.tutoreal.ui.screen.login.LoginScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
 import com.mastutor.tutoreal.ui.screen.profile.ProfileScreen
+import com.mastutor.tutoreal.ui.screen.register.RegisterPictureScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
 import com.mastutor.tutoreal.ui.screen.search.SearchScreen
 import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
+import com.mastutor.tutoreal.ui.screen.tutor.TutorScreen
+import com.mastutor.tutoreal.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,14 +51,12 @@ fun MainJetpack(
 
         )){
             composable(Screen.Chooser.route){
-                ChooserScreen(onLoginClicked = { navHostController.navigate(Screen.Login.route)}, onRegisterClicked = {navHostController.navigate(Screen.Register.route)}, navHostController = navHostController)
+                ChooserScreen(onLoginClicked = { navHostController.navigate(Screen.Login.route)}, onRegisterClicked = {navHostController.navigate("register")}, navHostController = navHostController)
             }
             composable(Screen.Login.route){
                 LoginScreen(navHostController = navHostController)
             }
-            composable(Screen.Register.route){
-                RegisterScreen()
-            }
+            registerGraph(navHostController)
             composable(Screen.Home.route){
                 HomeScreen(navHostController = navHostController)
             }
@@ -69,9 +75,45 @@ fun MainJetpack(
             }
             composable(route = Screen.Search.route, arguments = listOf(navArgument("categoryIdx"){type = NavType.IntType}),){
                 val categoryIdx = it.arguments?.getInt("categoryIdx") ?: 0
-                SearchScreen(categoryIdx = categoryIdx, onBackClicked = {navHostController.navigateUp()})
+                SearchScreen(
+                    categoryIdx = categoryIdx,
+                    onBackClicked = {
+                        navHostController.navigateUp()
+                    },
+                    moveToTutorDetail = { id ->
+                        navHostController.navigate(Screen.Tutor.createRoute(id))
+                    }
+                )
+            }
+            composable(
+                route = Screen.Tutor.route,
+                arguments = listOf(navArgument("tutorId") { type = NavType.StringType }),
+            ) {
+                val id = it.arguments?.getString("tutorId") ?: ""
+                TutorScreen(
+                    id = id,
+                    navHostController = navHostController,
+                )
             }
         }
+    }
+}
 
+fun NavGraphBuilder.registerGraph(navController: NavHostController) {
+    navigation(startDestination = Screen.RegisterForm.route, route = "register") {
+        composable(Screen.RegisterForm.route) {backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry("register")
+            }
+            val viewModel = hiltViewModel<AuthViewModel>(parentEntry)
+            RegisterScreen(viewModel = viewModel, navHostController = navController)
+        }
+        composable(Screen.RegisterPicture.route) {backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry("register")
+            }
+            val viewModel = hiltViewModel<AuthViewModel>(parentEntry)
+            RegisterPictureScreen(viewModel = viewModel, navHostController = navController)
+        }
     }
 }

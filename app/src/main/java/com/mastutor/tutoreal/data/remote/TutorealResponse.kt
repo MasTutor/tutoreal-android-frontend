@@ -124,3 +124,45 @@ data class UserId(
 	@field:SerializedName("id")
 	val id: String? = null
 )
+data class TutorResponse(
+	@field:SerializedName("error")
+	val error: String,
+
+	@field:SerializedName("message")
+	val message: String,
+
+	@field:SerializedName("detail_tutor")
+	val detailTutor: ArrayList<TutorDetail>
+)
+
+data class TutorDetail(
+	@field:SerializedName("id")
+	val id: String,
+
+	@field:SerializedName("UserId")
+	val userId: String,
+
+	@field:SerializedName("Nama")
+	val nama: String,
+
+	@field:SerializedName("hasPenis")
+	val gender: Int,
+
+	@field:SerializedName("AgesRanges")
+	val ages: String,
+
+	@field:SerializedName("Specialization")
+	val specialization: String,
+
+	@field:SerializedName("Categories")
+	val categories: String,
+
+	@field:SerializedName("AboutMe")
+	val about: String,
+
+	@field:SerializedName("SkillsAndExperience")
+	val skills: String,
+
+	@field:SerializedName("picture")
+	val picture: String
+)

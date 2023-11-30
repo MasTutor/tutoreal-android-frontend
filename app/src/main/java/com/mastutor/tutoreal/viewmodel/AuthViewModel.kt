@@ -1,5 +1,6 @@
 package com.mastutor.tutoreal.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -76,6 +77,9 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     private val _passwordConfirm = mutableStateOf("")
     val passwordConfirm: State<String> get() = _passwordConfirm
 
+    private val _imageUri = mutableStateOf<Uri>(Uri.EMPTY)
+    val imageUri: State<Uri> get() = _imageUri
+
     private val _male = mutableStateOf(true)
     val male: State<Boolean> get() = _male
 
@@ -97,12 +101,30 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
         _passwordConfirm.value = password
     }
 
-    fun register(){
-        viewModelScope.launch {
-            repository.register(fullName = fullNameRegister.value, email = emailRegister.value, password = passwordRegister.value, male = male.value).collect{
-                _registerResponse.value = it
-            }
-        }
+    fun changeUri(uri: Uri) {
+        _imageUri.value = uri
     }
 
+    fun register(){
+        viewModelScope.launch {
+            _registerResponse.value = AuthUiState.Load
+            val result = imageUri.value.let { repository.uploadImage(it) }
+
+            result.fold(
+                onSuccess = { image ->
+                    repository.register(
+                        fullName = fullNameRegister.value,
+                        email = emailRegister.value,
+                        password = passwordRegister.value,
+                        male = male.value,
+                        photoUrl = image
+                    ).collect{
+                        _registerResponse.value = it
+                    }
+                },
+                onFailure = {
+                }
+            ).toString()
+        }
+    }
 }
