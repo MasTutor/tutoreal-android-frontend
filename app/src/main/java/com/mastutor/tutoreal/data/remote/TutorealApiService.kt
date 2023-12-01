@@ -23,7 +23,7 @@ interface TutorealApiService {
     suspend fun searchTutor(
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("specialization") specialization: String,
+        @Query("specialization") specialization: String? = null,
         @Query("category") category: String? = null
     ): TutorsResponse
 
