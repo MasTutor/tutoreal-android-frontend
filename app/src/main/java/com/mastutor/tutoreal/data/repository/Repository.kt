@@ -1,10 +1,10 @@
 package com.mastutor.tutoreal.data.repository
 
+import android.content.Context
+import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.mastutor.tutoreal.data.pagingsource.TutorPagingSource
-import android.content.Context
-import android.net.Uri
 import com.mastutor.tutoreal.data.preferences.SessionPreferences
 import com.mastutor.tutoreal.data.remote.ImgurApiService
 import com.mastutor.tutoreal.data.remote.ImgurResponse
@@ -13,6 +13,7 @@ import com.mastutor.tutoreal.data.remote.ProfileResponse
 import com.mastutor.tutoreal.data.remote.RegisterResponse
 import com.mastutor.tutoreal.data.remote.TutorResponse
 import com.mastutor.tutoreal.data.remote.TutorealApiService
+import com.mastutor.tutoreal.data.remote.datahelper.HomeDataHelper
 import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.util.uriToFile
@@ -169,8 +170,22 @@ class Repository @Inject constructor(
         return flow {
             try {
                 emit(UiState.Loading)
-                val responseProfile = tutorealApiService.getTutor(id)
-                emit(UiState.Success(responseProfile))
+                val responseTutors = tutorealApiService.getTutor(id)
+                emit(UiState.Success(responseTutors))
+            }
+            catch (e: Exception){
+                emit(UiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getHomeNeeded(token: String): Flow<UiState<HomeDataHelper>>{
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val responseProfile = tutorealApiService.getProfile(token)
+                val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100)
+                emit(UiState.Success(HomeDataHelper(responseProfile, responseTutors)))
             }
             catch (e: Exception){
                 emit(UiState.Failure(e))
