@@ -164,5 +164,8 @@ data class TutorDetail(
 	val skills: String,
 
 	@field:SerializedName("picture")
-	val picture: String
+	val picture: String,
+
+	@field:SerializedName("price")
+	val price: String? = null
 )

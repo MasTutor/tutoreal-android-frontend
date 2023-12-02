@@ -24,6 +24,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.mastutor.tutoreal.ui.components.SelectionDialog
+import com.mastutor.tutoreal.ui.components.TextFieldDialog
 import com.mastutor.tutoreal.ui.components.UserEditComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
@@ -58,6 +62,16 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
         }
         viewModel.getProfile()
     }
+
+    // Dialog Logics
+    val phoneNumberEdit = remember { mutableStateOf(false) }
+    val usernameEdit = remember { mutableStateOf(false) }
+    val genderEdit = remember { mutableStateOf(false) }
+    val genders = listOf("male", "female")
+    val selectedItem = remember {
+        mutableStateOf(genders[0])
+    }
+
     viewModel.profileResponse.collectAsState(initial = UiState.Loading).value.let { uiState ->
         when(uiState){
             is UiState.Loading -> {
@@ -74,15 +88,42 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
             is UiState.Success -> {
                 val userData = uiState.data
                 if (userData != null) {
+                    TextFieldDialog(
+                        data = "Nama",
+                        openDialog = usernameEdit,
+                        value = userData.profile.nama,
+                        onValueChanged = { },
+                        onSubmitClicked = {
+                            usernameEdit.value = false
+                        }
+                    )
+
+                    TextFieldDialog(
+                        data = "Nomor Telepon",
+                        openDialog = phoneNumberEdit,
+                        value = userData.profile.noTelp,
+                        onValueChanged = { },
+                        onSubmitClicked = {
+                            phoneNumberEdit.value = false
+                        }
+                    )
+
+                    SelectionDialog(
+                        openDialog = genderEdit,
+                        options = genders,
+                        selectedOptions = selectedItem,
+                        onSubmitClicked = {}
+                    )
+
                     ProfileContent(
                         fullName = userData.profile.nama,
                         phoneNumber =userData.profile.noTelp.ifEmpty { "Not yet set" },
                         gender = userData.profile.gender,
                         photoUrl = userData.profile.photoURL,
-                        onFullNameClicked = {},
-                        onPhoneNumberClicked = {},
-                        onGenderClicked = {},
-                        onLogoutClicked = {viewModel.deleteSession()},
+                        onFullNameClicked = { usernameEdit.value = true },
+                        onPhoneNumberClicked = { phoneNumberEdit.value = true },
+                        onGenderClicked = { genderEdit.value = true },
+                        onLogoutClicked = { viewModel.deleteSession() },
                         onHistoryClicked = { })
                 }
             }

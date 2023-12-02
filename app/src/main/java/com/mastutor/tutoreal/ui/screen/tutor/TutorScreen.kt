@@ -88,7 +88,12 @@ fun TutorScreen(
                             onBackClicked = {
                                 navHostController.navigateUp()
                             },
-                            dataTutor = tutor,
+                            name = tutor.nama,
+                            price = tutor.price ?: "69",
+                            specialization = tutor.specialization,
+                            about = tutor.about,
+                            skillsExperience = tutor.skills,
+                            picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                             tabs = tabs,
                             tabIndex = tabIndex,
                             category = it,
@@ -108,10 +113,15 @@ fun TutorScreen(
 fun TutorContent(
     modifier: Modifier,
     onBackClicked: () -> Unit,
-    dataTutor: TutorDetail,
+    name: String,
+    picture: String,
+    specialization: String,
+    price: String,
+    about: String,
+    skillsExperience: String,
+    category: Category,
     tabs: List<String>,
     tabIndex: Int,
-    category: Category,
     onTabSelected: (Int) -> Unit
 ) {
     Column(modifier = modifier
@@ -152,7 +162,7 @@ fun TutorContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 AsyncImage(
-                    model = dataTutor.picture.ifEmpty { "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg" },
+                    model = picture,
                     contentDescription = "User Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -160,12 +170,12 @@ fun TutorContent(
                         .size(150.dp)
                 )
                 Text(
-                    text = dataTutor.nama,
+                    text = name,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(top = 15.dp)
                 )
                 Text(
-                    text = dataTutor.specialization,
+                    text = specialization,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(top = 3.dp)
@@ -174,7 +184,7 @@ fun TutorContent(
                     shape = RoundedCornerShape(15),
                     modifier = modifier.padding(top = 20.dp)
                 ) {
-                    Text("Book A Session IDR ...",
+                    Text("Book A Session IDR ${price}",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold))
                 }
             }
@@ -199,7 +209,13 @@ fun TutorContent(
         }
 
         when(tabIndex) {
-            0 -> AboutSection(modifier = modifier, dataTutor = dataTutor, category)
+            0 -> AboutSection(
+                modifier = modifier,
+                name = name,
+                about = about,
+                skillsExperience = skillsExperience,
+                category = category
+            )
             1 -> ReviewSection(modifier = modifier)
         }
 
@@ -207,20 +223,26 @@ fun TutorContent(
 }
 
 @Composable
-fun AboutSection(modifier: Modifier, dataTutor: TutorDetail, category: Category) {
+fun AboutSection(
+    modifier: Modifier,
+    name: String,
+    about: String,
+    skillsExperience: String,
+    category: Category
+) {
     Box(modifier = modifier
         .fillMaxWidth()
         .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
         Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("About ${dataTutor.nama}", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-            Text(dataTutor.about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
+            Text("About $name", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            Text(about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
 
             Text("Speciality", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
             CategoryComponentBig(category = category,
                 onClick = {}, modifier = modifier.padding(bottom = 5.dp))
 
             Text("Skills and Experience", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-            Text(dataTutor.about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
+            Text(skillsExperience, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
         }
     }
 }

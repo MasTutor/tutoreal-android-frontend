@@ -96,6 +96,9 @@ fun HomeScreen(
                             imageUrl = profileResponse.photoURL,
                             onUserClicked = {navHostController.navigate(Screen.Profile.route)},
                             onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route)},
+                            moveToTutorDetail = { id ->
+                                navHostController.navigate(Screen.Tutor.createRoute(id))
+                            },
                             listTutor = tutorData
                         )
                     }
@@ -115,6 +118,7 @@ fun HomeContent(
     searchOnClick: () -> Unit,
     onCategoryClicked:(Int) -> Unit,
     onUserClicked:() -> Unit,
+    moveToTutorDetail:(String) -> Unit,
     categories: List<Category>,
     name: String,
     imageUrl: String,
@@ -241,14 +245,15 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-            //TODO: Implement OnClick ke Detail User
             LazyRow(modifier = Modifier.padding(bottom = 20.dp)){
                 items(listTutor){tutor ->
                     TutorComponentBig(
                         photoUrl = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                         name = tutor.nama,
                         job = tutor.specialization,
-                       modifier = Modifier.padding(start = 5.dp, end = 5.dp),
+                        modifier = Modifier
+                            .padding(start = 5.dp, end = 5.dp)
+                            .clickable(onClick = { moveToTutorDetail(tutor.id) })
                     )
 
                 }
