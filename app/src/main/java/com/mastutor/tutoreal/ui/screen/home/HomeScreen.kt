@@ -126,7 +126,7 @@ fun HomeContent(
         ) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(110.dp)
             .background(color = MaterialTheme.colorScheme.tertiary),
             horizontalArrangement = Arrangement.Center
         ){
@@ -134,7 +134,7 @@ fun HomeContent(
                 modifier = modifier.fillMaxSize().offset(y = 10.dp)
             ){
                 Column(verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(start = 10.dp).fillMaxHeight()
+                        modifier = Modifier.padding(start = 10.dp).fillMaxHeight().offset(y = 4.dp)
                 ) {
                     Text(
                         text = "Halo,",
