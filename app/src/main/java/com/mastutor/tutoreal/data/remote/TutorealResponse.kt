@@ -166,3 +166,32 @@ data class TutorDetail(
 	@field:SerializedName("picture")
 	val picture: String
 )
+data class ScheduleResponse(
+
+	@field:SerializedName("history_data")
+	val historyData: List<HistoryDataItem?>? = null,
+
+	@field:SerializedName("error")
+	val error: String? = null,
+
+	@field:SerializedName("message")
+	val message: String? = null
+)
+
+data class HistoryDataItem(
+
+	@field:SerializedName("TutorName")
+	val tutorName: String? = null,
+
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@field:SerializedName("SessionName")
+	val sessionName: String? = null,
+
+	@field:SerializedName("Date")
+	val date: String? = null,
+
+	@field:SerializedName("status")
+	val status: String? = null
+)

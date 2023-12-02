@@ -1,5 +1,6 @@
 package com.mastutor.tutoreal.viewmodel
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,16 @@ class HomeViewModel @Inject constructor(private val repository: Repository): Vie
         get() = _homeResponse
 
     private val _userToken = mutableStateOf("")
+    private val _userExist = mutableStateOf(false)
+    val userExist: State<Boolean> get() = _userExist
+
+    fun tryUserExist(){
+        viewModelScope.launch {
+            repository.getUserExist().collect(){
+                _userExist.value = it
+            }
+        }
+    }
     fun getToken(){
         viewModelScope.launch {
             repository.getUserToken().collect(){

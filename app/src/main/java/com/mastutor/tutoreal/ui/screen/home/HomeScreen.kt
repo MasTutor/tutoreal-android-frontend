@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,9 +45,12 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.data.local.Category
+import com.mastutor.tutoreal.data.local.StatusData
+import com.mastutor.tutoreal.data.remote.HistoryDataItem
 import com.mastutor.tutoreal.data.remote.TutorItem
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
 import com.mastutor.tutoreal.ui.components.MatchmakingCardComponent
+import com.mastutor.tutoreal.ui.components.ScheduleComponent
 import com.mastutor.tutoreal.ui.components.TutorComponentBig
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
@@ -60,11 +64,18 @@ fun HomeScreen(
     navHostController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel()
 ){
+    val userExist by viewModel.userExist
     SideEffect {
+        viewModel.tryUserExist()
         viewModel.getToken()
     }
 
     LaunchedEffect(key1 = true){
+        if(!userExist){
+            navHostController.navigate(Screen.Chooser.route){
+                popUpTo(0)
+            }
+        }
         viewModel.getHomeProcess()
     }
 
@@ -84,6 +95,7 @@ fun HomeScreen(
             is UiState.Success -> {
                 val profileResponse = uiState.data?.profileResponse?.profile
                 val tutorData = uiState.data?.tutorsResponse?.tutors?.items?.shuffled()?.take(4)
+                val scheduleData = if(uiState.data?.scheduleResponse?.historyData?.isNotEmpty() == true) uiState.data.scheduleResponse.historyData[0] else null
                 if (profileResponse != null) {
                     if (tutorData != null) {
                         HomeContent(
@@ -94,7 +106,8 @@ fun HomeScreen(
                             imageUrl = profileResponse.photoURL,
                             onUserClicked = {navHostController.navigate(Screen.Profile.route)},
                             onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route)},
-                            listTutor = tutorData
+                            listTutor = tutorData,
+                            nextSchedule = scheduleData
                         )
                     }
                 }
@@ -117,7 +130,8 @@ fun HomeContent(
     name: String,
     imageUrl: String,
     onMatchmakingClicked: () -> Unit,
-    listTutor: List<TutorItem>
+    listTutor: List<TutorItem>,
+    nextSchedule: HistoryDataItem? = null
 ){
     Column(modifier = modifier
         .fillMaxSize()
@@ -198,28 +212,46 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-        Box(
-            modifier = Modifier
-                .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .fillMaxWidth()
-                .height(120.dp)
 
-        ) {
-            //TODO: Implement Jadwal user jika sudah jadi
-            Text(
-                text = "Jadwal Kosong",
-                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
-                modifier = Modifier.align(
-                    Alignment.Center
+            if(nextSchedule != null){
+                ScheduleComponent(
+                    title = nextSchedule.sessionName.toString(),
+                    tutorName = nextSchedule.tutorName.toString(),
+                    date = nextSchedule.date.toString(),
+                    status = if(nextSchedule.status.toString() == "OnGoing")
+                    {StatusData(status = nextSchedule.status.toString(), color = Color.Yellow)}
+                    else if (nextSchedule.status.toString() == "Completed")
+                    {StatusData(status = nextSchedule.status.toString(), color = Color.Green) }
+                    else { StatusData(status = nextSchedule.status.toString(), color = Color.Red) },
+                    modifier = Modifier
+                        .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                 )
-            )
-        }
+            }
+            else{
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .fillMaxWidth()
+                        .height(120.dp)
+
+                ) {
+                    Text(
+                        text = "Jadwal Kosong",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.align(
+                            Alignment.Center
+                        )
+                    )
+                }
+            }
+
+
         Text(
             text = "Kategori",
             style = MaterialTheme.typography.bodyLarge,

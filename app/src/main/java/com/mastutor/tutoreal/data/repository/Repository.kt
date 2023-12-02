@@ -11,6 +11,7 @@ import com.mastutor.tutoreal.data.remote.ImgurResponse
 import com.mastutor.tutoreal.data.remote.LoginResponse
 import com.mastutor.tutoreal.data.remote.ProfileResponse
 import com.mastutor.tutoreal.data.remote.RegisterResponse
+import com.mastutor.tutoreal.data.remote.ScheduleResponse
 import com.mastutor.tutoreal.data.remote.TutorResponse
 import com.mastutor.tutoreal.data.remote.TutorealApiService
 import com.mastutor.tutoreal.data.remote.datahelper.HomeDataHelper
@@ -57,6 +58,18 @@ class Repository @Inject constructor(
 
     suspend fun deleteSession(){
         sessionPreferences.deleteSession()
+    }
+    fun getSchedule(token: String): Flow<UiState<ScheduleResponse>>{
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val responseSchedule = tutorealApiService.getSchedule(token)
+                emit(UiState.Success(responseSchedule))
+            }
+            catch (e: Exception){
+                emit(UiState.Failure(e))
+            }
+        }
     }
     fun getProfile(token: String):Flow<UiState<ProfileResponse>>{
         return flow {
@@ -185,7 +198,8 @@ class Repository @Inject constructor(
                 emit(UiState.Loading)
                 val responseProfile = tutorealApiService.getProfile(token)
                 val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100)
-                emit(UiState.Success(HomeDataHelper(responseProfile, responseTutors)))
+                val responseSchedule = tutorealApiService.getSchedule(token)
+                emit(UiState.Success(HomeDataHelper(responseProfile, responseTutors, responseSchedule)))
             }
             catch (e: Exception){
                 emit(UiState.Failure(e))
