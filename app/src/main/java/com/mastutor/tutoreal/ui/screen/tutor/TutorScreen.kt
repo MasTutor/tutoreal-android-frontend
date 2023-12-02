@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,6 +46,7 @@ import com.mastutor.tutoreal.data.dummy.SillyText
 import com.mastutor.tutoreal.data.dummy.TutorData
 import com.mastutor.tutoreal.data.dummy.TutorDummy
 import com.mastutor.tutoreal.data.local.CategoriesData
+import com.mastutor.tutoreal.data.local.Category
 import com.mastutor.tutoreal.data.remote.TutorDetail
 import com.mastutor.tutoreal.data.remote.TutorItem
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
@@ -70,8 +72,7 @@ fun TutorScreen(
             is UiState.Loading -> {
                 viewModel.getTutor(id)
                 Column(
-                    modifier = modifier
-                        .fillMaxSize(),
+                    modifier = modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -81,20 +82,21 @@ fun TutorScreen(
             }
 
             is UiState.Success -> {
-                // TODO: Why tf is the response is on ArrayList. Tell backend later.
-                uiState.data?.detailTutor!![0].let {
-                    TutorContent(modifier = modifier,
-                        onBackClicked = {
-                            navHostController.navigateUp()
-                        },
-                        dataTutor = it,
-                        tabs = tabs,
-                        tabIndex = tabIndex,
-                        onTabSelected = { index -> tabIndex = index }
-                    )
+                uiState.data?.detailTutor?.let { tutor ->
+                    CategoriesData.categories.firstOrNull { it.id == tutor.categories }?.let {
+                        TutorContent(modifier = modifier,
+                            onBackClicked = {
+                                navHostController.navigateUp()
+                            },
+                            dataTutor = tutor,
+                            tabs = tabs,
+                            tabIndex = tabIndex,
+                            category = it,
+                            onTabSelected = { index -> tabIndex = index }
+                        )
+                    }
                 }
             }
-
             is UiState.Failure -> {
                 FailureScreen(onRefreshClicked = { viewModel.getTutor(id) })
             }
@@ -109,6 +111,7 @@ fun TutorContent(
     dataTutor: TutorDetail,
     tabs: List<String>,
     tabIndex: Int,
+    category: Category,
     onTabSelected: (Int) -> Unit
 ) {
     Column(modifier = modifier
@@ -127,7 +130,7 @@ fun TutorContent(
                 modifier = Modifier
                     .padding(start = 10.dp)
                     .align(Alignment.TopStart)
-                    .offset(y = 20.dp)
+                    .offset(y = 10.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -144,7 +147,7 @@ fun TutorContent(
             }
             Column(modifier = modifier
                 .fillMaxSize()
-                .padding(top = 50.dp),
+                .padding(top = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -182,9 +185,12 @@ fun TutorContent(
             .padding(top = 15.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(15.dp) ,modifier = modifier.align(Alignment.Center)) {
                 tabs.forEachIndexed { index, title ->
-                    // TODO: For non-selected, remove background
                     Button(onClick = { onTabSelected(index) },
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (tabIndex == index)
+                                MaterialTheme.colorScheme.primary else Color.Transparent
+                        )
                     ) {
                         Text(title, style = MaterialTheme.typography.bodySmall)
                     }
@@ -193,7 +199,7 @@ fun TutorContent(
         }
 
         when(tabIndex) {
-            0 -> AboutSection(modifier = modifier, dataTutor = dataTutor)
+            0 -> AboutSection(modifier = modifier, dataTutor = dataTutor, category)
             1 -> ReviewSection(modifier = modifier)
         }
 
@@ -201,19 +207,16 @@ fun TutorContent(
 }
 
 @Composable
-fun AboutSection(modifier: Modifier, dataTutor: TutorDetail) {
+fun AboutSection(modifier: Modifier, dataTutor: TutorDetail, category: Category) {
     Box(modifier = modifier
         .fillMaxWidth()
         .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
         Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("About ${dataTutor.nama}", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-            // TODO: GET Nama
             Text(dataTutor.about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
 
             Text("Speciality", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-            // TODO: Lazy Row, maybe
-            val selectedCategory = CategoriesData.categories.firstOrNull { it.id == dataTutor.categories }
-            CategoryComponentBig(category = selectedCategory ?: CategoriesData.categories.first(), // TODO: Temporary handling
+            CategoryComponentBig(category = category,
                 onClick = {}, modifier = modifier.padding(bottom = 5.dp))
 
             Text("Skills and Experience", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))

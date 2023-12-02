@@ -132,7 +132,7 @@ data class TutorResponse(
 	val message: String,
 
 	@field:SerializedName("detail_tutor")
-	val detailTutor: ArrayList<TutorDetail>
+	val detailTutor: TutorDetail
 )
 
 data class TutorDetail(
