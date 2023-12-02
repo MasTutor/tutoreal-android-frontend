@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -124,13 +126,16 @@ fun HomeContent(
         ) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(100.dp)
             .background(color = MaterialTheme.colorScheme.tertiary),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement = Arrangement.Center
         ){
-            Row(Modifier.padding(top = 20.dp)){
-                Column(modifier = Modifier.padding(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier.fillMaxSize().offset(y = 10.dp)
+            ){
+                Column(verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(start = 10.dp).fillMaxHeight()
+                ) {
                     Text(
                         text = "Halo,",
                         style = MaterialTheme.typography.bodySmall,
@@ -150,7 +155,7 @@ fun HomeContent(
                     modifier = Modifier
                         .padding(end = 10.dp)
                         .clip(CircleShape)
-                        .size(50.dp)
+                        .size(48.dp)
                         .clickable { onUserClicked() })
             }
         }
