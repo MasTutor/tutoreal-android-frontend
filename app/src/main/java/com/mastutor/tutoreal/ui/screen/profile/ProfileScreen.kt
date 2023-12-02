@@ -83,7 +83,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                         onPhoneNumberClicked = {},
                         onGenderClicked = {},
                         onLogoutClicked = {viewModel.deleteSession()},
-                        onHistoryClicked = { })
+                        onHistoryClicked = {navHostController.navigate(Screen.Schedule.route)})
                 }
             }
             is UiState.Failure -> {

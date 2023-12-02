@@ -31,4 +31,9 @@ interface TutorealApiService {
     suspend fun getTutor(
         @Query("tutor_id") tutorId: String
     ): TutorResponse
+
+    @GET("/user/history")
+    suspend fun getSchedule(
+        @Header("Authorization") token: String,
+    ): ScheduleResponse
 }

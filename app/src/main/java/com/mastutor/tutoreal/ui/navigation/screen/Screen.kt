@@ -16,4 +16,5 @@ sealed class Screen(val route: String){
     object Search: Screen("search/{categoryIdx}"){
         fun createRoute(categoryIdx: Int) = "search/$categoryIdx"
     }
+    object Schedule: Screen("schedule")
 }
