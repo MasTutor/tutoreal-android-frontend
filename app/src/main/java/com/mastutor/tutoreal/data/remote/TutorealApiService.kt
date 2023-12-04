@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface TutorealApiService {
@@ -36,4 +37,16 @@ interface TutorealApiService {
     suspend fun getSchedule(
         @Header("Authorization") token: String,
     ): ScheduleResponse
+
+//    @PUT("/user/editprofile")
+//    suspend fun editProfile(
+//        @Header("Authorization") token: String,
+//        @Body requestBody: RequestBody
+//    ) : EditResponse
+
+    @POST("/user/new-history")
+    suspend fun newHistory(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    ) : BookResponse
 }

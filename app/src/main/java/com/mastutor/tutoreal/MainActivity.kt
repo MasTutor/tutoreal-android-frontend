@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
+import com.mastutor.tutoreal.ui.screen.booking.BookingScreen
 import com.mastutor.tutoreal.ui.screen.home.HomeContent
 import com.mastutor.tutoreal.ui.screen.login.LoginScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen

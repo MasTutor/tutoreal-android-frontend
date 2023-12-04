@@ -123,7 +123,6 @@ fun TutorComponent(
         shape = RoundedCornerShape(24.dp), modifier = modifier
             .fillMaxWidth()
             .height(140.dp)
-            .padding(10.dp)
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White)
 

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,37 +30,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mastutor.tutoreal.data.dummy.SillyText
-import com.mastutor.tutoreal.data.dummy.TutorData
-import com.mastutor.tutoreal.data.dummy.TutorDummy
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.data.local.Category
-import com.mastutor.tutoreal.data.remote.TutorDetail
-import com.mastutor.tutoreal.data.remote.TutorItem
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
-import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.viewmodel.TutorViewModel
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
 fun TutorScreen(
     id: String,
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: TutorViewModel = hiltViewModel()
+    moveToBookScreen: () -> Unit,
+    viewModel: TutorViewModel
 ) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
     val tabs = listOf("About", "Reviews")
@@ -83,21 +72,24 @@ fun TutorScreen(
 
             is UiState.Success -> {
                 uiState.data?.detailTutor?.let { tutor ->
+                    viewModel.setData(tutor)
                     CategoriesData.categories.firstOrNull { it.id == tutor.categories }?.let {
                         TutorContent(modifier = modifier,
                             onBackClicked = {
                                 navHostController.navigateUp()
                             },
+                            id = tutor.id,
                             name = tutor.nama,
                             price = tutor.price.ifEmpty { "69" },
                             specialization = tutor.specialization,
                             about = tutor.about,
-                            skillsExperience = tutor.skills ?: tutor.about, // TODO: Kena NPE, masalah kayak dulu?
+                            skillsExperience = tutor.skills.ifEmpty { tutor.about },
                             picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                             tabs = tabs,
                             tabIndex = tabIndex,
                             category = it,
-                            onTabSelected = { index -> tabIndex = index }
+                            onTabSelected = { index -> tabIndex = index },
+                            onBookClicked = moveToBookScreen
                         )
                     }
                 }
@@ -113,6 +105,7 @@ fun TutorScreen(
 fun TutorContent(
     modifier: Modifier,
     onBackClicked: () -> Unit,
+    id: String,
     name: String,
     picture: String,
     specialization: String,
@@ -122,7 +115,8 @@ fun TutorContent(
     category: Category,
     tabs: List<String>,
     tabIndex: Int,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
+    onBookClicked: () -> Unit
 ) {
     Column(modifier = modifier
         .fillMaxSize()
@@ -180,11 +174,11 @@ fun TutorContent(
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(top = 3.dp)
                 )
-                Button(onClick = { /*TODO*/ },
+                Button(onClick = { onBookClicked() },
                     shape = RoundedCornerShape(15),
                     modifier = modifier.padding(top = 20.dp)
                 ) {
-                    Text("Book A Session IDR ${price}",
+                    Text("Book A Session $price",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold))
                 }
             }
@@ -254,6 +248,7 @@ fun ReviewSection(modifier: Modifier) {
         .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
         Text(
             modifier = modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.primary,
             text = "No Reviews",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)

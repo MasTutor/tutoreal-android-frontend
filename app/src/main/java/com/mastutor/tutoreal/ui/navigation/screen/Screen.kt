@@ -1,5 +1,7 @@
 package com.mastutor.tutoreal.ui.navigation.screen
 
+import com.mastutor.tutoreal.data.remote.TutorDetail
+
 sealed class Screen(val route: String){
     object Login : Screen("login")
     object RegisterForm : Screen("registerForm")
@@ -9,6 +11,8 @@ sealed class Screen(val route: String){
     object Profile: Screen("profile")
     object Tutor : Screen("tutor/{tutorId}") {
         fun createRoute(tutorId: String) = "tutor/$tutorId"
+    }
+    object Book : Screen("book") {
     }
     object Matchmaking: Screen("matchmaking")
     object MatchmakingResult : Screen("matchmakingResult")
