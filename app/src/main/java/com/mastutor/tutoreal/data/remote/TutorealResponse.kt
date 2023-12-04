@@ -161,7 +161,7 @@ data class TutorDetail(
 	val about: String,
 
 	@field:SerializedName("SkillsAndExperience")
-	val skills: String,
+	val skills: String? = null,
 
 	@field:SerializedName("picture")
 	val picture: String,

@@ -89,10 +89,10 @@ fun TutorScreen(
                                 navHostController.navigateUp()
                             },
                             name = tutor.nama,
-                            price = tutor.price ?: "69",
+                            price = tutor.price.ifEmpty { "69" },
                             specialization = tutor.specialization,
                             about = tutor.about,
-                            skillsExperience = tutor.skills,
+                            skillsExperience = tutor.skills ?: tutor.about, // TODO: Kena NPE, masalah kayak dulu?
                             picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                             tabs = tabs,
                             tabIndex = tabIndex,
