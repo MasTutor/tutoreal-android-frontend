@@ -1,8 +1,6 @@
 package com.mastutor.tutoreal
 
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -11,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -29,6 +26,7 @@ import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
 import com.mastutor.tutoreal.ui.screen.profile.ProfileScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterPictureScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
+import com.mastutor.tutoreal.ui.screen.schedule.ScheduleScreen
 import com.mastutor.tutoreal.ui.screen.search.SearchScreen
 import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
 import com.mastutor.tutoreal.ui.screen.tutor.TutorScreen
@@ -69,6 +67,9 @@ fun MainJetpack(
                     onNextClicked = { navHostController.navigate(Screen.Survey.route) },
                     navHostController = navHostController
                 )
+            }
+            composable(Screen.Schedule.route){
+                ScheduleScreen()
             }
             composable(Screen.Survey.route){
                 SurveyScreen()

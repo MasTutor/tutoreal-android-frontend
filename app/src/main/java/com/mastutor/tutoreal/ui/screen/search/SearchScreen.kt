@@ -220,7 +220,6 @@ fun SearchPaging(
                     else {
                         Column {
                             FailureScreen(onRefreshClicked = { tutors.refresh() })
-                            Text(text = "${state.error.message}")
                         }
                     }
                 }
@@ -252,7 +251,6 @@ fun SearchPaging(
                     else {
                         Column {
                             FailureScreen(onRefreshClicked = { tutors.retry()})
-                            Text(text = "${state.error.cause}")
                         }
                     }
                 }

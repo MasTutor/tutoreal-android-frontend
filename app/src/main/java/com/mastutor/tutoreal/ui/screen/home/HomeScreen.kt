@@ -46,9 +46,12 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.data.local.Category
+import com.mastutor.tutoreal.data.local.StatusData
+import com.mastutor.tutoreal.data.remote.HistoryDataItem
 import com.mastutor.tutoreal.data.remote.TutorItem
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
 import com.mastutor.tutoreal.ui.components.MatchmakingCardComponent
+import com.mastutor.tutoreal.ui.components.ScheduleComponent
 import com.mastutor.tutoreal.ui.components.TutorComponentBig
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
@@ -86,6 +89,7 @@ fun HomeScreen(
             is UiState.Success -> {
                 val profileResponse = uiState.data?.profileResponse?.profile
                 val tutorData = uiState.data?.tutorsResponse?.tutors?.items?.shuffled()?.take(4)
+                val scheduleData = if(uiState.data?.scheduleResponse?.historyData?.isNotEmpty() == true) uiState.data.scheduleResponse.historyData[0] else null
                 if (profileResponse != null) {
                     if (tutorData != null) {
                         HomeContent(
@@ -96,10 +100,11 @@ fun HomeScreen(
                             imageUrl = profileResponse.photoURL,
                             onUserClicked = {navHostController.navigate(Screen.Profile.route)},
                             onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route)},
+                            listTutor = tutorData,
+                            nextSchedule = scheduleData,
                             moveToTutorDetail = { id ->
                                 navHostController.navigate(Screen.Tutor.createRoute(id))
-                            },
-                            listTutor = tutorData
+                            }
                         )
                     }
                 }
@@ -118,12 +123,13 @@ fun HomeContent(
     searchOnClick: () -> Unit,
     onCategoryClicked:(Int) -> Unit,
     onUserClicked:() -> Unit,
-    moveToTutorDetail:(String) -> Unit,
+    moveToTutorDetail: (String) -> Unit,
     categories: List<Category>,
     name: String,
     imageUrl: String,
     onMatchmakingClicked: () -> Unit,
-    listTutor: List<TutorItem>
+    listTutor: List<TutorItem>,
+    nextSchedule: HistoryDataItem? = null
 ){
     Column(modifier = modifier
         .fillMaxSize()
@@ -132,13 +138,13 @@ fun HomeContent(
             .fillMaxWidth()
             .height(110.dp)
             .background(color = MaterialTheme.colorScheme.tertiary),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ){
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier.fillMaxSize().offset(y = 10.dp)
             ){
                 Column(verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(start = 10.dp).fillMaxHeight().offset(y = 4.dp)
+                    modifier = Modifier.padding(start = 10.dp).fillMaxHeight().offset(y = 4.dp)
                 ) {
                     Text(
                         text = "Halo,",
@@ -207,28 +213,46 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-        Box(
-            modifier = Modifier
-                .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(16.dp)
+            if(nextSchedule != null){
+                ScheduleComponent(
+                    title = nextSchedule.sessionName.toString(),
+                    tutorName = nextSchedule.tutorName.toString(),
+                    date = nextSchedule.date.toString(),
+                    status = if(nextSchedule.status.toString() == "OnGoing")
+                    {
+                        StatusData(status = nextSchedule.status.toString(), color = Color.Yellow)
+                    }
+                    else if (nextSchedule.status.toString() == "Completed")
+                    {
+                        StatusData(status = nextSchedule.status.toString(), color = Color.Green) }
+                    else { StatusData(status = nextSchedule.status.toString(), color = Color.Red) },
+                    modifier = Modifier
+                        .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                 )
-                .fillMaxWidth()
-                .height(120.dp)
+            }
+            else{
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .fillMaxWidth()
+                        .height(120.dp)
 
-        ) {
-            //TODO: Implement Jadwal user jika sudah jadi
-            Text(
-                text = "Jadwal Kosong",
-                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
-                modifier = Modifier.align(
-                    Alignment.Center
-                )
-            )
-        }
+                ) {
+                    Text(
+                        text = "Jadwal Kosong",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.align(
+                            Alignment.Center
+                        )
+                    )
+                }
+            }
         Text(
             text = "Kategori",
             style = MaterialTheme.typography.bodyLarge,
