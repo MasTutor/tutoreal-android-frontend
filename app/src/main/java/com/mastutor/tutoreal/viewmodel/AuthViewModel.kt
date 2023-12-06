@@ -30,6 +30,47 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     private val _userExist = mutableStateOf(false)
     val userExist: State<Boolean> get() = _userExist
 
+    private val _fullNameError = mutableStateOf(false)
+    val fullNameError: State<Boolean> get() = _fullNameError
+
+    private val _emailError = mutableStateOf(false)
+    val emailError: State<Boolean> get() = _emailError
+
+    private val _passwordError = mutableStateOf(false)
+    val passwordError: State<Boolean> get() = _passwordError
+
+    private val _confirmPasswordError = mutableStateOf(false)
+    val confirmPasswordError: State<Boolean> get() = _confirmPasswordError
+
+    private val _showPassword = mutableStateOf(false)
+    val showPassword: State<Boolean> get() = _showPassword
+
+    private val _showConfirmPassword = mutableStateOf(false)
+    val showConfirmPassword: State<Boolean> get() = _showConfirmPassword
+
+    fun changeShowPassword(boolean: Boolean){
+        _showPassword.value = boolean
+    }
+
+    fun changeShowConfirmPassword(boolean: Boolean){
+        _showConfirmPassword.value = boolean
+    }
+
+
+    fun changeFullNameError(boolean: Boolean){
+        _fullNameError.value = boolean
+    }
+    fun changeEmailError(boolean: Boolean){
+        _emailError.value = boolean
+    }
+
+    fun changePasswordError(boolean: Boolean){
+        _passwordError.value = boolean
+    }
+    fun changeConfirmPasswordError(boolean: Boolean){
+        _confirmPasswordError.value = boolean
+    }
+
     fun changeEmailLogin(email: String){
         _emailLogin.value = email
     }
