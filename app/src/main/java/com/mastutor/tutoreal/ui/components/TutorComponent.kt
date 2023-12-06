@@ -120,9 +120,11 @@ fun TutorComponent(
     onClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(24.dp), modifier = modifier
+        shape = RoundedCornerShape(24.dp),
+        modifier = modifier
             .fillMaxWidth()
             .height(140.dp)
+            .clip(RoundedCornerShape(24.dp))
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White)
 
@@ -179,7 +181,8 @@ fun TutorComponentBig(
     modifier: Modifier = Modifier,
     photoUrl: String,
     name: String,
-    job: String
+    job: String,
+    onClick: () -> Unit
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -189,6 +192,7 @@ fun TutorComponentBig(
             .width(198.dp)
             .height(218.dp)
             .background(Color.White)
+            .clickable { onClick() }
     ){
         AsyncImage(
             model = photoUrl,
@@ -204,6 +208,7 @@ fun TutorComponentBig(
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 10.dp)
         )
         Text(
             text = job,
@@ -247,7 +252,7 @@ fun TutorComponentPreview() {
                 price = 200000,
                 percentage = 98.0,
             )
-            TutorComponentBig(photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg", name = "Jim Burton", job = "Con Artist")
+            TutorComponentBig(photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg", name = "Jim Burton", job = "Con Artist", onClick = {})
         }
     }
 }

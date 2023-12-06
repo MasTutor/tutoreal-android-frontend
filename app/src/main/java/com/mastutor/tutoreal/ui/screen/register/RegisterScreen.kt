@@ -1,7 +1,6 @@
 package com.mastutor.tutoreal.ui.screen.register
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -125,12 +124,12 @@ fun RegisterContent(
             onValueChange = onFullNameChanged,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                disabledLabelColor = MaterialTheme.colorScheme.primary,
-                cursorColor = Color.LightGray,
+                containerColor = Color.White,
+                disabledLabelColor = Color.White,
+                cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.White
+                textColor = Color.Black
             ),
             placeholder = {
                 Text(
@@ -138,7 +137,7 @@ fun RegisterContent(
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = Color.Gray
                     )
                 )
             },
@@ -175,8 +174,8 @@ fun RegisterContent(
                                   },
                         modifier = Modifier.padding(end = 4.dp),
                         colors = RadioButtonDefaults.colors(
-                            unselectedColor = MaterialTheme.colorScheme.primary,
-                            selectedColor = MaterialTheme.colorScheme.primary
+                            unselectedColor = Color.Black,
+                            selectedColor = Color.Black
                         )
                     )
                     Text(
@@ -185,7 +184,7 @@ fun RegisterContent(
                             fontWeight = FontWeight.Normal,
                             fontSize = 16.sp
                         ),
-                        color = MaterialTheme.colorScheme.primary
+                        color = Color.Black
                     )
                 }
             }
@@ -195,12 +194,12 @@ fun RegisterContent(
             onValueChange = onEmailChanged,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                disabledLabelColor = MaterialTheme.colorScheme.primary,
-                cursorColor = Color.LightGray,
+                containerColor = Color.White,
+                disabledLabelColor = Color.White,
+                cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.White
+                textColor = Color.Black
             ),
             placeholder = {
                 Text(
@@ -208,7 +207,7 @@ fun RegisterContent(
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = Color.Gray
                     )
                 )
             },
@@ -226,12 +225,12 @@ fun RegisterContent(
             onValueChange = onPasswordChanged,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                disabledLabelColor = MaterialTheme.colorScheme.primary,
-                cursorColor = Color.LightGray,
+                containerColor = Color.White,
+                disabledLabelColor = Color.White,
+                cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.White
+                textColor = Color.Black
             ),
             placeholder = {
                 Text(
@@ -239,7 +238,7 @@ fun RegisterContent(
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = Color.Gray
                     )
                 )
             },
@@ -257,12 +256,12 @@ fun RegisterContent(
             onValueChange = onConfirmPasswordChanged,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                disabledLabelColor = MaterialTheme.colorScheme.primary,
-                cursorColor = Color.LightGray,
+                containerColor = Color.White,
+                disabledLabelColor = Color.White,
+                cursorColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.White
+                textColor = Color.Black
             ),
             placeholder = {
                 Text(
@@ -270,7 +269,7 @@ fun RegisterContent(
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = Color.Gray
                     )
                 )
             },
@@ -288,10 +287,9 @@ fun RegisterContent(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.White
             ),
-            border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
         ) {
             Text("Next")
         }

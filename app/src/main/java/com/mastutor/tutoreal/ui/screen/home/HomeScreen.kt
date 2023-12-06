@@ -275,9 +275,9 @@ fun HomeContent(
                         photoUrl = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                         name = tutor.nama,
                         job = tutor.specialization,
+                        onClick = {moveToTutorDetail(tutor.id)},
                         modifier = Modifier
                             .padding(start = 5.dp, end = 5.dp)
-                            .clickable(onClick = { moveToTutorDetail(tutor.id) })
                     )
 
                 }

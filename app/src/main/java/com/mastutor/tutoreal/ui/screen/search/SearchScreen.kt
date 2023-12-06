@@ -135,7 +135,7 @@ fun SearchContent(
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Color.Transparent,
                         disabledLabelColor = Color.Transparent,
-                        cursorColor = Color.LightGray,
+                        cursorColor = Color.Black,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         textColor = Color.Black
@@ -146,7 +146,7 @@ fun SearchContent(
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 16.sp,
-                                color = Color.Black
+                                color = Color.Gray
                             )
                         )
                     },

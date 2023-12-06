@@ -1,6 +1,5 @@
 package com.mastutor.tutoreal.ui.screen.survey
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +48,7 @@ fun SurveyScreen(
     }
     val visibleQuestion = QuestionsData.questions[currentPageIndex.intValue]
     val answer = remember{mutableIntStateOf(3)}
-    val choices = listOf("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree")
+    val choices = listOf("Sangat Setuju", "Setuju", "Netral", "Tidak Setuju", "Sangat Tidak Setuju")
     val (selectedChoice, onChoiceSelected) = remember {
         mutableStateOf(choices[2])
     }
@@ -106,9 +103,9 @@ fun SurveyContent(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(bottom = 20.dp)
-                .clip(RoundedCornerShape(24.dp))
                 .fillMaxWidth()
                 .size(160.dp)
+                .clip(RoundedCornerShape(8.dp))
 
         )
         choices.forEachIndexed{ idx ,choice ->
@@ -130,6 +127,7 @@ fun SurveyContent(
                         color = if (choice == selectedChoice) MaterialTheme.colorScheme.primary else Color.Transparent,
                         shape = RoundedCornerShape(8.dp)
                     )
+                    .clip(RoundedCornerShape(8.dp))
                     .selectable(
                         selected = (choice == selectedChoice),
                         onClick = {
