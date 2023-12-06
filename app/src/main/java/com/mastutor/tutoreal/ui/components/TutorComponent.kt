@@ -1,6 +1,7 @@
 package com.mastutor.tutoreal.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -115,13 +116,16 @@ fun TutorComponent(
     photoUrl: String,
     name: String,
     job: String,
-    price: String
+    price: String,
+    onClick: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(24.dp), modifier = modifier
             .fillMaxWidth()
             .height(140.dp)
-            .padding(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -175,7 +179,7 @@ fun TutorComponentBig(
     modifier: Modifier = Modifier,
     photoUrl: String,
     name: String,
-    job: String,
+    job: String
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -234,6 +238,7 @@ fun TutorComponentPreview() {
                 name = "Jim Burton",
                 job = "Con Artist",
                 price = "Rp. 20.000",
+                onClick = {}
             )
             MatchTutorComponent(
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",

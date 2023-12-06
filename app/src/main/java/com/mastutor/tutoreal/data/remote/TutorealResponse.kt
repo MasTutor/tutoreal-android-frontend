@@ -132,7 +132,7 @@ data class TutorResponse(
 	val message: String,
 
 	@field:SerializedName("detail_tutor")
-	val detailTutor: ArrayList<TutorDetail>
+	val detailTutor: TutorDetail
 )
 
 data class TutorDetail(
@@ -160,11 +160,14 @@ data class TutorDetail(
 	@field:SerializedName("AboutMe")
 	val about: String,
 
-	@field:SerializedName("SkillsAndExperience")
+	@field:SerializedName("SkillsAndExperiences")
 	val skills: String,
 
 	@field:SerializedName("picture")
-	val picture: String
+	val picture: String,
+
+	@field:SerializedName("price")
+	val price: String
 )
 data class ScheduleResponse(
 
@@ -176,6 +179,18 @@ data class ScheduleResponse(
 
 	@field:SerializedName("message")
 	val message: String? = null
+)
+
+data class BookResponse(
+
+	@field:SerializedName("history_data")
+	val historyData: HistoryDataItem,
+
+	@field:SerializedName("error")
+	val error: String,
+
+	@field:SerializedName("message")
+	val message: String
 )
 
 data class HistoryDataItem(

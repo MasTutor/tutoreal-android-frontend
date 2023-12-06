@@ -6,6 +6,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.mastutor.tutoreal.data.pagingsource.TutorPagingSource
 import com.mastutor.tutoreal.data.preferences.SessionPreferences
+import com.mastutor.tutoreal.data.remote.BookResponse
+//import com.mastutor.tutoreal.data.remote.EditResponse
 import com.mastutor.tutoreal.data.remote.ImgurApiService
 import com.mastutor.tutoreal.data.remote.ImgurResponse
 import com.mastutor.tutoreal.data.remote.LoginResponse
@@ -206,4 +208,43 @@ class Repository @Inject constructor(
             }
         }.flowOn(Dispatchers.IO)
     }
+
+    fun newHistory(token: String, id: String, title: String, date: String, status: String): Flow<AuthUiState<BookResponse>> {
+        val jsonObject = JSONObject()
+        jsonObject.put("tutorId", id)
+        jsonObject.put("title", title)
+        jsonObject.put("status", status)
+        jsonObject.put("Date", date)
+
+        val requestBody =
+            jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                emit(AuthUiState.Idle)
+                emit(AuthUiState.Load)
+                val responseHistory = tutorealApiService.newHistory(token, requestBody)
+                emit(AuthUiState.Success(responseHistory))
+            }
+            catch (e: Exception){
+                emit(AuthUiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+//    fun editProfile(token: String): Flow<UiState<EditResponse>> {
+//        val jsonObject = JSONObject()
+//
+//        return flow {
+//            try {
+//                emit(UiState.Loading)
+//                val responseProfile = tutorealApiService.getProfile(token)
+//                val responseEdit = tutorealApiService.editProfile(token, jsonObject)
+//                emit(UiState.Success(HomeDataHelper(responseProfile, responseEdit)))
+//            }
+//            catch (e: Exception){
+//                emit(UiState.Failure(e))
+//            }
+//        }.flowOn(Dispatchers.IO)
+//    }
 }

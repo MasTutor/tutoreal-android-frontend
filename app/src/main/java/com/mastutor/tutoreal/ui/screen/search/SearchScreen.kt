@@ -204,7 +204,9 @@ fun SearchPaging(
                     name = tutor.nama,
                     job = tutor.specialization,
                     price = tutor.price.ifEmpty { "Rp. 30.000" },
-                    modifier = modifier.clickable { moveToTutorDetail(tutor.id) })
+                    modifier = modifier.padding(10.dp),
+                    onClick = { moveToTutorDetail(tutor.id) }
+                )
             }
 
         }

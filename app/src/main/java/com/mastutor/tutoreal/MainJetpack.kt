@@ -19,6 +19,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
+import com.mastutor.tutoreal.ui.screen.booking.BookingScreen
 import com.mastutor.tutoreal.ui.screen.chooser.ChooserScreen
 import com.mastutor.tutoreal.ui.screen.home.HomeScreen
 import com.mastutor.tutoreal.ui.screen.login.LoginScreen
@@ -31,6 +32,7 @@ import com.mastutor.tutoreal.ui.screen.search.SearchScreen
 import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
 import com.mastutor.tutoreal.ui.screen.tutor.TutorScreen
 import com.mastutor.tutoreal.viewmodel.AuthViewModel
+import com.mastutor.tutoreal.viewmodel.TutorViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,16 +88,7 @@ fun MainJetpack(
                     }
                 )
             }
-            composable(
-                route = Screen.Tutor.route,
-                arguments = listOf(navArgument("tutorId") { type = NavType.StringType }),
-            ) {
-                val id = it.arguments?.getString("tutorId") ?: ""
-                TutorScreen(
-                    id = id,
-                    navHostController = navHostController,
-                )
-            }
+            tutorGraph(navHostController)
         }
     }
 }
@@ -116,5 +109,42 @@ fun NavGraphBuilder.registerGraph(navController: NavHostController) {
             val viewModel = hiltViewModel<AuthViewModel>(parentEntry)
             RegisterPictureScreen(viewModel = viewModel, navHostController = navController)
         }
+    }
+}
+
+fun NavGraphBuilder.tutorGraph(navController: NavHostController) {
+    navigation(startDestination = Screen.Tutor.route, route = "tutor") {
+        composable(
+            route = Screen.Tutor.route,
+            arguments = listOf(navArgument("tutorId") { type = NavType.StringType }),
+        ) {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry("tutor")
+            }
+            val viewModel = hiltViewModel<TutorViewModel>(parentEntry)
+            val id = it.arguments?.getString("tutorId") ?: ""
+            TutorScreen(
+                id = id,
+                navHostController = navController,
+                moveToBookScreen = {
+                    navController.navigate(Screen.Book.route)
+                },
+                viewModel = viewModel
+            )
+        }
+
+        composable(
+            route = Screen.Book.route
+        ) {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry("tutor")
+            }
+            val viewModel = hiltViewModel<TutorViewModel>(parentEntry)
+            BookingScreen(modifier = Modifier,
+                viewModel = viewModel,
+                navHostController = navController
+            )
+        }
+
     }
 }

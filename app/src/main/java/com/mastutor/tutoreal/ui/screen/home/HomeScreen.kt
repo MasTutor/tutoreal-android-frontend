@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -30,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -64,18 +65,11 @@ fun HomeScreen(
     navHostController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel()
 ){
-    val userExist by viewModel.userExist
     SideEffect {
-        viewModel.tryUserExist()
         viewModel.getToken()
     }
 
     LaunchedEffect(key1 = true){
-        if(!userExist){
-            navHostController.navigate(Screen.Chooser.route){
-                popUpTo(0)
-            }
-        }
         viewModel.getHomeProcess()
     }
 
@@ -107,7 +101,10 @@ fun HomeScreen(
                             onUserClicked = {navHostController.navigate(Screen.Profile.route)},
                             onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route)},
                             listTutor = tutorData,
-                            nextSchedule = scheduleData
+                            nextSchedule = scheduleData,
+                            moveToTutorDetail = { id ->
+                                navHostController.navigate(Screen.Tutor.createRoute(id))
+                            }
                         )
                     }
                 }
@@ -126,6 +123,7 @@ fun HomeContent(
     searchOnClick: () -> Unit,
     onCategoryClicked:(Int) -> Unit,
     onUserClicked:() -> Unit,
+    moveToTutorDetail: (String) -> Unit,
     categories: List<Category>,
     name: String,
     imageUrl: String,
@@ -138,13 +136,16 @@ fun HomeContent(
         ) {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(110.dp)
             .background(color = MaterialTheme.colorScheme.tertiary),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
         ){
-            Row(Modifier.padding(top = 20.dp)){
-                Column(modifier = Modifier.padding(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier.fillMaxSize().offset(y = 10.dp)
+            ){
+                Column(verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(start = 10.dp).fillMaxHeight().offset(y = 4.dp)
+                ) {
                     Text(
                         text = "Halo,",
                         style = MaterialTheme.typography.bodySmall,
@@ -164,7 +165,7 @@ fun HomeContent(
                     modifier = Modifier
                         .padding(end = 10.dp)
                         .clip(CircleShape)
-                        .size(50.dp)
+                        .size(48.dp)
                         .clickable { onUserClicked() })
             }
         }
@@ -212,16 +213,18 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-
             if(nextSchedule != null){
                 ScheduleComponent(
                     title = nextSchedule.sessionName.toString(),
                     tutorName = nextSchedule.tutorName.toString(),
                     date = nextSchedule.date.toString(),
                     status = if(nextSchedule.status.toString() == "OnGoing")
-                    {StatusData(status = nextSchedule.status.toString(), color = Color.Yellow)}
+                    {
+                        StatusData(status = nextSchedule.status.toString(), color = Color.Yellow)
+                    }
                     else if (nextSchedule.status.toString() == "Completed")
-                    {StatusData(status = nextSchedule.status.toString(), color = Color.Green) }
+                    {
+                        StatusData(status = nextSchedule.status.toString(), color = Color.Green) }
                     else { StatusData(status = nextSchedule.status.toString(), color = Color.Red) },
                     modifier = Modifier
                         .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
@@ -250,8 +253,6 @@ fun HomeContent(
                     )
                 }
             }
-
-
         Text(
             text = "Kategori",
             style = MaterialTheme.typography.bodyLarge,
@@ -268,14 +269,15 @@ fun HomeContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
         )
-            //TODO: Implement OnClick ke Detail User
             LazyRow(modifier = Modifier.padding(bottom = 20.dp)){
                 items(listTutor){tutor ->
                     TutorComponentBig(
                         photoUrl = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                         name = tutor.nama,
                         job = tutor.specialization,
-                       modifier = Modifier.padding(start = 5.dp, end = 5.dp),
+                        modifier = Modifier
+                            .padding(start = 5.dp, end = 5.dp)
+                            .clickable(onClick = { moveToTutorDetail(tutor.id) })
                     )
 
                 }
