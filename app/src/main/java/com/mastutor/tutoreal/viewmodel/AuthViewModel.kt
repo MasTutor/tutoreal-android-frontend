@@ -36,20 +36,31 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     private val _emailError = mutableStateOf(false)
     val emailError: State<Boolean> get() = _emailError
 
+    private val _emailErrorLogin = mutableStateOf(false)
+    val emailErrorLogin: State<Boolean> get() = _emailErrorLogin
+
     private val _passwordError = mutableStateOf(false)
     val passwordError: State<Boolean> get() = _passwordError
+
+    private val _passwordErrorLogin = mutableStateOf(false)
+    val passwordErrorLogin: State<Boolean> get() = _passwordErrorLogin
 
     private val _confirmPasswordError = mutableStateOf(false)
     val confirmPasswordError: State<Boolean> get() = _confirmPasswordError
 
     private val _showPassword = mutableStateOf(false)
     val showPassword: State<Boolean> get() = _showPassword
+    private val _showPasswordLogin = mutableStateOf(false)
+    val showPasswordLogin: State<Boolean> get() = _showPasswordLogin
 
     private val _showConfirmPassword = mutableStateOf(false)
     val showConfirmPassword: State<Boolean> get() = _showConfirmPassword
 
     fun changeShowPassword(boolean: Boolean){
         _showPassword.value = boolean
+    }
+    fun changeShowPasswordLogin(boolean: Boolean){
+        _showPasswordLogin.value = boolean
     }
 
     fun changeShowConfirmPassword(boolean: Boolean){
@@ -64,8 +75,15 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
         _emailError.value = boolean
     }
 
+    fun changeEmailErrorLogin(boolean: Boolean){
+        _emailErrorLogin.value = boolean
+    }
+
     fun changePasswordError(boolean: Boolean){
         _passwordError.value = boolean
+    }
+    fun changePasswordErrorLogin(boolean: Boolean){
+        _passwordErrorLogin.value = boolean
     }
     fun changeConfirmPasswordError(boolean: Boolean){
         _confirmPasswordError.value = boolean

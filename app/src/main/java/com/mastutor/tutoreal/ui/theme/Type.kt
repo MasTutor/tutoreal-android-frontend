@@ -1,6 +1,5 @@
 package com.mastutor.tutoreal.ui.theme
 
-import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -16,7 +15,7 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val fontName = GoogleFont(name = "Poppins")
+val fontName = GoogleFont(name = "Urbanist")
 val fontFamily = FontFamily(
     Font(googleFont = fontName, fontProvider = provider)
 )

@@ -46,8 +46,16 @@ fun MainJetpack(
     Scaffold {innerPadding ->
         NavHost(navController = navHostController, startDestination = Screen.Chooser.route, modifier = Modifier.padding(
             //for edge to edge
-            top = if(currentRoute == Screen.Home.route || currentRoute == Screen.Matchmaking.route || currentRoute == Screen.Search.route) 0.dp else innerPadding.calculateTopPadding(),
-            bottom = if(currentRoute == Screen.Chooser.route || currentRoute == Screen.Matchmaking.route) 0.dp else innerPadding.calculateBottomPadding()
+            top = if(
+                currentRoute == Screen.Home.route
+                || currentRoute == Screen.Matchmaking.route
+                || currentRoute == Screen.Search.route
+                || currentRoute == Screen.Login.route
+                || currentRoute == Screen.RegisterForm.route
+                ) 0.dp else innerPadding.calculateTopPadding(),
+            bottom = if(currentRoute == Screen.Chooser.route
+                || currentRoute == Screen.Matchmaking.route
+                ) 0.dp else innerPadding.calculateBottomPadding()
 
         )){
             composable(Screen.Chooser.route){
