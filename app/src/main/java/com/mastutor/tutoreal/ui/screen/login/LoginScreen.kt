@@ -1,16 +1,25 @@
 package com.mastutor.tutoreal.ui.screen.login
 
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +62,9 @@ fun LoginScreen(
     val email by viewModel.emailLogin
     val password by viewModel.passwordLogin
     val userExist by viewModel.userExist
+    val emailError by viewModel.emailErrorLogin
+    val passwordError by viewModel.passwordErrorLogin
+    val showPassword by viewModel.showPasswordLogin
 
     SideEffect {
         viewModel.tryUserExist()
@@ -71,18 +84,29 @@ fun LoginScreen(
                 LoginContent(
                     email = email,
                     password = password,
-                    onEmailChanged = viewModel::changeEmailLogin,
-                    onPasswordChanged = viewModel::changePasswordLogin,
+                    onEmailChanged =
+                    {
+                        viewModel.changeEmailLogin(it)
+                        viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
+                    },
+                    onPasswordChanged =
+                    {
+                        viewModel.changePasswordLogin(it)
+                        viewModel.changePasswordErrorLogin(password.isEmpty())
+                    },
                     onLoginClicked = {
-                        if(email.isEmpty() || !isEmailValid(email)){
-                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password.isEmpty()){
-                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
+                        viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
+                        viewModel.changePasswordErrorLogin(password.isEmpty())
+                        if(!emailError && !passwordError){
                             viewModel.login()
                         }
+                    },
+                    showPasswordChanged = viewModel::changeShowPasswordLogin,
+                    emailError = emailError,
+                    passwordError = passwordError,
+                    showPassword = showPassword,
+                    onBackClicked = {
+                        navHostController.navigateUp()
                     }
 
                 )
@@ -95,7 +119,8 @@ fun LoginScreen(
                     onPasswordChanged = { },
                     onLoginClicked = {},
                     modifier = modifier.alpha(0.3f),
-
+                    showPasswordChanged = {},
+                    onBackClicked = {}
                 )
                 Column(
                     modifier = modifier
@@ -111,18 +136,29 @@ fun LoginScreen(
                 LoginContent(
                     email = email,
                     password = password,
-                    onEmailChanged = viewModel::changeEmailLogin,
-                    onPasswordChanged = viewModel::changePasswordLogin,
+                    onEmailChanged =
+                    {
+                        viewModel.changeEmailLogin(it)
+                        viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
+                    },
+                    onPasswordChanged =
+                    {
+                        viewModel.changePasswordLogin(it)
+                        viewModel.changePasswordErrorLogin(password.isEmpty())
+                    },
                     onLoginClicked = {
-                        if(email.isEmpty() || !isEmailValid(email)){
-                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password.isEmpty()){
-                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
+                        viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
+                        viewModel.changePasswordErrorLogin(password.isEmpty())
+                        if(!emailError && !passwordError){
                             viewModel.login()
                         }
+                    },
+                    showPasswordChanged = viewModel::changeShowPasswordLogin,
+                    emailError = emailError,
+                    passwordError = passwordError,
+                    showPassword = showPassword,
+                    onBackClicked = {
+                        navHostController.navigateUp()
                     }
 
                 )
@@ -134,18 +170,29 @@ fun LoginScreen(
                 LoginContent(
                     email = email,
                     password = password,
-                    onEmailChanged = viewModel::changeEmailLogin,
-                    onPasswordChanged = viewModel::changePasswordLogin,
+                    onEmailChanged =
+                    {
+                        viewModel.changeEmailLogin(it)
+                        viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
+                    },
+                    onPasswordChanged =
+                    {
+                        viewModel.changePasswordLogin(it)
+                        viewModel.changePasswordErrorLogin(password.isEmpty())
+                    },
                     onLoginClicked = {
-                        if(email.isEmpty() || !isEmailValid(email)){
-                            Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-                        }
-                        else if(password.isEmpty()){
-                            Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-                        }
-                        else{
+                        viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
+                        viewModel.changePasswordErrorLogin(password.isEmpty())
+                        if(!emailError && !passwordError){
                             viewModel.login()
                         }
+                    },
+                    showPasswordChanged = viewModel::changeShowPasswordLogin,
+                    emailError = emailError,
+                    passwordError = passwordError,
+                    showPassword = showPassword,
+                    onBackClicked = {
+                        navHostController.navigateUp()
                     }
 
                 )
@@ -168,88 +215,163 @@ fun LoginContent(
     onPasswordChanged: (String) -> Unit,
     onLoginClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    emailError: Boolean = false,
+    passwordError: Boolean = false,
+    showPassword: Boolean = false,
+    showPasswordChanged: (Boolean) -> Unit,
+    onBackClicked: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 10.dp, end = 10.dp, top = 20.dp)
     ) {
-        TextField(
-            value = email,
-            onValueChange = onEmailChanged,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                disabledLabelColor = Color.White,
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.Black
-            ),
-            placeholder = {
-                Text(
-                    text = "Email",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .height(170.dp)
+            .background(color = MaterialTheme.colorScheme.tertiary),
+        ){
+            Row(
+                modifier = Modifier
+                    .padding(start = 4.dp, top = 40.dp, bottom = 40.dp)
+                    .clickable { onBackClicked() },
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription ="Arrow Back",
+                    modifier = Modifier.padding(end = 8.dp),
+                    tint = Color.Black
                 )
-            },
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
+                Text(
+                    text = "Kembali",
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, fontWeight = FontWeight.Bold),
+                )
+            }
+            Text(
+                text = "Selamat Datang Kembali!",
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                modifier = Modifier
+                    .padding(start = 8.dp)
 
-        )
-        TextField(
-            value = password,
-            onValueChange = onPasswordChanged,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                disabledLabelColor = Color.White,
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.Black
-            ),
-            placeholder = {
-                Text(
-                    text = "Password",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
                 )
-            },
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
+            Text(
+                text = "Senang bertemu kembali",
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
+                modifier = Modifier
+                    .padding(start = 8.dp)
+
+            )
+
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp),
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Button(
-            onClick = onLoginClicked,
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            ),
+                .fillMaxSize()
+                .padding(start = 10.dp, end = 10.dp, top = 20.dp)
         ) {
-            Text("Login")
+
+            TextField(
+                label = {
+                    if(emailError) {
+                        Text(text = "Error: Email Kosong atau bukan email", color = MaterialTheme.colorScheme.error)
+                    }
+                    else{
+                        Text(
+                            text = "Email",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
+                        )
+                    }
+                },
+                value = email,
+                onValueChange = onEmailChanged,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    disabledLabelColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    textColor = Color.Black
+                ),
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+
+            )
+            TextField(
+                label = {
+                    if(passwordError) {
+                        Text(text = "Error: Password kosong", color = MaterialTheme.colorScheme.error)
+                    }
+                    else{
+                        Text(
+                            text = "Password",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
+                        )
+                    }
+                },
+                value = password,
+                onValueChange = onPasswordChanged,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    disabledLabelColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    textColor = Color.Black
+                ),
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                visualTransformation =
+                if(!showPassword){
+                    PasswordVisualTransformation()
+                }else {
+                    VisualTransformation.None},
+                trailingIcon = {
+                    Icon(
+                        imageVector = if(!showPassword){
+                            Icons.Filled.Remove} else {
+                            Icons.Filled.RemoveRedEye}, contentDescription = "Eye",
+                        modifier = Modifier.clickable {
+                            showPasswordChanged(!showPassword)
+                        }
+                    )
+                }
+            )
+            Button(
+                onClick = onLoginClicked,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ),
+            ) {
+                Text("Login")
+            }
         }
     }
+
 }
 
 @Preview(
@@ -268,6 +390,8 @@ fun LoginContentPreview() {
             password = password,
             onEmailChanged = { text -> email = text },
             onPasswordChanged = { text -> password = text },
-            onLoginClicked = {})
+            onLoginClicked = {},
+            showPasswordChanged = {},
+            onBackClicked = {})
     }
 }

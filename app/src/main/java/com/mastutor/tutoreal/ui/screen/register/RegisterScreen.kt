@@ -1,17 +1,24 @@
 package com.mastutor.tutoreal.ui.screen.register
 
-import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -29,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +58,12 @@ fun RegisterScreen(
     val fullName by viewModel.fullNameRegister
     val password by viewModel.passwordRegister
     val passwordConfirm by viewModel.passwordConfirm
-    val male by viewModel.male
+    val fullNameError by viewModel.fullNameError
+    val emailError by viewModel.emailError
+    val passwordError by viewModel.passwordError
+    val confirmPasswordError by viewModel.confirmPasswordError
+    val showPassword by viewModel.showPassword
+    val showConfirmPassword by viewModel.showConfirmPassword
 
     val genders = listOf("Male", "Female")
     val (selectedGender, onGenderSelected) = remember {
@@ -62,10 +75,24 @@ fun RegisterScreen(
         email = email,
         password = password,
         confirmPassword = passwordConfirm,
-        onFullNameChanged = viewModel::changeFullNameRegister,
-        onEmailChanged = viewModel::changeEmailRegister,
-        onPasswordChanged = viewModel::changePasswordRegister,
-        onConfirmPasswordChanged = viewModel::changePasswordConfirm,
+        onFullNameChanged =
+        {
+            viewModel.changeFullNameRegister(it)
+            viewModel.changeFullNameError(fullName.isEmpty())
+        },
+        onEmailChanged =
+        {
+            viewModel.changeEmailRegister(it)
+            viewModel.changeEmailError(email.isEmpty() || !isEmailValid(email))
+        },
+        onPasswordChanged = {
+            viewModel.changePasswordRegister(it)
+            viewModel.changePasswordError(password.isEmpty())
+        },
+        onConfirmPasswordChanged = {
+            viewModel.changePasswordConfirm(it)
+            viewModel.changeConfirmPasswordError(passwordConfirm.isEmpty() || passwordConfirm != password)
+        },
         genders = genders,
         selectedGender = selectedGender,
         onGenderSelected =
@@ -75,22 +102,25 @@ fun RegisterScreen(
         },
         onNextClicked =
         {
-            if(fullName.isEmpty()){
-                Toast.makeText(context, "Full name kosong", Toast.LENGTH_SHORT).show()
-            }
-            else if(email.isEmpty() || !isEmailValid(email)){
-                Toast.makeText(context, "Email kosong atau tidak valid", Toast.LENGTH_SHORT).show()
-            }
-            else if(password.isEmpty()){
-                Toast.makeText(context, "Password kosong", Toast.LENGTH_SHORT).show()
-            }
-            else if(password != passwordConfirm){
-                Toast.makeText(context, "Confirm password tidak cocok", Toast.LENGTH_SHORT).show()
-            }
-            else{
+            viewModel.changeFullNameError(fullName.isEmpty())
+            viewModel.changeEmailError(email.isEmpty() || !isEmailValid(email))
+            viewModel.changePasswordError(password.isEmpty())
+            viewModel.changeConfirmPasswordError(passwordConfirm.isEmpty() || passwordConfirm != password)
+            if(!fullNameError && !emailError && !passwordError && !confirmPasswordError){
                 navHostController.navigate(Screen.RegisterPicture.route)
             }
         },
+        fullNameError = fullNameError,
+        passwordError = passwordError,
+        emailError = emailError,
+        confirmPasswordError = confirmPasswordError,
+        showPassword = showPassword,
+        showConfirmPassword = showConfirmPassword,
+        showPasswordChanged = viewModel::changeShowPassword,
+        showConfirmPasswordChanged = viewModel::changeShowConfirmPassword,
+        onBackClicked = {
+            navHostController.navigateUp()
+        }
     )
 
 }
@@ -112,188 +142,282 @@ fun RegisterContent(
     onGenderSelected: (String) -> Unit,
     onNextClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    fullNameError: Boolean = false,
+    emailError: Boolean = false,
+    passwordError: Boolean = false,
+    confirmPasswordError: Boolean = false,
+    showPassword: Boolean = false,
+    showConfirmPassword: Boolean = false,
+    showPasswordChanged: (Boolean) -> Unit,
+    showConfirmPasswordChanged: (Boolean) -> Unit,
+    onBackClicked: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 10.dp, end = 10.dp, top = 20.dp)
     ) {
-        TextField(
-            value = fullName,
-            onValueChange = onFullNameChanged,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                disabledLabelColor = Color.White,
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.Black
-            ),
-            placeholder = {
-                Text(
-                    text = "Full name",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .height(170.dp)
+            .background(color = MaterialTheme.colorScheme.tertiary),
+        ){
+            Row(
+                modifier = Modifier
+                    .padding(start = 4.dp, top = 40.dp, bottom = 40.dp)
+                    .clickable { onBackClicked() },
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription ="Arrow Back",
+                    modifier = Modifier.padding(end = 8.dp),
+                    tint = Color.Black
                 )
-            },
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
+                Text(
+                    text = "Kembali",
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, fontWeight = FontWeight.Bold),
+                )
+            }
+            Text(
+                text = "Selamat Datang!",
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                modifier = Modifier
+                    .padding(start = 8.dp)
 
-        )
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)) {
-            genders.forEach { gender ->
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .selectable(
-                            selected = (gender == selectedGender),
-                            onClick = { onGenderSelected(gender) })
+            )
+            Text(
+                text = "Senang bertemu denganmu",
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
+                modifier = Modifier
+                    .padding(start = 8.dp)
 
-                ) {
-                    RadioButton(
-                        selected = (gender == selectedGender),
-                        onClick = {
-                            onGenderSelected(gender)
+            )
 
-                                  },
-                        modifier = Modifier.padding(end = 4.dp),
-                        colors = RadioButtonDefaults.colors(
-                            unselectedColor = Color.Black,
-                            selectedColor = Color.Black
+        }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .fillMaxSize()
+                .padding(start = 10.dp, end = 10.dp, top = 20.dp)
+        ) {
+            TextField(
+                label = {
+                    if(fullNameError) {
+                        Text(text = "Error: Fullname Kosong", color = MaterialTheme.colorScheme.error)
+                    }
+                    else{
+                        Text(
+                            text = "Full name",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
                         )
-                    )
-                    Text(
-                        text = gender,
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp
-                        ),
-                        color = Color.Black
-                    )
+                    }
+                },
+                value = fullName,
+                onValueChange = onFullNameChanged,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    disabledLabelColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    textColor = Color.Black
+                ),
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
+
+            )
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)) {
+                genders.forEach { gender ->
+                    Row(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .selectable(
+                                selected = (gender == selectedGender),
+                                onClick = { onGenderSelected(gender) })
+
+                    ) {
+                        RadioButton(
+                            selected = (gender == selectedGender),
+                            onClick = {
+                                onGenderSelected(gender)
+
+                            },
+                            modifier = Modifier.padding(end = 4.dp),
+                            colors = RadioButtonDefaults.colors(
+                                unselectedColor = Color.Black,
+                                selectedColor = Color.Black
+                            )
+                        )
+                        Text(
+                            text = gender,
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp
+                            ),
+                            color = Color.Black
+                        )
+                    }
                 }
             }
-        }
-        TextField(
-            value = email,
-            onValueChange = onEmailChanged,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                disabledLabelColor = Color.White,
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.Black
-            ),
-            placeholder = {
-                Text(
-                    text = "Email",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-                )
-            },
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
+            TextField(
+                label = {
+                    if(emailError) {
+                        Text(text = "Error: Email Kosong atau bukan email", color = MaterialTheme.colorScheme.error)
+                    }
+                    else{
+                        Text(
+                            text = "Email",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
+                        )
+                    }
+                },
+                value = email,
+                onValueChange = onEmailChanged,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    disabledLabelColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    textColor = Color.Black
+                ),
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp)
 
-        )
-        TextField(
-            value = password,
-            onValueChange = onPasswordChanged,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                disabledLabelColor = Color.White,
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.Black
-            ),
-            placeholder = {
-                Text(
-                    text = "Password",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.Gray
+            )
+            TextField(
+                label = {
+                    if(passwordError) {
+                        Text(text = "Error: Password kosong", color = MaterialTheme.colorScheme.error)
+                    }
+                    else{
+                        Text(
+                            text = "Password",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
+                        )
+                    }
+                },
+                value = password,
+                onValueChange = onPasswordChanged,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    disabledLabelColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    textColor = Color.Black
+                ),
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                visualTransformation =
+                if(!showPassword){PasswordVisualTransformation()}else {
+                    VisualTransformation.None},
+                trailingIcon = {
+                    Icon(
+                        imageVector = if(!showPassword){Icons.Filled.Remove} else {Icons.Filled.RemoveRedEye}, contentDescription = "Eye",
+                        modifier = Modifier.clickable {
+                            showPasswordChanged(!showPassword)
+                        }
                     )
-                )
-            },
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp),
-            visualTransformation = PasswordVisualTransformation()
-        )
-        TextField(
-            value = confirmPassword,
-            onValueChange = onConfirmPasswordChanged,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                disabledLabelColor = Color.White,
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                textColor = Color.Black
-            ),
-            placeholder = {
-                Text(
-                    text = "Confirm password",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        color = Color.Gray
+                }
+            )
+            TextField(
+                label = {
+                    if(confirmPasswordError) {
+                        Text(text = "Error: Confirm password kosong atau salah", color = MaterialTheme.colorScheme.error)
+                    }
+                    else{
+                        Text(
+                            text = "Confirm password",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
+                        )
+                    }
+                },
+                value = confirmPassword,
+                onValueChange = onConfirmPasswordChanged,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    disabledLabelColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    textColor = Color.Black
+                ),
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+                visualTransformation =
+                if(!showConfirmPassword){PasswordVisualTransformation()}else {
+                    VisualTransformation.None},
+                trailingIcon = {
+                    Icon(
+                        imageVector = if(!showConfirmPassword){Icons.Filled.Remove} else {Icons.Filled.RemoveRedEye}, contentDescription = "Eye",
+                        modifier = Modifier.clickable {
+                            showConfirmPasswordChanged(!showConfirmPassword)
+                        }
                     )
-                )
-            },
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp),
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Button(
-            onClick = onNextClicked, modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            ),
-        ) {
-            Text("Next")
+                }
+            )
+            Button(
+                onClick = onNextClicked, modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ),
+            ) {
+                Text("Next")
+            }
         }
     }
+
 }
 
 @Preview(
@@ -327,6 +451,10 @@ fun RegisterContentPreview() {
             genders = genders,
             selectedGender = selectedGender,
             onGenderSelected = onGenderSelected,
-            onNextClicked = {},)
+            onNextClicked = {},
+            showConfirmPasswordChanged = {},
+            showPasswordChanged = {},
+            onBackClicked = {}
+            )
     }
 }
