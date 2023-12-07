@@ -90,6 +90,7 @@ fun HomeScreen(
                 val profileResponse = uiState.data?.profileResponse?.profile
                 val tutorData = uiState.data?.tutorsResponse?.tutors?.items?.shuffled()?.take(4)
                 val scheduleData = if(uiState.data?.scheduleResponse?.historyData?.isNotEmpty() == true) uiState.data.scheduleResponse.historyData[0] else null
+
                 if (profileResponse != null) {
                     if (tutorData != null) {
                         HomeContent(
@@ -98,12 +99,32 @@ fun HomeScreen(
                             categories = CategoriesData.categories,
                             name = profileResponse.nama,
                             imageUrl = profileResponse.photoURL,
-                            onUserClicked = {navHostController.navigate(Screen.Profile.route)},
-                            onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route)},
+                            onUserClicked = {navHostController.navigate(Screen.Profile.route){
+                                popUpTo(Screen.Home.route){
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                                            },
+                            onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route){
+                                popUpTo(Screen.Home.route){
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                                                   },
                             listTutor = tutorData,
                             nextSchedule = scheduleData,
                             moveToTutorDetail = { id ->
-                                navHostController.navigate(Screen.Tutor.createRoute(id))
+                                navHostController.navigate(Screen.Tutor.createRoute(id)){
+                                    popUpTo(Screen.Home.route){
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         )
                     }
@@ -141,10 +162,15 @@ fun HomeContent(
             horizontalArrangement = Arrangement.Center,
         ){
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = modifier.fillMaxSize().offset(y = 10.dp)
+                modifier = modifier
+                    .fillMaxSize()
+                    .offset(y = 10.dp)
             ){
                 Column(verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(start = 10.dp).fillMaxHeight().offset(y = 4.dp)
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .fillMaxHeight()
+                        .offset(y = 4.dp)
                 ) {
                     Text(
                         text = "Halo,",

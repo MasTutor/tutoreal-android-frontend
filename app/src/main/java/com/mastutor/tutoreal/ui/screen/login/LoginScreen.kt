@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -233,7 +233,7 @@ fun LoginContent(
         ){
             Row(
                 modifier = Modifier
-                    .padding(start = 4.dp, top = 40.dp, bottom = 40.dp)
+                    .padding(start = 4.dp, top = 40.dp, bottom = 30.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -249,15 +249,15 @@ fun LoginContent(
                 )
             }
             Text(
-                text = "Selamat Datang Kembali!",
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                text = "Selamat Datang!",
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black, fontSize = 32.sp),
                 modifier = Modifier
                     .padding(start = 8.dp)
 
                 )
             Text(
                 text = "Senang bertemu kembali",
-                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, ),
                 modifier = Modifier
                     .padding(start = 8.dp)
 
@@ -349,8 +349,10 @@ fun LoginContent(
                 trailingIcon = {
                     Icon(
                         imageVector = if(!showPassword){
-                            Icons.Filled.Remove} else {
-                            Icons.Filled.RemoveRedEye}, contentDescription = "Eye",
+                            Icons.Filled.VisibilityOff
+                        } else {
+                            Icons.Filled.Visibility},
+                        contentDescription = "Eye",
                         modifier = Modifier.clickable {
                             showPasswordChanged(!showPassword)
                         }
