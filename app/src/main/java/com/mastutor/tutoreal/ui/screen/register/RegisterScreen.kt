@@ -13,8 +13,8 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -164,7 +164,7 @@ fun RegisterContent(
         ){
             Row(
                 modifier = Modifier
-                    .padding(start = 4.dp, top = 40.dp, bottom = 40.dp)
+                    .padding(start = 4.dp, top = 40.dp, bottom = 30.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -181,7 +181,7 @@ fun RegisterContent(
             }
             Text(
                 text = "Selamat Datang!",
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black, fontSize = 32.sp),
                 modifier = Modifier
                     .padding(start = 8.dp)
 
@@ -351,7 +351,7 @@ fun RegisterContent(
                     VisualTransformation.None},
                 trailingIcon = {
                     Icon(
-                        imageVector = if(!showPassword){Icons.Filled.Remove} else {Icons.Filled.RemoveRedEye}, contentDescription = "Eye",
+                        imageVector = if(!showPassword){Icons.Filled.VisibilityOff} else {Icons.Filled.Visibility}, contentDescription = "Eye",
                         modifier = Modifier.clickable {
                             showPasswordChanged(!showPassword)
                         }
@@ -397,7 +397,7 @@ fun RegisterContent(
                     VisualTransformation.None},
                 trailingIcon = {
                     Icon(
-                        imageVector = if(!showConfirmPassword){Icons.Filled.Remove} else {Icons.Filled.RemoveRedEye}, contentDescription = "Eye",
+                        imageVector = if(!showConfirmPassword){Icons.Filled.VisibilityOff} else {Icons.Filled.Visibility}, contentDescription = "Eye",
                         modifier = Modifier.clickable {
                             showConfirmPasswordChanged(!showConfirmPassword)
                         }

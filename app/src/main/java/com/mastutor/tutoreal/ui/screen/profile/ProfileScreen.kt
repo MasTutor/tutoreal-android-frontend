@@ -11,8 +11,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
 import androidx.compose.material.icons.rounded.Call
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -171,7 +172,7 @@ fun ProfileContent(
         Text(text = fullName, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(bottom = 20.dp))
         UserEditComponent(icon = Icons.Rounded.Person, data = fullName, onClick = onFullNameClicked, modifier = Modifier.padding(bottom = 10.dp))
         UserEditComponent(icon = Icons.Rounded.Call, data = phoneNumber, onClick = onPhoneNumberClicked, modifier = Modifier.padding(bottom = 10.dp))
-        UserEditComponent(icon = Icons.Rounded.Face, data = if(gender == 1) "Male" else "Female", onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
+        UserEditComponent(icon = if(gender == 1) Icons.Filled.Male else Icons.Filled.Female, data = if(gender == 1) "Male" else "Female", onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
         Row {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
