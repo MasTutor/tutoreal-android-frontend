@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,15 +64,16 @@ fun SelectionDialog(
                 Button(
                     onClick = onSubmitClicked
                 ) {
-                    Text("Confirm ")
+                    Text("Konfirmasi")
                 }
             },
             dismissButton = {
                 Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                     onClick = {
                         openDialog.value = false
                     }) {
-                    Text("Dismiss")
+                    Text("Batal")
                 }
             }
         )

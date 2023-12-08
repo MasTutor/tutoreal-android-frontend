@@ -54,7 +54,7 @@ fun TutorScreen(
     viewModel: TutorViewModel
 ) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
-    val tabs = listOf("About", "Reviews")
+    val tabs = listOf("Tentang", "Ulasan")
 
     viewModel.tutorResponse.collectAsState(UiState.Loading).value.let { uiState ->
         when(uiState) {
@@ -178,7 +178,7 @@ fun TutorContent(
                     shape = RoundedCornerShape(15),
                     modifier = modifier.padding(top = 20.dp)
                 ) {
-                    Text("Book A Session $price",
+                    Text("Pesan Sesi $price",
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold))
                 }
             }
@@ -228,14 +228,14 @@ fun AboutSection(
         .fillMaxWidth()
         .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
         Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("About $name", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            Text("Tentang $name", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
             Text(about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
 
-            Text("Speciality", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            Text("Keahlian", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
             CategoryComponentBig(category = category,
                 onClick = {}, modifier = modifier.padding(bottom = 5.dp))
 
-            Text("Skills and Experience", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+            Text("Keterampilan dan Pengalaman", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
             Text(skillsExperience, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
         }
     }

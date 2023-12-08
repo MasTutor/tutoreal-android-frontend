@@ -232,19 +232,28 @@ class Repository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-//    fun editProfile(token: String): Flow<UiState<EditResponse>> {
-//        val jsonObject = JSONObject()
-//
-//        return flow {
-//            try {
-//                emit(UiState.Loading)
-//                val responseProfile = tutorealApiService.getProfile(token)
-//                val responseEdit = tutorealApiService.editProfile(token, jsonObject)
-//                emit(UiState.Success(HomeDataHelper(responseProfile, responseEdit)))
-//            }
-//            catch (e: Exception){
-//                emit(UiState.Failure(e))
-//            }
-//        }.flowOn(Dispatchers.IO)
-//    }
+    fun editProfile(token: String,
+                    name: String? = null,
+                    gender: Boolean? = null,
+                    nomor: String? = null,
+    ): Flow<UiState<ProfileResponse>> {
+
+        val jsonObject = JSONObject()
+        jsonObject.put("fullname", name)
+        jsonObject.put("hasPenis", gender)
+        jsonObject.put("noTelp", nomor)
+        val requestBody =
+            jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val responseEdit = tutorealApiService.editProfile(token, requestBody)
+                emit(UiState.Success(responseEdit))
+            }
+            catch (e: Exception){
+                emit(UiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
 }

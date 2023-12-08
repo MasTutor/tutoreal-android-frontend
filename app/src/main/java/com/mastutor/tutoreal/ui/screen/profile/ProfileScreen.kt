@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +51,11 @@ import com.mastutor.tutoreal.viewmodel.ProfileViewModel
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()){
     val userExist by viewModel.userExist
+
+    var nameField by remember { mutableStateOf("") }
+    var numberField by remember { mutableStateOf("") }
+    var genderField by remember { mutableStateOf("") }
+
     SideEffect {
         viewModel.tryUserExist()
         viewModel.getToken()
@@ -68,7 +74,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
     val phoneNumberEdit = remember { mutableStateOf(false) }
     val usernameEdit = remember { mutableStateOf(false) }
     val genderEdit = remember { mutableStateOf(false) }
-    val genders = listOf("male", "female")
+    val genders = listOf("Pria", "Wanita")
     val selectedItem = remember {
         mutableStateOf(genders[0])
     }
@@ -92,20 +98,21 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                     TextFieldDialog(
                         data = "Nama",
                         openDialog = usernameEdit,
-                        value = userData.profile.nama,
-                        onValueChanged = { },
+                        value = nameField,
+                        onValueChanged = { nameField = it },
                         onSubmitClicked = {
-                            usernameEdit.value = false
+                            viewModel.editProfile("name", nameField)
                         }
                     )
 
                     TextFieldDialog(
                         data = "Nomor Telepon",
                         openDialog = phoneNumberEdit,
-                        value = userData.profile.noTelp,
-                        onValueChanged = { },
+                        value = numberField,
+                        onValueChanged = { numberField = it },
+                        isNumber = true,
                         onSubmitClicked = {
-                            phoneNumberEdit.value = false
+                            viewModel.editProfile("number", numberField)
                         }
                     )
 
@@ -113,12 +120,19 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                         openDialog = genderEdit,
                         options = genders,
                         selectedOptions = selectedItem,
-                        onSubmitClicked = {}
+                        onSubmitClicked = {
+                            genderField = if (selectedItem.value == "Pria") {
+                                "true"
+                            } else {
+                                "false"
+                            }
+                            viewModel.editProfile("gender", genderField)
+                        }
                     )
 
                     ProfileContent(
                         fullName = userData.profile.nama,
-                        phoneNumber =userData.profile.noTelp.ifEmpty { "Not yet set" },
+                        phoneNumber = userData.profile.noTelp.ifEmpty { "Not yet set" },
                         gender = userData.profile.gender,
                         photoUrl = userData.profile.photoURL,
                         onFullNameClicked = { usernameEdit.value = true },
@@ -172,7 +186,7 @@ fun ProfileContent(
         Text(text = fullName, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(bottom = 20.dp))
         UserEditComponent(icon = Icons.Rounded.Person, data = fullName, onClick = onFullNameClicked, modifier = Modifier.padding(bottom = 10.dp))
         UserEditComponent(icon = Icons.Rounded.Call, data = phoneNumber, onClick = onPhoneNumberClicked, modifier = Modifier.padding(bottom = 10.dp))
-        UserEditComponent(icon = if(gender == 1) Icons.Filled.Male else Icons.Filled.Female, data = if(gender == 1) "Male" else "Female", onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
+        UserEditComponent(icon = if(gender == 1) Icons.Filled.Male else Icons.Filled.Female, data = if(gender == 1) "Pria" else "Wanita", onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
         Row {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),

@@ -49,4 +49,36 @@ class ProfileViewModel @Inject constructor(private val repository: Repository): 
             }
         }
     }
+
+    fun editProfile(field: String, data: String) {
+        val token = "Bearer ${_userToken.value}"
+        viewModelScope.launch {
+            when (field) {
+                "number" -> {
+                    repository.editProfile(
+                        token,
+                        nomor = data
+                    ).collect() {
+                        _profileResponse.value = it
+                    }
+                }
+                "name" -> {
+                    repository.editProfile(
+                        token,
+                        name = data
+                    ).collect() {
+                        _profileResponse.value = it
+                    }
+                }
+                "gender" -> {
+                    repository.editProfile(
+                        token,
+                        gender = data.toBoolean()
+                    ).collect() {
+                        _profileResponse.value = it
+                    }
+                }
+            }
+        }
+    }
 }

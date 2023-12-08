@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ fun TextFieldDialog(
     value: String,
     onValueChanged: (String) -> Unit,
     onSubmitClicked: () -> Unit,
+    isNumber: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     if (openDialog.value) {
@@ -37,7 +40,7 @@ fun TextFieldDialog(
                     TextField(
                         value = value,
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
+                            keyboardType = if (isNumber) KeyboardType.Number else KeyboardType.Text
                         ),
                         onValueChange = onValueChanged,
                         singleLine = true
@@ -48,15 +51,16 @@ fun TextFieldDialog(
                 Button(
                     onClick = onSubmitClicked
                 ) {
-                    Text("Confirm")
+                    Text("Konfirmasi")
                 }
             },
             dismissButton = {
                 Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                     onClick = {
                         openDialog.value = false
                     }) {
-                    Text("Dismiss")
+                    Text("Batal")
                 }
             }
         )

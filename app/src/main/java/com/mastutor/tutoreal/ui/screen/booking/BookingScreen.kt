@@ -82,7 +82,7 @@ fun BookingScreen(modifier: Modifier = Modifier,
         day = (cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US)?.toString() + ", ")
     }
 
-    AlertDialog(text = "OK! Lesgo home!", openDialog = successDialog, onSubmitClicked = {
+    AlertDialog(text = "OK!", openDialog = successDialog, onSubmitClicked = {
         // TODO: Navigate somewhere else
         navHostController.navigate(Screen.Home.route) {
             popUpTo(Screen.Book.route) {
@@ -212,11 +212,11 @@ fun BookingContent(
                     tint = Color.Black
                 )
             }
-            Text("Schedule Your Session", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            Text("Jadwalkan Sesi Anda!", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp), textAlign = TextAlign.Center)
-            Text("Your Session Title", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
+            Text("Judul Sesi Anda", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
             TextField(
                 value = sessionTitle,
                 colors = TextFieldDefaults.textFieldColors(
@@ -229,7 +229,7 @@ fun BookingContent(
                 singleLine = true,
                 placeholder = {
                     Text(
-                        text = "Session Title",
+                        text = "Masukkan Judul!",
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Normal,
                             fontSize = 16.sp,
@@ -241,7 +241,7 @@ fun BookingContent(
                     .fillMaxWidth()
                     .padding(bottom = 5.dp)
             )
-            Text("Your Tutor", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
+            Text("Tutor Anda", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
             TutorComponent(photoUrl = picture,
                 name = name,
                 job = job,
@@ -250,7 +250,7 @@ fun BookingContent(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(bottom = 5.dp))
-            Text("Pick Your Date", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
+            Text("Pilih Tanggal Anda", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
 
             Box(modifier = modifier
                 .background(Color.White)
@@ -260,7 +260,7 @@ fun BookingContent(
                 .height(64.dp)
                 .clip(RoundedCornerShape(5.dp))
             ) {
-                Text(date.ifEmpty { "Click here to choose date" },
+                Text(date.ifEmpty { "Tekan disini untuk memilih!" },
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = if (date.isEmpty()) FontWeight.Normal else FontWeight.Bold,
                         fontSize = 16.sp,
@@ -294,7 +294,7 @@ fun BookingContent(
                     modifier
                         .fillMaxWidth()
                         .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)) {
-                    Text("Total Payment:", style = MaterialTheme.typography.bodyMedium.copy(
+                    Text("Total Pembayaran:", style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Normal), color = Color.Gray
                     )
                     Spacer(modifier.weight(1F))
@@ -307,7 +307,7 @@ fun BookingContent(
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
                 ) {
-                    Text("Confirm Booking")
+                    Text("Konfirmasi Pemesanan")
                 }
             }
         }

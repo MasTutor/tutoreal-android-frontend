@@ -84,6 +84,7 @@ fun ScheduleContent(
                     items(schedules) { schedule ->
                         if (schedule != null) {
                             ScheduleComponent(
+                                modifier = Modifier.padding(10.dp),
                                 title = schedule.sessionName.toString(),
                                 tutorName = schedule.tutorName.toString(),
                                 date = schedule.date.toString(),
