@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Biotech
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -67,7 +67,7 @@ fun ChooserScreen(
             )
             .offset(y = (-100).dp)
             .padding(horizontal = 20.dp)) {
-            Icon(imageVector = Icons.Filled.Biotech, contentDescription = "", tint = MaterialTheme.colorScheme.primary, modifier = Modifier
+            Icon(imageVector = Icons.Filled.Palette, contentDescription = "", tint = MaterialTheme.colorScheme.primary, modifier = Modifier
                 .size(240.dp)
             )
             Text(text = "Tutoreal", style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.primary, fontSize = 42.sp))

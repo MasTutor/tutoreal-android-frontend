@@ -1,7 +1,5 @@
 package com.mastutor.tutoreal.ui.navigation.screen
 
-import com.mastutor.tutoreal.data.remote.TutorDetail
-
 sealed class Screen(val route: String){
     object Login : Screen("login")
     object RegisterForm : Screen("registerForm")
@@ -21,4 +19,5 @@ sealed class Screen(val route: String){
         fun createRoute(categoryIdx: Int) = "search/$categoryIdx"
     }
     object Schedule: Screen("schedule")
+    object Splash: Screen("splash")
 }

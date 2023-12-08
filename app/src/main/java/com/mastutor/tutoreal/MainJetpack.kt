@@ -29,6 +29,7 @@ import com.mastutor.tutoreal.ui.screen.register.RegisterPictureScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
 import com.mastutor.tutoreal.ui.screen.schedule.ScheduleScreen
 import com.mastutor.tutoreal.ui.screen.search.SearchScreen
+import com.mastutor.tutoreal.ui.screen.splash.SplashScreen
 import com.mastutor.tutoreal.ui.screen.survey.SurveyScreen
 import com.mastutor.tutoreal.ui.screen.tutor.TutorScreen
 import com.mastutor.tutoreal.viewmodel.AuthViewModel
@@ -44,7 +45,7 @@ fun MainJetpack(
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold {innerPadding ->
-        NavHost(navController = navHostController, startDestination = Screen.Chooser.route, modifier = Modifier.padding(
+        NavHost(navController = navHostController, startDestination = Screen.Splash.route, modifier = Modifier.padding(
             //for edge to edge
             top = if(
                 currentRoute == Screen.Home.route
@@ -52,14 +53,19 @@ fun MainJetpack(
                 || currentRoute == Screen.Search.route
                 || currentRoute == Screen.Login.route
                 || currentRoute == Screen.RegisterForm.route
+                || currentRoute == Screen.Splash.route
                 ) 0.dp else innerPadding.calculateTopPadding(),
             bottom = if(currentRoute == Screen.Chooser.route
                 || currentRoute == Screen.Matchmaking.route
+                || currentRoute == Screen.Splash.route
                 ) 0.dp else innerPadding.calculateBottomPadding()
 
         )){
             composable(Screen.Chooser.route){
                 ChooserScreen(onLoginClicked = { navHostController.navigate(Screen.Login.route)}, onRegisterClicked = {navHostController.navigate("register")}, navHostController = navHostController)
+            }
+            composable(Screen.Splash.route){
+                SplashScreen(navHostController = navHostController)
             }
             composable(Screen.Login.route){
                 LoginScreen(navHostController = navHostController)
