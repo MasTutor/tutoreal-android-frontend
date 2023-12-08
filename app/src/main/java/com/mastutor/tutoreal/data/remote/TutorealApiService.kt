@@ -38,11 +38,11 @@ interface TutorealApiService {
         @Header("Authorization") token: String,
     ): ScheduleResponse
 
-//    @PUT("/user/editprofile")
-//    suspend fun editProfile(
-//        @Header("Authorization") token: String,
-//        @Body requestBody: RequestBody
-//    ) : EditResponse
+    @PUT("/user/editprofile")
+    suspend fun editProfile(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    ) : ProfileResponse
 
     @POST("/user/new-history")
     suspend fun newHistory(
