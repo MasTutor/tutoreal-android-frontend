@@ -31,7 +31,7 @@ fun AlertDialog(
             },
             text = {
                 Column(modifier = modifier.padding(top = 10.dp).fillMaxWidth()) {
-                    Text("Booking Successful!", textAlign = TextAlign.Center)
+                    Text("Pemesanan Berhasil!", textAlign = TextAlign.Center)
                 }
             },
             confirmButton = {

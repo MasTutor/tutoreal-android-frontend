@@ -87,7 +87,7 @@ fun MatchTutorComponent(
                         .weight(1F)
                 )
                 Text(
-                    text = "IDR $price/Session",
+                    text = "IDR $price/Sesi",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -166,7 +166,7 @@ fun TutorComponent(
                         .weight(1F)
                 )
                 Text(
-                    text = "$price/Session",
+                    text = "$price/Sesi",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

@@ -168,7 +168,7 @@ fun ScheduleComponent(
                 .padding(8.dp)
         ){
             Text(text = title, style = MaterialTheme.typography.bodySmall, color = Color.LightGray, modifier = Modifier.padding(bottom = 4.dp))
-            Text(text = "Meeting with $tutorName",
+            Text(text = "Sesi dengan $tutorName",
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 color = Color.Black,
                 modifier = Modifier.padding(bottom = 20.dp).width(220.dp),
