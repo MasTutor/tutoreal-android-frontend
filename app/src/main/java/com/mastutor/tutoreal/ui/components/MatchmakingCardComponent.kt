@@ -15,12 +15,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 
@@ -37,7 +39,7 @@ fun MatchmakingCardComponent(
     {
         Box {
             AsyncImage(
-                model = "https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg",
+                model = "https://i.imgur.com/LXAIL9h.jpeg",
                 contentDescription = "Teaching",
                 contentScale = ContentScale.Crop,
                 colorFilter = ColorFilter.tint(
@@ -54,20 +56,20 @@ fun MatchmakingCardComponent(
                     .padding(start = 10.dp)
             ) {
                 Text(
-                    text = "Coba Pencocokan Kita",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(bottom = 2.dp)
+                    text = "Coba\nPencocokan Kita",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 30.sp, lineHeight = 32.sp),
+                    modifier = Modifier.padding(bottom = 2.dp).alpha(0.5F)
                 )
                 Text(
                     text = "Temukan pembimbing yang cocok untukmu",
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp).alpha(0.5F)
                 )
                 Icon(
                     imageVector = Icons.Filled.ArrowForward,
                     contentDescription = "Arrow Forward",
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp).alpha(0.5F)
                 )
             }
         }

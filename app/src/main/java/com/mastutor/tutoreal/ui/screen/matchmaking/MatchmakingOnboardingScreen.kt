@@ -21,14 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
@@ -48,10 +47,6 @@ fun MatchmakingOnboardingScreen(
             model = "https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg",
             contentDescription = "Teaching",
             contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(
-                color = MaterialTheme.colorScheme.primary,
-                blendMode = BlendMode.Multiply
-            ),
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
@@ -81,10 +76,10 @@ fun MatchmakingOnboardingScreen(
 
         Text(
             text = "Selamat Datang",
-            style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
+            style = MaterialTheme.typography.bodyLarge.copy(color = Color.White, fontSize = 30.sp),
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = 120.dp)
+                .offset(y = 100.dp)
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
