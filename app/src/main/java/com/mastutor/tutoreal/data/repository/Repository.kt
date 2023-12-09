@@ -38,7 +38,7 @@ class Repository @Inject constructor(
     private val sessionPreferences: SessionPreferences,
     private val imgurApiService: ImgurApiService,
     @ApplicationContext private val context: Context
-){
+) {
     fun searchTutors(
         specialization: String,
         category: String? = null
@@ -51,48 +51,49 @@ class Repository @Inject constructor(
         }
     ).flow
 
-    fun getUserExist(): Flow<Boolean>{
+    fun getUserExist(): Flow<Boolean> {
         return sessionPreferences.getUserExist()
     }
-    fun getUserToken(): Flow<String>{
+
+    fun getUserToken(): Flow<String> {
         return sessionPreferences.getUserToken()
     }
 
-    suspend fun deleteSession(){
+    suspend fun deleteSession() {
         sessionPreferences.deleteSession()
     }
-    fun getSchedule(token: String): Flow<UiState<ScheduleResponse>>{
+
+    fun getSchedule(token: String): Flow<UiState<ScheduleResponse>> {
         return flow {
             try {
                 emit(UiState.Loading)
                 val responseSchedule = tutorealApiService.getSchedule(token)
                 emit(UiState.Success(responseSchedule))
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 emit(UiState.Failure(e))
             }
         }
     }
-    fun getProfile(token: String):Flow<UiState<ProfileResponse>>{
+
+    fun getProfile(token: String): Flow<UiState<ProfileResponse>> {
         return flow {
             try {
                 emit(UiState.Loading)
                 val responseProfile = tutorealApiService.getProfile(token)
                 emit(UiState.Success(responseProfile))
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 emit(UiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
     }
+
     fun register(
         fullName: String,
         email: String,
         password: String,
         male: Boolean = true,
         photoUrl: String
-    ): Flow<AuthUiState<RegisterResponse>>
-    {
+    ): Flow<AuthUiState<RegisterResponse>> {
         val jsonObject = JSONObject()
         jsonObject.put("fullname", fullName)
         jsonObject.put("email", email)
@@ -109,8 +110,7 @@ class Repository @Inject constructor(
                 emit(AuthUiState.Load)
                 val responseRegister = tutorealApiService.register(requestBody)
                 emit(AuthUiState.Success(responseRegister))
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 emit(AuthUiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
@@ -119,8 +119,7 @@ class Repository @Inject constructor(
     fun login(
         email: String,
         password: String
-    ):Flow<AuthUiState<LoginResponse>>
-    {
+    ): Flow<AuthUiState<LoginResponse>> {
         val jsonObject = JSONObject()
         jsonObject.put("email", email)
         jsonObject.put("password", password)
@@ -139,7 +138,7 @@ class Repository @Inject constructor(
                     }
                 }
                 emit(AuthUiState.Success(responseLogin))
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 emit(AuthUiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
@@ -181,35 +180,47 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getTutor(id: String):Flow<UiState<TutorResponse>>{
+    fun getTutor(id: String): Flow<UiState<TutorResponse>> {
         return flow {
             try {
                 emit(UiState.Loading)
                 val responseTutors = tutorealApiService.getTutor(id)
                 emit(UiState.Success(responseTutors))
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 emit(UiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
     }
 
-    fun getHomeNeeded(token: String): Flow<UiState<HomeDataHelper>>{
+    fun getHomeNeeded(token: String): Flow<UiState<HomeDataHelper>> {
         return flow {
             try {
                 emit(UiState.Loading)
                 val responseProfile = tutorealApiService.getProfile(token)
                 val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100)
                 val responseSchedule = tutorealApiService.getSchedule(token)
-                emit(UiState.Success(HomeDataHelper(responseProfile, responseTutors, responseSchedule)))
-            }
-            catch (e: Exception){
+                emit(
+                    UiState.Success(
+                        HomeDataHelper(
+                            responseProfile,
+                            responseTutors,
+                            responseSchedule
+                        )
+                    )
+                )
+            } catch (e: Exception) {
                 emit(UiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
     }
 
-    fun newHistory(token: String, id: String, title: String, date: String, status: String): Flow<AuthUiState<BookResponse>> {
+    fun newHistory(
+        token: String,
+        id: String,
+        title: String,
+        date: String,
+        status: String
+    ): Flow<AuthUiState<BookResponse>> {
         val jsonObject = JSONObject()
         jsonObject.put("tutorId", id)
         jsonObject.put("title", title)
@@ -225,18 +236,18 @@ class Repository @Inject constructor(
                 emit(AuthUiState.Load)
                 val responseHistory = tutorealApiService.newHistory(token, requestBody)
                 emit(AuthUiState.Success(responseHistory))
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 emit(AuthUiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
     }
 
-    fun editProfile(token: String,
-                    name: String? = null,
-                    gender: Boolean? = null,
-                    nomor: String? = null,
-                    picture: String? = null
+    fun editProfile(
+        token: String,
+        name: String? = null,
+        gender: Boolean? = null,
+        nomor: String? = null,
+        picture: String? = null
     ): Flow<UiState<ProfileResponse>> {
 
         val jsonObject = JSONObject()
@@ -252,8 +263,7 @@ class Repository @Inject constructor(
                 emit(UiState.Loading)
                 val responseEdit = tutorealApiService.editProfile(token, requestBody)
                 emit(UiState.Success(responseEdit))
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 emit(UiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)

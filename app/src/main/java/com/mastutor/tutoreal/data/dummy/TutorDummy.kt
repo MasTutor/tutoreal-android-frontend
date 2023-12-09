@@ -1,6 +1,6 @@
 package com.mastutor.tutoreal.data.dummy
 
-data class TutorDummy (
+data class TutorDummy(
     val name: String,
     val about: String,
     val skills: String,
@@ -12,13 +12,14 @@ data class TutorDummy (
 )
 
 object SillyText {
-    val lorem = "\"Lorem ipsum dolor sit amet, consectetura dipiscing elit. Cras sem nulla, mollis sed lorem ut, dictum dignissim justo. Donec consequat risus vel ligula condimentum maximus. Integer non tortor turpis. Suspendisse nisl augue, pulvinar ut rutrum fermentum, bibendum ultricies tellus. Aenean tristique ex vel tellus fringilla, in pretium dolor sollicitudin. vel rutrum.\","
+    val lorem =
+        "\"Lorem ipsum dolor sit amet, consectetura dipiscing elit. Cras sem nulla, mollis sed lorem ut, dictum dignissim justo. Donec consequat risus vel ligula condimentum maximus. Integer non tortor turpis. Suspendisse nisl augue, pulvinar ut rutrum fermentum, bibendum ultricies tellus. Aenean tristique ex vel tellus fringilla, in pretium dolor sollicitudin. vel rutrum.\","
 }
 
 object TutorData {
     val tutors = listOf(
         // make 10 of this.
-        TutorDummy (
+        TutorDummy(
             "Charlie",
             "Ooo yeah baby, this is what I am waiting for",
             "This is what it's all about ooo",
@@ -28,7 +29,7 @@ object TutorData {
             690000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Gnorts Statham",
             "Lorem ipsum dolor sit amet, consectetura dipiscing elit. Cras sem nulla, mollis sed lorem ut, dictum dignissim justo. Donec consequat risus vel ligula condimentum maximus. Integer non tortor turpis. Suspendisse nisl augue, pulvinar ut rutrum fermentum, bibendum ultricies tellus. Aenean tristique ex vel tellus fringilla, in pretium dolor sollicitudin. vel rutrum.",
             "Java, Kotlin, Android",
@@ -38,7 +39,7 @@ object TutorData {
             75000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Bob",
             "Enthusiastic about data science and machine learning",
             "Python, Pandas, Scikit-learn",
@@ -48,7 +49,7 @@ object TutorData {
             80000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Eve",
             "Experienced in graphic design and UI/UX",
             "Adobe Creative Suite, Figma",
@@ -58,7 +59,7 @@ object TutorData {
             70000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "David",
             "Passionate about mathematics and teaching",
             "Algebra, Calculus, Statistics",
@@ -68,7 +69,7 @@ object TutorData {
             72000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Grace",
             "Fitness freak and nutrition expert",
             "Personal Training, Nutrition",
@@ -78,7 +79,7 @@ object TutorData {
             90000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Frank",
             "Expert in cybersecurity and ethical hacking",
             "Cybersecurity, Penetration Testing",
@@ -88,7 +89,7 @@ object TutorData {
             85000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Helen",
             "Passionate about environmental science",
             "Climate Change, Ecology",
@@ -98,7 +99,7 @@ object TutorData {
             78000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Jack",
             "Avid reader and literature enthusiast",
             "English Literature, Creative Writing",
@@ -108,7 +109,7 @@ object TutorData {
             73000000,
             98.0
         ),
-        TutorDummy (
+        TutorDummy(
             "Mia",
             "Art lover and experienced painter",
             "Oil Painting, Watercolor",

@@ -5,7 +5,7 @@ import com.mastutor.tutoreal.data.remote.ScheduleResponse
 import com.mastutor.tutoreal.data.remote.TutorsResponse
 
 data class HomeDataHelper(
-   val profileResponse: ProfileResponse,
+    val profileResponse: ProfileResponse,
     val tutorsResponse: TutorsResponse,
     val scheduleResponse: ScheduleResponse
     //TODO: Add History Response

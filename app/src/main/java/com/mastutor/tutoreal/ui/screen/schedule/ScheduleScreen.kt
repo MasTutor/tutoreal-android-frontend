@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,15 +44,15 @@ fun ScheduleScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     viewModel: ScheduleViewModel = hiltViewModel()
-){
+) {
     SideEffect {
         viewModel.getToken()
     }
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.getSchedule()
     }
-    viewModel.scheduleResponse.collectAsState(initial = UiState.Loading).value.let {uiState ->
-        when(uiState){
+    viewModel.scheduleResponse.collectAsState(initial = UiState.Loading).value.let { uiState ->
+        when (uiState) {
             is UiState.Loading -> {
                 Column(
                     modifier = modifier
@@ -65,27 +64,31 @@ fun ScheduleScreen(
                     CircularProgressIndicator(color = Color.Black)
                 }
             }
+
             is UiState.Success -> {
-                ScheduleContent(schedules = uiState.data?.historyData,
+                ScheduleContent(
+                    schedules = uiState.data?.historyData,
                     onBackClicked = {
                         navHostController.navigateUp()
                     },
                     modifier = Modifier.padding(10.dp)
                 )
             }
+
             is UiState.Failure -> {
-                FailureScreen(onRefreshClicked = {viewModel.getSchedule()})
+                FailureScreen(onRefreshClicked = { viewModel.getSchedule() })
             }
         }
     }
 
 }
+
 @Composable
 fun ScheduleContent(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit,
     schedules: List<HistoryDataItem?>?
-){
+) {
     Row(
         modifier = Modifier
             .padding(start = 10.dp, top = 5.dp)
@@ -95,18 +98,20 @@ fun ScheduleContent(
     ) {
         Icon(
             imageVector = Icons.Filled.ArrowBack,
-            contentDescription ="Arrow Forward",
+            contentDescription = "Arrow Forward",
             modifier = Modifier.padding(end = 8.dp),
             tint = Color.Black
         )
 
     }
-    Column(modifier = modifier.fillMaxWidth()){
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = "Histori Jadwal",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 8.dp, top = 20.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(bottom = 8.dp, top = 20.dp)
+                .fillMaxWidth()
         )
         if (schedules != null) {
             if (schedules.isNotEmpty()) {
@@ -124,9 +129,15 @@ fun ScheduleContent(
                                         color = Color.Yellow
                                     )
                                 } else if (schedule.status.toString() == "Completed") {
-                                    StatusData(status = schedule.status.toString(), color = Color.Green)
+                                    StatusData(
+                                        status = schedule.status.toString(),
+                                        color = Color.Green
+                                    )
                                 } else {
-                                    StatusData(status = schedule.status.toString(), color = Color.Red)
+                                    StatusData(
+                                        status = schedule.status.toString(),
+                                        color = Color.Red
+                                    )
                                 },
                             )
                         }

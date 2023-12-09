@@ -9,15 +9,15 @@ class TutorPagingSource(
     private val tutorealApiService: TutorealApiService,
     private val specialization: String,
     private val category: String? = null,
-    ): PagingSource<Int, TutorItem>()
-{
-        private companion object{
-            const val INITIAL_PAGE_INDEX = 1
-        }
+) : PagingSource<Int, TutorItem>() {
+    private companion object {
+        const val INITIAL_PAGE_INDEX = 1
+    }
 
     override fun getRefreshKey(state: PagingState<Int, TutorItem>): Int? {
         return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(1) ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+            state.closestPageToPosition(it)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
         }
     }
 
@@ -31,14 +31,12 @@ class TutorPagingSource(
             )
             LoadResult.Page(
                 data = responseData.tutors.items,
-                prevKey = if(position == INITIAL_PAGE_INDEX) null else position -1,
-                nextKey = if(responseData.tutors.items.isEmpty()) null else position + 1
+                prevKey = if (position == INITIAL_PAGE_INDEX) null else position - 1,
+                nextKey = if (responseData.tutors.items.isEmpty()) null else position + 1
             )
-        }
-        catch (e: NullPointerException){
+        } catch (e: NullPointerException) {
             LoadResult.Error(Throwable(message = "Null Pointer Nih"))
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             LoadResult.Error(e)
 
         }

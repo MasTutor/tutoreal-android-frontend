@@ -13,31 +13,32 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+class HomeViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     private val _homeResponse: MutableStateFlow<UiState<HomeDataHelper>> = MutableStateFlow(
-        UiState.Loading)
+        UiState.Loading
+    )
     val homeResponse: StateFlow<UiState<HomeDataHelper>>
         get() = _homeResponse
 
     private val _userToken = mutableStateOf("")
 
-    fun getToken(){
+    fun getToken() {
         viewModelScope.launch {
-            repository.getUserToken().collect(){
+            repository.getUserToken().collect {
                 _userToken.value = it
             }
         }
     }
 
-    fun deleteSession(){
+    fun deleteSession() {
         viewModelScope.launch {
             repository.deleteSession()
         }
     }
 
-    fun getHomeProcess(){
+    fun getHomeProcess() {
         viewModelScope.launch {
-            repository.getHomeNeeded("Bearer ${_userToken.value}").collect(){
+            repository.getHomeNeeded("Bearer ${_userToken.value}").collect {
                 _homeResponse.value = it
             }
         }

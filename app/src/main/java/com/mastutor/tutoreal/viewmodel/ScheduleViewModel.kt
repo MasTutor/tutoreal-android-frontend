@@ -13,22 +13,24 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ScheduleViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+class ScheduleViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     private val _scheduleResponse: MutableStateFlow<UiState<ScheduleResponse>> = MutableStateFlow(
-        UiState.Loading)
+        UiState.Loading
+    )
     val scheduleResponse: StateFlow<UiState<ScheduleResponse>> = _scheduleResponse
     private val _userToken = mutableStateOf("")
 
-    fun getToken(){
+    fun getToken() {
         viewModelScope.launch {
-            repository.getUserToken().collect(){
+            repository.getUserToken().collect {
                 _userToken.value = it
             }
         }
     }
-    fun getSchedule(){
-        viewModelScope.launch{
-            repository.getSchedule("Bearer ${_userToken.value}").collect(){
+
+    fun getSchedule() {
+        viewModelScope.launch {
+            repository.getSchedule("Bearer ${_userToken.value}").collect {
                 _scheduleResponse.value = it
             }
         }

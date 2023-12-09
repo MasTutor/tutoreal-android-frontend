@@ -183,7 +183,7 @@ fun TutorComponentBig(
     name: String,
     job: String,
     onClick: () -> Unit
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -193,7 +193,7 @@ fun TutorComponentBig(
             .height(218.dp)
             .background(Color.White)
             .clickable { onClick() }
-    ){
+    ) {
         AsyncImage(
             model = photoUrl,
             contentDescription = "User Photo",
@@ -252,7 +252,11 @@ fun TutorComponentPreview() {
                 price = 200000,
                 percentage = 98.0,
             )
-            TutorComponentBig(photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg", name = "Jim Burton", job = "Con Artist", onClick = {})
+            TutorComponentBig(
+                photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
+                name = "Jim Burton",
+                job = "Con Artist",
+                onClick = {})
         }
     }
 }

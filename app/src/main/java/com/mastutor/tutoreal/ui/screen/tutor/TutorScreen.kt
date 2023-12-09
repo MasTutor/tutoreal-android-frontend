@@ -19,10 +19,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,13 +38,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.data.local.Category
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
@@ -57,7 +59,7 @@ fun TutorScreen(
     val tabs = listOf("Tentang", "Ulasan")
 
     viewModel.tutorResponse.collectAsState(UiState.Loading).value.let { uiState ->
-        when(uiState) {
+        when (uiState) {
             is UiState.Loading -> {
                 viewModel.getTutor(id)
                 Column(
@@ -74,12 +76,13 @@ fun TutorScreen(
                 uiState.data?.detailTutor?.let { tutor ->
                     viewModel.setData(tutor)
                     CategoriesData.categories.firstOrNull { it.id == tutor.categories }?.let {
-                        TutorContent(modifier = modifier,
+                        TutorContent(
+                            modifier = modifier,
                             onBackClicked = {
                                 navHostController.navigateUp()
                             },
                             name = tutor.nama,
-                            price = tutor.price.ifEmpty { "Rp. 690000" },
+                            price = tutor.price.ifEmpty { "Rp 30.000" },
                             specialization = tutor.specialization,
                             about = tutor.about,
                             skillsExperience = tutor.skills.ifEmpty { tutor.about },
@@ -93,6 +96,7 @@ fun TutorScreen(
                     }
                 }
             }
+
             is UiState.Failure -> {
                 FailureScreen(onRefreshClicked = { viewModel.getTutor(id) })
             }
@@ -116,17 +120,18 @@ fun TutorContent(
     onTabSelected: (Int) -> Unit,
     onBookClicked: () -> Unit
 ) {
-    Column(modifier = modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState())
-        .background(color = MaterialTheme.colorScheme.tertiary)
-        .padding(bottom = 10.dp)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 10.dp)
     ) {
-        Box(modifier = modifier
-            .fillMaxWidth()
-            .height(390.dp)
-            .clip(RoundedCornerShape(bottomEndPercent = 10, bottomStartPercent = 10))
-            .background(color = Color.White)
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(390.dp)
+                .clip(RoundedCornerShape(bottomEndPercent = 10, bottomStartPercent = 10))
+                .background(color = Color.White)
         ) {
             Row(
                 modifier = Modifier
@@ -135,21 +140,25 @@ fun TutorContent(
                     .offset(y = 10.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription ="Arrow Forward",
+                    contentDescription = "Arrow Forward",
                     modifier = Modifier.padding(end = 8.dp),
                     tint = Color.Black
                 )
                 Text(
                     text = "Kembali",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    ),
                 )
             }
-            Column(modifier = modifier
-                .fillMaxSize()
-                .padding(top = 30.dp),
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(top = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -172,35 +181,44 @@ fun TutorContent(
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.padding(top = 3.dp)
                 )
-                Button(onClick = { onBookClicked() },
+                Button(
+                    onClick = { onBookClicked() },
                     shape = RoundedCornerShape(15),
                     modifier = modifier.padding(top = 20.dp)
                 ) {
-                    Text("Pesan Sesi $price",
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold))
+                    Text(
+                        "Pesan Sesi $price",
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+                    )
                 }
             }
         }
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 15.dp)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(15.dp) ,modifier = modifier.align(Alignment.Center)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                modifier = modifier.align(Alignment.Center)
+            ) {
                 tabs.forEachIndexed { index, title ->
-                    Button(onClick = { onTabSelected(index) },
+                    Button(
+                        onClick = { onTabSelected(index) },
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (tabIndex == index)
                                 MaterialTheme.colorScheme.primary else Color.Transparent
                         )
                     ) {
-                        Text(title, style = MaterialTheme.typography.bodySmall)
+                        Text(title, style = MaterialTheme.typography.bodySmall.copy(color = if(tabIndex == index) Color.White else MaterialTheme.colorScheme.primary))
                     }
                 }
             }
         }
 
-        when(tabIndex) {
+        when (tabIndex) {
             0 -> AboutSection(
                 modifier = modifier,
                 name = name,
@@ -208,6 +226,7 @@ fun TutorContent(
                 skillsExperience = skillsExperience,
                 category = category
             )
+
             1 -> ReviewSection(modifier = modifier)
         }
 
@@ -222,28 +241,50 @@ fun AboutSection(
     skillsExperience: String,
     category: Category
 ) {
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
-        Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Tentang $name", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp, start = 15.dp, end = 15.dp)
+    ) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                "Tentang $name",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+            )
             Text(about, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
 
-            Text("Keahlian", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-            CategoryComponentBig(category = category,
-                onClick = {}, modifier = modifier.padding(bottom = 5.dp))
+            Text(
+                "Keahlian",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+            )
+            CategoryComponentBig(
+                category = category,
+                onClick = {}, modifier = modifier.padding(bottom = 5.dp)
+            )
 
-            Text("Keterampilan dan Pengalaman", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
-            Text(skillsExperience, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Justify)
+            Text(
+                "Keterampilan dan Pengalaman",
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+            )
+            Text(
+                skillsExperience,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Justify
+            )
         }
     }
 }
 
 @Composable
 fun ReviewSection(modifier: Modifier) {
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .padding(top = 20.dp, start = 15.dp, end = 15.dp)) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp, start = 15.dp, end = 15.dp)
+    ) {
         Text(
             modifier = modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,

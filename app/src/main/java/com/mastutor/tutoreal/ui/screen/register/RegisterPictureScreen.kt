@@ -5,7 +5,6 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,20 +19,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,10 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import com.mastutor.tutoreal.R
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.util.AuthUiState
@@ -75,14 +68,15 @@ fun RegisterPictureScreen(
     }
 
     viewModel.registerResponse.collectAsState(initial = AuthUiState.Idle).value.let { uiState ->
-        when(uiState) {
+        when (uiState) {
             is AuthUiState.Idle -> {
                 RegisterPictureContent(
                     modifier = modifier,
                     name = name,
                     imageUri = imageUri,
                     onEditClicked = {
-                        launcher.launch("image/*") },
+                        launcher.launch("image/*")
+                    },
                     onRegisterClicked = {
                         viewModel.register()
                     },
@@ -137,7 +131,11 @@ fun RegisterPictureScreen(
                     }
                 )
                 LaunchedEffect(key1 = true) {
-                    Toast.makeText(context, "Gagal cek input, atau cek koneksi internet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Gagal cek input, atau cek koneksi internet",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
             }
@@ -156,10 +154,11 @@ fun RegisterPictureContent(
 ) {
     val context = LocalContext.current
 
-    Column(modifier = modifier
-        .background(MaterialTheme.colorScheme.background)
-        .fillMaxSize()
-        .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxSize()
+            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
     ) {
         Row(
             modifier = Modifier
@@ -170,7 +169,7 @@ fun RegisterPictureContent(
         ) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
-                contentDescription ="Arrow Forward",
+                contentDescription = "Arrow Forward",
                 modifier = Modifier.padding(end = 8.dp),
                 tint = Color.Black
             )
@@ -185,7 +184,8 @@ fun RegisterPictureContent(
                 .weight(1F)
         )
 
-        Text("Choose your profile picture",
+        Text(
+            "Choose your profile picture",
             modifier = modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
             textAlign = TextAlign.Center
@@ -196,10 +196,11 @@ fun RegisterPictureContent(
                 .height(50.dp)
         )
 
-        Box(modifier = modifier
-            .size(354.dp)
-            .clip(RoundedCornerShape(30.dp))
-            .background(Color.White)
+        Box(
+            modifier = modifier
+                .size(354.dp)
+                .clip(RoundedCornerShape(30.dp))
+                .background(Color.White)
         ) {
             Column(
                 modifier = modifier.fillMaxSize(),
@@ -214,7 +215,8 @@ fun RegisterPictureContent(
                 Image(
                     bitmap =
                     if (imageUri != Uri.EMPTY) {
-                        val inputStream = imageUri?.let { context.contentResolver.openInputStream(it) }
+                        val inputStream =
+                            imageUri.let { context.contentResolver.openInputStream(it) }
                         val bitmap = BitmapFactory.decodeStream(inputStream)
                         bitmap.asImageBitmap()
                     } else {
@@ -230,7 +232,8 @@ fun RegisterPictureContent(
 
                 Spacer(modifier = modifier.height(32.dp))
 
-                Text(name,
+                Text(
+                    name,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.Center
                 )

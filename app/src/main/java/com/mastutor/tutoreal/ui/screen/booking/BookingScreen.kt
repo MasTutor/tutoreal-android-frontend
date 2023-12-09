@@ -3,7 +3,6 @@ package com.mastutor.tutoreal.ui.screen.booking
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.widget.Toast
-import com.mastutor.tutoreal.util.separateDate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,21 +38,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mastutor.tutoreal.ui.components.AlertDialog
 import com.mastutor.tutoreal.ui.components.TutorComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.util.AuthUiState
+import com.mastutor.tutoreal.util.separateDate
 import com.mastutor.tutoreal.viewmodel.TutorViewModel
 import java.util.Calendar
 import java.util.Locale
 
 @SuppressLint("NewApi")
 @Composable
-fun BookingScreen(modifier: Modifier = Modifier,
-                  viewModel: TutorViewModel,
-                  navHostController: NavHostController
+fun BookingScreen(
+    modifier: Modifier = Modifier,
+    viewModel: TutorViewModel,
+    navHostController: NavHostController
 ) {
     SideEffect {
         viewModel.getToken()
@@ -104,7 +104,8 @@ fun BookingScreen(modifier: Modifier = Modifier,
     viewModel.bookResponse.collectAsState(initial = AuthUiState.Idle).value.let { uiState ->
         when (uiState) {
             is AuthUiState.Idle -> {
-                BookingContent(modifier = modifier,
+                BookingContent(
+                    modifier = modifier,
                     onBackClicked = { navHostController.navigateUp() },
                     sessionTitle = title,
                     onSessionTitleChanged = {
@@ -115,7 +116,12 @@ fun BookingScreen(modifier: Modifier = Modifier,
                         viewModel.changeTitleError(title.isEmpty())
                         viewModel.changeDateError(date.isEmpty())
                         if (!titleError && !dateError) {
-                            viewModel.bookTutor(id = tutor.id, title = title, date = date, status = "OnGoing")
+                            viewModel.bookTutor(
+                                id = tutor.id,
+                                title = title,
+                                date = date,
+                                status = "OnGoing"
+                            )
                         }
                     },
                     onDateClicked = {
@@ -123,7 +129,7 @@ fun BookingScreen(modifier: Modifier = Modifier,
                         viewModel.changeDateError(date.isEmpty())
                     },
                     date = "$day$date",
-                    price = tutor.price.ifEmpty { "Rp. 690000" },
+                    price = tutor.price.ifEmpty { "Rp 30.000" },
                     name = tutor.nama,
                     picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                     job = tutor.specialization,
@@ -134,13 +140,13 @@ fun BookingScreen(modifier: Modifier = Modifier,
 
             is AuthUiState.Load -> {
                 BookingContent(
-                    onBackClicked = {  },
+                    onBackClicked = { },
                     sessionTitle = title,
                     onSessionTitleChanged = { },
                     onBookClicked = { },
                     onDateClicked = { },
                     date = "$day$date",
-                    price = tutor.price.ifEmpty { "Rp. 690000" },
+                    price = tutor.price.ifEmpty { "Rp 30.000" },
                     name = tutor.nama,
                     picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                     job = tutor.specialization,
@@ -161,13 +167,13 @@ fun BookingScreen(modifier: Modifier = Modifier,
 
             is AuthUiState.Success -> {
                 BookingContent(
-                    onBackClicked = {  },
+                    onBackClicked = { },
                     sessionTitle = title,
                     onSessionTitleChanged = { },
                     onBookClicked = { },
                     onDateClicked = { },
                     date = "$day$date",
-                    price = tutor.price.ifEmpty { "Rp. 690000" },
+                    price = tutor.price.ifEmpty { "Rp 30.000" },
                     name = tutor.nama,
                     picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                     job = tutor.specialization,
@@ -186,9 +192,14 @@ fun BookingScreen(modifier: Modifier = Modifier,
                     sessionTitle = title,
                     onSessionTitleChanged = viewModel::changeTitle,
                     onBookClicked = {
-                        viewModel.bookTutor(id = tutor.id, title = title, date = date, status = "Ongoing") // token
+                        viewModel.bookTutor(
+                            id = tutor.id,
+                            title = title,
+                            date = date,
+                            status = "Ongoing"
+                        ) // token
                     }, onDateClicked = { datePicker.show() }, date = "$day$date",
-                    price = tutor.price.ifEmpty { "Rp. 690000" },
+                    price = tutor.price.ifEmpty { "Rp 30.000" },
                     name = tutor.nama,
                     picture = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                     job = tutor.specialization,
@@ -196,7 +207,11 @@ fun BookingScreen(modifier: Modifier = Modifier,
                     dateError = dateError
                 )
                 LaunchedEffect(key1 = true) {
-                    Toast.makeText(context, "Gagal cek input, atau cek koneksi internet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Gagal cek input, atau cek koneksi internet",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -223,7 +238,8 @@ fun BookingContent(
     Box(
         modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background)) {
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -236,19 +252,26 @@ fun BookingContent(
                     .clickable { onBackClicked() }
                     .padding(top = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription ="Arrow Forward",
+                    contentDescription = "Arrow Forward",
                     modifier = Modifier.padding(end = 8.dp),
                     tint = Color.Black
                 )
             }
-            Text("Jadwalkan Sesi Anda!", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            Text(
+                "Jadwalkan Sesi Anda!",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp), textAlign = TextAlign.Center)
-            Text("Judul Sesi Anda", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
+                    .padding(bottom = 10.dp),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                "Judul Sesi Anda",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+            )
             TextField(
                 value = sessionTitle,
                 colors = TextFieldDefaults.textFieldColors(
@@ -265,7 +288,7 @@ fun BookingContent(
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Normal,
                             fontSize = 16.sp,
-                            color = if(sessionTitleError) Color.Red else Color.Gray
+                            color = if (sessionTitleError) MaterialTheme.colorScheme.error else Color.Gray
                         )
                     )
                 },
@@ -273,30 +296,40 @@ fun BookingContent(
                     .fillMaxWidth()
                     .padding(bottom = 5.dp)
             )
-            Text("Tutor Anda", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
-            TutorComponent(photoUrl = picture,
+            Text(
+                "Tutor Anda",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+            )
+            TutorComponent(
+                photoUrl = picture,
                 name = name,
                 job = job,
                 price = price,
                 onClick = {},
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(bottom = 5.dp))
-            Text("Pilih Tanggal Anda", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal))
+                    .padding(bottom = 5.dp)
+            )
+            Text(
+                "Pilih Tanggal Anda",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+            )
 
-            Box(modifier = modifier
-                .background(Color.White)
-                .clickable(onClick = onDateClicked)
-                .padding(start = 5.dp)
-                .fillMaxWidth()
-                .height(64.dp)
-                .clip(RoundedCornerShape(5.dp))
+            Box(
+                modifier = modifier
+                    .background(Color.White)
+                    .clickable(onClick = onDateClicked)
+                    .padding(start = 5.dp)
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .clip(RoundedCornerShape(5.dp))
             ) {
-                Text(date.ifEmpty { "Tekan untuk memilih tanggal!" },
+                Text(
+                    date.ifEmpty { "Tekan untuk memilih tanggal!" },
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = if (date.isEmpty()) FontWeight.Normal else FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = if (dateError) Color.Red else Color.Black
+                        color = if (dateError) MaterialTheme.colorScheme.error else Color.Black
                     ),
                     modifier = modifier
                         .align(Alignment.CenterStart)
@@ -307,13 +340,15 @@ fun BookingContent(
             Spacer(modifier = modifier.weight(1F))
         }
 
-        Box(modifier = modifier
-            .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(Color.White)
-            .align(Alignment.BottomCenter)
-            .fillMaxWidth()
-            .padding(bottom = 5.dp)) {
-            Column(modifier = modifier.padding(start = 10.dp, end = 10.dp, bottom = 20.dp)) {
+        Box(
+            modifier = modifier
+                .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+                .background(Color.White)
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(bottom = 5.dp)
+        ) {
+            Column(modifier = modifier.padding(start = 10.dp, end = 10.dp, bottom = 40.dp)) {
                 Divider(
                     color = Color.LightGray,
                     modifier = Modifier
@@ -325,9 +360,12 @@ fun BookingContent(
                 Row(
                     modifier
                         .fillMaxWidth()
-                        .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)) {
-                    Text("Total Pembayaran:", style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Normal), color = Color.Gray
+                        .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)
+                ) {
+                    Text(
+                        "Total Pembayaran:", style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Normal
+                        ), color = Color.Gray
                     )
                     Spacer(modifier.weight(1F))
                     Text(price, color = Color.Black)
@@ -338,7 +376,7 @@ fun BookingContent(
                     onClick = onBookClicked,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
-                    enabled  = (!sessionTitleError && !dateError)
+                    enabled = (!sessionTitleError && !dateError)
                 ) {
                     Text("Konfirmasi Pemesanan")
                 }

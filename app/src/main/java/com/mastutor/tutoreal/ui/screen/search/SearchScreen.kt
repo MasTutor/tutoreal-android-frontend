@@ -58,6 +58,7 @@ import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
 import com.mastutor.tutoreal.viewmodel.SearchViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
@@ -70,29 +71,30 @@ fun SearchScreen(
     var selectedCategory: String? by remember {
         mutableStateOf(null)
     }
-    val selectedCategoryIdx = remember{ mutableIntStateOf(categoryIdx) }
+    val selectedCategoryIdx = remember { mutableIntStateOf(categoryIdx) }
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val focusRequester = remember{FocusRequester()}
-    LaunchedEffect(key1 = true){
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(key1 = true) {
         lazyListState.animateScrollToItem(selectedCategoryIdx.intValue)
         focusRequester.requestFocus()
-        if(categoryIdx != 0){
+        if (categoryIdx != 0) {
             selectedCategory = CategoriesData.categories[categoryIdx].id
         }
     }
 
     SearchContent(
         search = search,
-        onSearchChanged = {text -> search = text} ,
+        onSearchChanged = { text -> search = text },
         lazyListState = lazyListState,
         selectedCategoryIdx = selectedCategoryIdx,
         coroutineScope = coroutineScope,
         onBackClicked = onBackClicked,
         focusRequester = focusRequester,
-        tutors = viewModel.searchTutors(specialization = search, category = selectedCategory).collectAsLazyPagingItems(),
+        tutors = viewModel.searchTutors(specialization = search, category = selectedCategory)
+            .collectAsLazyPagingItems(),
         moveToTutorDetail = moveToTutorDetail,
-        onSelectedCategoryChanged = {id -> selectedCategory = id}
+        onSelectedCategoryChanged = { id -> selectedCategory = id }
     )
 }
 
@@ -110,23 +112,26 @@ fun SearchContent(
     tutors: LazyPagingItems<TutorItem>,
     moveToTutorDetail: (String) -> Unit,
     onSelectedCategoryChanged: (String?) -> Unit
-){
+) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp)
-            .background(color = MaterialTheme.colorScheme.tertiary)
-            ,){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(color = MaterialTheme.colorScheme.tertiary),
+        ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 30.dp)
-            ){
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Arrow Back", modifier = Modifier
-                    .clickable {
-                        onBackClicked()
-                    }
-                    .padding(end = 10.dp))
+            ) {
+                Icon(imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Arrow Back",
+                    modifier = Modifier
+                        .clickable {
+                            onBackClicked()
+                        }
+                        .padding(end = 10.dp))
                 TextField(
                     maxLines = 1,
                     value = search,
@@ -166,16 +171,16 @@ fun SearchContent(
             modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
             state = lazyListState,
             flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
-        ){
-            itemsIndexed(CategoriesData.categories){ index, category ->
-                CategoryComponentSmall(category = category, modifier = Modifier.padding(start = 5.dp, end = 5.dp),
+        ) {
+            itemsIndexed(CategoriesData.categories) { index, category ->
+                CategoryComponentSmall(category = category,
+                    modifier = Modifier.padding(start = 5.dp, end = 5.dp),
                     isSelected = index == selectedCategoryIdx.intValue,
                     onClick = {
                         selectedCategoryIdx.intValue = index
-                        if(index != 0) {
+                        if (index != 0) {
                             onSelectedCategoryChanged(category.id)
-                        }
-                        else{
+                        } else {
                             onSelectedCategoryChanged(null)
                         }
                         coroutineScope.launch {
@@ -195,30 +200,33 @@ fun SearchPaging(
     tutors: LazyPagingItems<TutorItem>,
     modifier: Modifier = Modifier,
     moveToTutorDetail: (String) -> Unit,
-){
-    LazyColumn(modifier = modifier.padding(horizontal = 10.dp)){
-        items(items = tutors, key = {it.id}){ tutor ->
-            if (tutor != null){
+) {
+    LazyColumn(modifier = modifier.padding(horizontal = 10.dp)) {
+        items(items = tutors, key = { it.id }) { tutor ->
+            if (tutor != null) {
                 TutorComponent(
                     photoUrl = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                     name = tutor.nama,
                     job = tutor.specialization,
-                    price = tutor.price.ifEmpty { "Rp. 30.000" },
+                    price = tutor.price.ifEmpty { "Rp 30.000" },
                     modifier = modifier.padding(10.dp),
                     onClick = { moveToTutorDetail(tutor.id) }
                 )
             }
 
         }
-        when(val state = tutors.loadState.refresh){
-            is LoadState.Error ->{
+        when (val state = tutors.loadState.refresh) {
+            is LoadState.Error -> {
                 item {
-                    if (state.error.message == "Null Pointer Nih"){
-                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()){
+                    if (state.error.message == "Null Pointer Nih") {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             Text(text = "No Data", textAlign = TextAlign.Center)
                         }
-                    }
-                    else {
+                    } else {
                         Column {
                             FailureScreen(onRefreshClicked = { tutors.refresh() })
                         }
@@ -226,6 +234,7 @@ fun SearchPaging(
                 }
 
             }
+
             is LoadState.Loading -> {
                 item {
                     Column(
@@ -239,23 +248,27 @@ fun SearchPaging(
                     }
                 }
             }
+
             else -> {}
         }
-        when(val state = tutors.loadState.append){
+        when (val state = tutors.loadState.append) {
             is LoadState.Error -> {
                 item {
-                    if (state.error.message == "null"){
-                        Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                    if (state.error.message == "null") {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Text(text = "No Data")
                         }
-                    }
-                    else {
+                    } else {
                         Column {
-                            FailureScreen(onRefreshClicked = { tutors.retry()})
+                            FailureScreen(onRefreshClicked = { tutors.retry() })
                         }
                     }
                 }
             }
+
             is LoadState.Loading -> {
                 item {
                     Column(
@@ -269,6 +282,7 @@ fun SearchPaging(
                     }
                 }
             }
+
             else -> {}
         }
     }

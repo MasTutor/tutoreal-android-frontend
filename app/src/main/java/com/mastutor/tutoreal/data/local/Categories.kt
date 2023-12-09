@@ -18,7 +18,7 @@ data class Category(
     val icon: ImageVector
 )
 
-object CategoriesData{
+object CategoriesData {
     val categories = listOf(
         Category(
             id = "",

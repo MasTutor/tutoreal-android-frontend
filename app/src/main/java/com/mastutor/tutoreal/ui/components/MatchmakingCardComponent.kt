@@ -28,7 +28,7 @@ import com.mastutor.tutoreal.ui.theme.TutorealTheme
 fun MatchmakingCardComponent(
     modifier: Modifier = Modifier,
     height: Int
-){
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -40,14 +40,19 @@ fun MatchmakingCardComponent(
                 model = "https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg",
                 contentDescription = "Teaching",
                 contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary, blendMode = BlendMode.Hardlight),
+                colorFilter = ColorFilter.tint(
+                    color = MaterialTheme.colorScheme.primary,
+                    blendMode = BlendMode.Hardlight
+                ),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxSize()
             )
-            Column(modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 10.dp)){
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(start = 10.dp)
+            ) {
                 Text(
                     text = "Coba Pencocokan Kita",
                     style = MaterialTheme.typography.bodyLarge,
@@ -61,7 +66,7 @@ fun MatchmakingCardComponent(
                 )
                 Icon(
                     imageVector = Icons.Filled.ArrowForward,
-                    contentDescription ="Arrow Forward",
+                    contentDescription = "Arrow Forward",
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -76,7 +81,7 @@ fun MatchmakingCardComponent(
     showBackground = true
 )
 @Composable
-fun MatchmakingCardComponentPreview(){
+fun MatchmakingCardComponentPreview() {
     TutorealTheme {
         Column {
             MatchmakingCardComponent(height = 240)

@@ -39,36 +39,44 @@ fun MatchmakingOnboardingScreen(
     onNextClicked: () -> Unit,
     modifier: Modifier = Modifier,
     navHostController: NavHostController
-){
-    Box(modifier = modifier
-        .fillMaxSize()
-        ) {
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
         AsyncImage(
             model = "https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg",
             contentDescription = "Teaching",
             contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary, blendMode = BlendMode.Multiply),
+            colorFilter = ColorFilter.tint(
+                color = MaterialTheme.colorScheme.primary,
+                blendMode = BlendMode.Multiply
+            ),
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize()
         )
         Row(
             modifier = Modifier
-            .padding(start = 10.dp, top = 10.dp)
-            .align(Alignment.TopStart).offset(y = 20.dp)
-            .clickable { onBackClicked() },
+                .padding(start = 10.dp, top = 10.dp)
+                .align(Alignment.TopStart)
+                .offset(y = 20.dp)
+                .clickable { onBackClicked() },
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
-                contentDescription ="Arrow Back",
+                contentDescription = "Arrow Back",
                 modifier = Modifier.padding(end = 8.dp),
                 tint = Color.White
             )
             Text(
                 text = "Kembali",
-                style = MaterialTheme.typography.bodySmall.copy(color = Color.White, fontWeight = FontWeight.Bold),
-                )
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                ),
+            )
         }
 
         Text(
@@ -80,10 +88,12 @@ fun MatchmakingOnboardingScreen(
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(start = 20.dp)
-                .offset(y = (-40).dp)){
+                .offset(y = (-40).dp)
+        ) {
             Text(
                 text = "Survey Kepribadian",
                 style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
@@ -101,16 +111,17 @@ fun MatchmakingOnboardingScreen(
                     .padding(bottom = 40.dp)
                     .align(Alignment.Start)
             )
-            OutlinedIconButton(onClick = onNextClicked,
+            OutlinedIconButton(
+                onClick = onNextClicked,
                 modifier = Modifier
                     .size(98.dp)
                     .padding(bottom = 8.dp)
                     .align(Alignment.CenterHorizontally),
                 border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
-                ) {
+            ) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowRight,
-                    contentDescription ="Arrow Forward",
+                    contentDescription = "Arrow Forward",
                     modifier = Modifier
                         .size(49.dp),
                     tint = Color.White
@@ -119,6 +130,7 @@ fun MatchmakingOnboardingScreen(
         }
     }
 }
+
 @Preview(
     device = "id:pixel_5",
     showSystemUi = true,
@@ -126,7 +138,7 @@ fun MatchmakingOnboardingScreen(
     showBackground = true
 )
 @Composable
-fun MatchmakingOnboardingScreenPreview(){
+fun MatchmakingOnboardingScreenPreview() {
     TutorealTheme {
     }
 }

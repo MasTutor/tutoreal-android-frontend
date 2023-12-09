@@ -46,7 +46,7 @@ fun CategoryComponentBig(
     category: Category,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -54,11 +54,23 @@ fun CategoryComponentBig(
             .clip(RoundedCornerShape(16.dp))
             .size(100.dp)
             .background(color = MaterialTheme.colorScheme.primary)
-            .clickable {onClick()}
-        ) {
-        Icon(imageVector = category.icon, contentDescription = "Category", tint = Color.White, modifier = Modifier
-            .size(50.dp))
-        Text(text = category.name, color = Color.White, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold, fontSize = 14.sp))
+            .clickable { onClick() }
+    ) {
+        Icon(
+            imageVector = category.icon,
+            contentDescription = "Category",
+            tint = Color.White,
+            modifier = Modifier
+                .size(50.dp)
+        )
+        Text(
+            text = category.name,
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp
+            )
+        )
 
     }
 }
@@ -69,8 +81,8 @@ fun CategoryComponentSmall(
     modifier: Modifier = Modifier,
     isSelected: Boolean,
     onClick: () -> Unit,
-){
-    Row( verticalAlignment = Alignment.CenterVertically,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -79,17 +91,28 @@ fun CategoryComponentSmall(
             .clickable { onClick() }
     )
     {
-        Box(modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 8.dp)
-            .clip(CircleShape)
-            .background(color = if (!isSelected) MaterialTheme.colorScheme.primary else Color.White)
-            ) {
-            Icon(imageVector = category.icon, contentDescription = "Category", tint = if(!isSelected) Color.White else MaterialTheme.colorScheme.primary, modifier = Modifier.padding(4.dp))
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 8.dp)
+                .clip(CircleShape)
+                .background(color = if (!isSelected) MaterialTheme.colorScheme.primary else Color.White)
+        ) {
+            Icon(
+                imageVector = category.icon,
+                contentDescription = "Category",
+                tint = if (!isSelected) Color.White else MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(4.dp)
+            )
         }
-        Text(text = category.name, color = if(!isSelected) Color.Black else Color.White, style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = category.name,
+            color = if (!isSelected) Color.Black else Color.White,
+            style = MaterialTheme.typography.bodySmall
+        )
         Spacer(modifier = Modifier.width(10.dp))
     }
 }
+
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(
     device = "id:pixel_5",
@@ -98,12 +121,12 @@ fun CategoryComponentSmall(
     showBackground = true
 )
 @Composable
-fun CategoryComponentPreview(){
+fun CategoryComponentPreview() {
     TutorealTheme {
-        val selectedCategoryIdx = remember{ mutableIntStateOf(0) }
+        val selectedCategoryIdx = remember { mutableIntStateOf(0) }
         val lazyListState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
-        LaunchedEffect(key1 = true){
+        LaunchedEffect(key1 = true) {
             lazyListState.animateScrollToItem(selectedCategoryIdx.intValue)
         }
         Column(
@@ -111,20 +134,24 @@ fun CategoryComponentPreview(){
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
+        ) {
 
-            LazyRow(){
-                items(CategoriesData.categories){category ->
-                    CategoryComponentBig(category = category, modifier = Modifier.padding(start = 5.dp, end = 5.dp), onClick = {})
+            LazyRow {
+                items(CategoriesData.categories) { category ->
+                    CategoryComponentBig(
+                        category = category,
+                        modifier = Modifier.padding(start = 5.dp, end = 5.dp),
+                        onClick = {})
                 }
             }
             LazyRow(
                 modifier = Modifier.padding(top = 10.dp),
                 state = lazyListState,
                 flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
-                ){
-                itemsIndexed(CategoriesData.categories){index, category ->
-                    CategoryComponentSmall(category = category, modifier = Modifier.padding(start = 5.dp, end = 5.dp),
+            ) {
+                itemsIndexed(CategoriesData.categories) { index, category ->
+                    CategoryComponentSmall(category = category,
+                        modifier = Modifier.padding(start = 5.dp, end = 5.dp),
                         isSelected = index == selectedCategoryIdx.intValue,
                         onClick = {
                             selectedCategoryIdx.intValue = index

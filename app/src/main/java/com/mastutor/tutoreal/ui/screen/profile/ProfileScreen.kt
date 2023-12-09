@@ -44,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -54,13 +53,16 @@ import com.mastutor.tutoreal.ui.components.TextFieldDialog
 import com.mastutor.tutoreal.ui.components.UserEditComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
-import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.viewmodel.ProfileViewModel
 
 //Stateful
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostController, viewModel: ProfileViewModel = hiltViewModel()){
+fun ProfileScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
     val userExist by viewModel.userExist
 
     var nameField by remember { mutableStateOf("") }
@@ -73,8 +75,8 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
     }
 
     LaunchedEffect(userExist) {
-        if(!userExist){
-            navHostController.navigate(Screen.Chooser.route){
+        if (!userExist) {
+            navHostController.navigate(Screen.Chooser.route) {
                 popUpTo(0)
             }
         }
@@ -101,7 +103,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
     }
 
     viewModel.profileResponse.collectAsState(initial = UiState.Loading).value.let { uiState ->
-        when(uiState){
+        when (uiState) {
             is UiState.Loading -> {
                 Column(
                     modifier = modifier
@@ -113,6 +115,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                     CircularProgressIndicator(color = Color.Black)
                 }
             }
+
             is UiState.Success -> {
                 val userData = uiState.data
                 if (userData != null) {
@@ -171,8 +174,12 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                     )
                 }
             }
+
             is UiState.Failure -> {
-                FailureScreen(onRefreshClicked = {viewModel.getProfile()}, logoutExist = true, onLogoutClicked = {viewModel.deleteSession()})
+                FailureScreen(
+                    onRefreshClicked = { viewModel.getProfile() },
+                    logoutExist = true,
+                    onLogoutClicked = { viewModel.deleteSession() })
             }
         }
     }
@@ -194,33 +201,30 @@ fun ProfileContent(
     onBackClicked: () -> Unit,
     onEditClicked: () -> Unit,
     modifier: Modifier = Modifier
-){
-    Row(
-        modifier = Modifier
-            .padding(start = 10.dp, top = 5.dp)
-            .offset(y = 5.dp)
-            .clickable { onBackClicked() },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Filled.ArrowBack,
-            contentDescription ="Arrow Forward",
-            modifier = Modifier.padding(end = 8.dp),
-            tint = Color.Black
-        )
-        Text(
-            text = "Kembali",
-            style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
-        )
-    }
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center ,
+        verticalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxSize()
             .padding(10.dp)
 
     ) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 10.dp, top = 5.dp)
+                .offset(y = 5.dp)
+                .clickable { onBackClicked() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Arrow Forward",
+                modifier = Modifier.padding(end = 8.dp),
+                tint = Color.Black
+            )
+        }
         Box(modifier = modifier) {
             AsyncImage(
                 model = photoUrl,
@@ -242,7 +246,10 @@ fun ProfileContent(
                     .align(Alignment.BottomEnd)
                     .size(55.dp)
             ) {
-                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primary),
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
@@ -255,10 +262,29 @@ fun ProfileContent(
         }
 
         Text(text = "Halo,", style = MaterialTheme.typography.bodyMedium)
-        Text(text = fullName, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(bottom = 20.dp))
-        UserEditComponent(icon = Icons.Rounded.Person, data = fullName, onClick = onFullNameClicked, modifier = Modifier.padding(bottom = 10.dp))
-        UserEditComponent(icon = Icons.Rounded.Call, data = phoneNumber, onClick = onPhoneNumberClicked, modifier = Modifier.padding(bottom = 10.dp))
-        UserEditComponent(icon = if(gender == 1) Icons.Filled.Male else Icons.Filled.Female, data = if(gender == 1) "Pria" else "Wanita", onClick = onGenderClicked, modifier = Modifier.padding(bottom = 10.dp))
+        Text(
+            text = fullName,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+        UserEditComponent(
+            icon = Icons.Rounded.Person,
+            data = fullName,
+            onClick = onFullNameClicked,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+        UserEditComponent(
+            icon = Icons.Rounded.Call,
+            data = phoneNumber,
+            onClick = onPhoneNumberClicked,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+        UserEditComponent(
+            icon = if (gender == 1) Icons.Filled.Male else Icons.Filled.Female,
+            data = if (gender == 1) "Pria" else "Wanita",
+            onClick = onGenderClicked,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
         Row {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),

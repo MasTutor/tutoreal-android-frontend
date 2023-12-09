@@ -1,4 +1,5 @@
 package com.mastutor.tutoreal.data.remote
+
 import com.google.gson.annotations.SerializedName
 
 class ImgurResponse(
