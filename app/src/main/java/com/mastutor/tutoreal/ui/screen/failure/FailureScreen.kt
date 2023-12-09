@@ -22,13 +22,18 @@ fun FailureScreen(
     onRefreshClicked: () -> Unit,
     logoutExist: Boolean = false,
     onLogoutClicked: () -> Unit = {},
-){
+) {
     Column(
-        modifier = modifier.fillMaxSize().padding(horizontal = 10.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "There's something wrong, please check your internet", textAlign = TextAlign.Center)
+        Text(
+            text = "There's something wrong, please check your internet",
+            textAlign = TextAlign.Center
+        )
         Row {
             Button(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
@@ -38,7 +43,7 @@ fun FailureScreen(
             ) {
                 Text("Refresh")
             }
-            if(logoutExist) {
+            if (logoutExist) {
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                     onClick = onLogoutClicked,

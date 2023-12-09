@@ -18,7 +18,7 @@ interface TutorealApiService {
     @GET("/user/profile")
     suspend fun getProfile(
         @Header("Authorization") token: String,
-    ):ProfileResponse
+    ): ProfileResponse
 
     @GET("/tutor/alltutors")
     suspend fun searchTutor(
@@ -42,11 +42,11 @@ interface TutorealApiService {
     suspend fun editProfile(
         @Header("Authorization") token: String,
         @Body requestBody: RequestBody
-    ) : ProfileResponse
+    ): ProfileResponse
 
     @POST("/user/new-history")
     suspend fun newHistory(
         @Header("Authorization") token: String,
         @Body requestBody: RequestBody
-    ) : BookResponse
+    ): BookResponse
 }

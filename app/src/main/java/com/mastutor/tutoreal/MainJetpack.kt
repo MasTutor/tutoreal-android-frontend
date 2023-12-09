@@ -40,57 +40,70 @@ import com.mastutor.tutoreal.viewmodel.TutorViewModel
 fun MainJetpack(
     modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController()
-){
+) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    Scaffold {innerPadding ->
-        NavHost(navController = navHostController, startDestination = Screen.Splash.route, modifier = Modifier.padding(
-            //for edge to edge
-            top = if(
-                currentRoute == Screen.Home.route
-                || currentRoute == Screen.Matchmaking.route
-                || currentRoute == Screen.Search.route
-                || currentRoute == Screen.Login.route
-                || currentRoute == Screen.RegisterForm.route
-                || currentRoute == Screen.Splash.route
+    Scaffold { innerPadding ->
+        NavHost(
+            navController = navHostController,
+            startDestination = Screen.Splash.route,
+            modifier = Modifier.padding(
+                //for edge to edge
+                top = if (
+                    currentRoute == Screen.Home.route
+                    || currentRoute == Screen.Matchmaking.route
+                    || currentRoute == Screen.Search.route
+                    || currentRoute == Screen.Login.route
+                    || currentRoute == Screen.RegisterForm.route
+                    || currentRoute == Screen.Splash.route
+                    || currentRoute == Screen.Tutor.route
                 ) 0.dp else innerPadding.calculateTopPadding(),
-            bottom = if(currentRoute == Screen.Chooser.route
-                || currentRoute == Screen.Matchmaking.route
-                || currentRoute == Screen.Splash.route
+                bottom = if (currentRoute == Screen.Chooser.route
+                    || currentRoute == Screen.Matchmaking.route
+                    || currentRoute == Screen.Splash.route
+                    || currentRoute == Screen.Book.route
                 ) 0.dp else innerPadding.calculateBottomPadding()
 
-        )){
-            composable(Screen.Chooser.route){
-                ChooserScreen(onLoginClicked = { navHostController.navigate(Screen.Login.route)}, onRegisterClicked = {navHostController.navigate("register")}, navHostController = navHostController)
+            )
+        ) {
+            composable(Screen.Chooser.route) {
+                ChooserScreen(
+                    onLoginClicked = { navHostController.navigate(Screen.Login.route) },
+                    onRegisterClicked = { navHostController.navigate("register") },
+                    navHostController = navHostController
+                )
             }
-            composable(Screen.Splash.route){
+            composable(Screen.Splash.route) {
                 SplashScreen(navHostController = navHostController)
             }
-            composable(Screen.Login.route){
+            composable(Screen.Login.route) {
                 LoginScreen(navHostController = navHostController)
             }
             registerGraph(navHostController)
-            composable(Screen.Home.route){
+            composable(Screen.Home.route) {
                 HomeScreen(navHostController = navHostController)
             }
-            composable(Screen.Profile.route){
+            composable(Screen.Profile.route) {
                 ProfileScreen(navHostController = navHostController)
             }
-            composable(Screen.Matchmaking.route){
+            composable(Screen.Matchmaking.route) {
                 MatchmakingOnboardingScreen(
                     onBackClicked = { /*TODO*/ },
                     onNextClicked = { navHostController.navigate(Screen.Survey.route) },
                     navHostController = navHostController
                 )
             }
-            composable(Screen.Schedule.route){
-                ScheduleScreen()
+            composable(Screen.Schedule.route) {
+                ScheduleScreen(navHostController = navHostController)
             }
-            composable(Screen.Survey.route){
+            composable(Screen.Survey.route) {
                 SurveyScreen()
             }
-            composable(route = Screen.Search.route, arguments = listOf(navArgument("categoryIdx"){type = NavType.IntType}),){
+            composable(
+                route = Screen.Search.route,
+                arguments = listOf(navArgument("categoryIdx") { type = NavType.IntType }),
+            ) {
                 val categoryIdx = it.arguments?.getInt("categoryIdx") ?: 0
                 SearchScreen(
                     categoryIdx = categoryIdx,
@@ -109,14 +122,14 @@ fun MainJetpack(
 
 fun NavGraphBuilder.registerGraph(navController: NavHostController) {
     navigation(startDestination = Screen.RegisterForm.route, route = "register") {
-        composable(Screen.RegisterForm.route) {backStackEntry ->
+        composable(Screen.RegisterForm.route) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry("register")
             }
             val viewModel = hiltViewModel<AuthViewModel>(parentEntry)
             RegisterScreen(viewModel = viewModel, navHostController = navController)
         }
-        composable(Screen.RegisterPicture.route) {backStackEntry ->
+        composable(Screen.RegisterPicture.route) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry("register")
             }
@@ -154,7 +167,8 @@ fun NavGraphBuilder.tutorGraph(navController: NavHostController) {
                 navController.getBackStackEntry("tutor")
             }
             val viewModel = hiltViewModel<TutorViewModel>(parentEntry)
-            BookingScreen(modifier = Modifier,
+            BookingScreen(
+                modifier = Modifier,
                 viewModel = viewModel,
                 navHostController = navController
             )

@@ -11,9 +11,10 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: Repository): ViewModel(){
+class SearchViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     fun searchTutors(
         specialization: String = "",
         category: String? = null
-    ): Flow<PagingData<TutorItem>> = repository.searchTutors(specialization, category).cachedIn(viewModelScope)
+    ): Flow<PagingData<TutorItem>> =
+        repository.searchTutors(specialization, category).cachedIn(viewModelScope)
 }

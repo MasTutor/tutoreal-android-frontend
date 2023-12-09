@@ -70,16 +70,16 @@ fun LoginScreen(
         viewModel.tryUserExist()
     }
 
-    LaunchedEffect(userExist){
-        if(userExist){
-            navHostController.navigate(Screen.Home.route){
+    LaunchedEffect(userExist) {
+        if (userExist) {
+            navHostController.navigate(Screen.Home.route) {
                 popUpTo(0)
             }
         }
     }
 
-    viewModel.loginResponse.collectAsState(initial = AuthUiState.Idle).value.let {uiState ->
-        when(uiState){
+    viewModel.loginResponse.collectAsState(initial = AuthUiState.Idle).value.let { uiState ->
+        when (uiState) {
             is AuthUiState.Idle -> {
                 LoginContent(
                     email = email,
@@ -97,7 +97,7 @@ fun LoginScreen(
                     onLoginClicked = {
                         viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
                         viewModel.changePasswordErrorLogin(password.isEmpty())
-                        if(!emailError && !passwordError){
+                        if (!emailError && !passwordError) {
                             viewModel.login()
                         }
                     },
@@ -111,11 +111,12 @@ fun LoginScreen(
 
                 )
             }
+
             is AuthUiState.Load -> {
                 LoginContent(
                     email = email,
                     password = password,
-                    onEmailChanged = {  },
+                    onEmailChanged = { },
                     onPasswordChanged = { },
                     onLoginClicked = {},
                     modifier = modifier.alpha(0.3f),
@@ -132,6 +133,7 @@ fun LoginScreen(
                     CircularProgressIndicator(color = Color.Black)
                 }
             }
+
             is AuthUiState.Success -> {
                 LoginContent(
                     email = email,
@@ -149,7 +151,7 @@ fun LoginScreen(
                     onLoginClicked = {
                         viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
                         viewModel.changePasswordErrorLogin(password.isEmpty())
-                        if(!emailError && !passwordError){
+                        if (!emailError && !passwordError) {
                             viewModel.login()
                         }
                     },
@@ -166,6 +168,7 @@ fun LoginScreen(
                     Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
                 }
             }
+
             is AuthUiState.Failure -> {
                 LoginContent(
                     email = email,
@@ -183,7 +186,7 @@ fun LoginScreen(
                     onLoginClicked = {
                         viewModel.changeEmailErrorLogin(email.isEmpty() || !isEmailValid(email))
                         viewModel.changePasswordErrorLogin(password.isEmpty())
-                        if(!emailError && !passwordError){
+                        if (!emailError && !passwordError) {
                             viewModel.login()
                         }
                     },
@@ -197,7 +200,11 @@ fun LoginScreen(
 
                 )
                 LaunchedEffect(key1 = true) {
-                    Toast.makeText(context, "Gagal cek input, atau cek koneksi internet", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Gagal cek input, atau cek koneksi internet",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -226,38 +233,45 @@ fun LoginContent(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .height(170.dp)
-            .background(color = MaterialTheme.colorScheme.tertiary),
-        ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .background(color = MaterialTheme.colorScheme.tertiary),
+        ) {
             Row(
                 modifier = Modifier
                     .padding(start = 4.dp, top = 40.dp, bottom = 30.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription ="Arrow Back",
+                    contentDescription = "Arrow Back",
                     modifier = Modifier.padding(end = 8.dp),
                     tint = Color.Black
                 )
                 Text(
                     text = "Kembali",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    ),
                 )
             }
             Text(
                 text = "Selamat Datang!",
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black, fontSize = 32.sp),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Color.Black,
+                    fontSize = 32.sp
+                ),
                 modifier = Modifier
                     .padding(start = 8.dp)
 
-                )
+            )
             Text(
                 text = "Senang bertemu kembali",
-                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, ),
+                style = MaterialTheme.typography.bodySmall.copy(color = Color.Black),
                 modifier = Modifier
                     .padding(start = 8.dp)
 
@@ -273,10 +287,12 @@ fun LoginContent(
 
             TextField(
                 label = {
-                    if(emailError) {
-                        Text(text = "Error: Email Kosong atau bukan email", color = MaterialTheme.colorScheme.error)
-                    }
-                    else{
+                    if (emailError) {
+                        Text(
+                            text = "Error: Email Kosong atau bukan email",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
                         Text(
                             text = "Email",
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -309,10 +325,12 @@ fun LoginContent(
             )
             TextField(
                 label = {
-                    if(passwordError) {
-                        Text(text = "Error: Password kosong", color = MaterialTheme.colorScheme.error)
-                    }
-                    else{
+                    if (passwordError) {
+                        Text(
+                            text = "Error: Password kosong",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
                         Text(
                             text = "Password",
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -342,16 +360,18 @@ fun LoginContent(
                     .fillMaxWidth()
                     .padding(bottom = 10.dp),
                 visualTransformation =
-                if(!showPassword){
+                if (!showPassword) {
                     PasswordVisualTransformation()
-                }else {
-                    VisualTransformation.None},
+                } else {
+                    VisualTransformation.None
+                },
                 trailingIcon = {
                     Icon(
-                        imageVector = if(!showPassword){
+                        imageVector = if (!showPassword) {
                             Icons.Filled.VisibilityOff
                         } else {
-                            Icons.Filled.Visibility},
+                            Icons.Filled.Visibility
+                        },
                         contentDescription = "Eye",
                         modifier = Modifier.clickable {
                             showPasswordChanged(!showPassword)

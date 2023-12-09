@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -33,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.dummy.TutorData
 import com.mastutor.tutoreal.ui.components.MatchTutorComponent
-import com.mastutor.tutoreal.ui.navigation.screen.Screen
 
 @Composable
 fun MatchmakingResultScreen(modifier: Modifier, onBackClicked: () -> Unit) {
@@ -52,12 +48,14 @@ fun MatchmakingResultContent(
     onBackClicked: () -> Unit,
     onUserClicked: () -> Unit
 ) {
-    Column(modifier = modifier
-        .background(MaterialTheme.colorScheme.background)
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
+    Column(
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
-        Row(modifier = modifier.fillMaxWidth(),
+        Row(
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -67,16 +65,19 @@ fun MatchmakingResultContent(
                     .offset(y = 15.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription ="Arrow Forward",
+                    contentDescription = "Arrow Forward",
                     modifier = Modifier.padding(end = 8.dp),
                     tint = Color.Black
                 )
                 Text(
                     text = "Kembali",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    ),
                 )
             }
             Spacer(
@@ -95,7 +96,10 @@ fun MatchmakingResultContent(
         }
 
         Box(modifier = modifier.padding(top = 30.dp, start = 30.dp, end = 30.dp)) {
-            Text("Your Survey Results", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold))
+            Text(
+                "Your Survey Results",
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+            )
         }
 
         Column(modifier = modifier.padding(top = 15.dp)) {

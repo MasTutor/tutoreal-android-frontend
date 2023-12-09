@@ -96,9 +96,9 @@ fun RegisterScreen(
         genders = genders,
         selectedGender = selectedGender,
         onGenderSelected =
-        {gender ->
+        { gender ->
             onGenderSelected(gender)
-            if(gender == "Male") viewModel.changeGender(true) else viewModel.changeGender(false)
+            if (gender == "Male") viewModel.changeGender(true) else viewModel.changeGender(false)
         },
         onNextClicked =
         {
@@ -106,7 +106,7 @@ fun RegisterScreen(
             viewModel.changeEmailError(email.isEmpty() || !isEmailValid(email))
             viewModel.changePasswordError(password.isEmpty())
             viewModel.changeConfirmPasswordError(passwordConfirm.isEmpty() || passwordConfirm != password)
-            if(!fullNameError && !emailError && !passwordError && !confirmPasswordError){
+            if (!fullNameError && !emailError && !passwordError && !confirmPasswordError) {
                 navHostController.navigate(Screen.RegisterPicture.route)
             }
         },
@@ -157,31 +157,38 @@ fun RegisterContent(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .height(170.dp)
-            .background(color = MaterialTheme.colorScheme.tertiary),
-        ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .background(color = MaterialTheme.colorScheme.tertiary),
+        ) {
             Row(
                 modifier = Modifier
                     .padding(start = 4.dp, top = 40.dp, bottom = 30.dp)
                     .clickable { onBackClicked() },
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription ="Arrow Back",
+                    contentDescription = "Arrow Back",
                     modifier = Modifier.padding(end = 8.dp),
                     tint = Color.Black
                 )
                 Text(
                     text = "Kembali",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Black, fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    ),
                 )
             }
             Text(
                 text = "Selamat Datang!",
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black, fontSize = 32.sp),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Color.Black,
+                    fontSize = 32.sp
+                ),
                 modifier = Modifier
                     .padding(start = 8.dp)
 
@@ -203,10 +210,12 @@ fun RegisterContent(
         ) {
             TextField(
                 label = {
-                    if(fullNameError) {
-                        Text(text = "Error: Fullname Kosong", color = MaterialTheme.colorScheme.error)
-                    }
-                    else{
+                    if (fullNameError) {
+                        Text(
+                            text = "Error: Fullname Kosong",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
                         Text(
                             text = "Full name",
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -242,7 +251,8 @@ fun RegisterContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp)) {
+                    .padding(bottom = 10.dp)
+            ) {
                 genders.forEach { gender ->
                     Row(
                         horizontalArrangement = Arrangement.Start,
@@ -278,10 +288,12 @@ fun RegisterContent(
             }
             TextField(
                 label = {
-                    if(emailError) {
-                        Text(text = "Error: Email Kosong atau bukan email", color = MaterialTheme.colorScheme.error)
-                    }
-                    else{
+                    if (emailError) {
+                        Text(
+                            text = "Error: Email Kosong atau bukan email",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
                         Text(
                             text = "Email",
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -314,10 +326,12 @@ fun RegisterContent(
             )
             TextField(
                 label = {
-                    if(passwordError) {
-                        Text(text = "Error: Password kosong", color = MaterialTheme.colorScheme.error)
-                    }
-                    else{
+                    if (passwordError) {
+                        Text(
+                            text = "Error: Password kosong",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
                         Text(
                             text = "Password",
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -347,11 +361,18 @@ fun RegisterContent(
                     .fillMaxWidth()
                     .padding(bottom = 10.dp),
                 visualTransformation =
-                if(!showPassword){PasswordVisualTransformation()}else {
-                    VisualTransformation.None},
+                if (!showPassword) {
+                    PasswordVisualTransformation()
+                } else {
+                    VisualTransformation.None
+                },
                 trailingIcon = {
                     Icon(
-                        imageVector = if(!showPassword){Icons.Filled.VisibilityOff} else {Icons.Filled.Visibility}, contentDescription = "Eye",
+                        imageVector = if (!showPassword) {
+                            Icons.Filled.VisibilityOff
+                        } else {
+                            Icons.Filled.Visibility
+                        }, contentDescription = "Eye",
                         modifier = Modifier.clickable {
                             showPasswordChanged(!showPassword)
                         }
@@ -360,10 +381,12 @@ fun RegisterContent(
             )
             TextField(
                 label = {
-                    if(confirmPasswordError) {
-                        Text(text = "Error: Confirm password kosong atau salah", color = MaterialTheme.colorScheme.error)
-                    }
-                    else{
+                    if (confirmPasswordError) {
+                        Text(
+                            text = "Error: Confirm password kosong atau salah",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
                         Text(
                             text = "Confirm password",
                             style = MaterialTheme.typography.bodySmall.copy(
@@ -393,11 +416,18 @@ fun RegisterContent(
                     .fillMaxWidth()
                     .padding(bottom = 20.dp),
                 visualTransformation =
-                if(!showConfirmPassword){PasswordVisualTransformation()}else {
-                    VisualTransformation.None},
+                if (!showConfirmPassword) {
+                    PasswordVisualTransformation()
+                } else {
+                    VisualTransformation.None
+                },
                 trailingIcon = {
                     Icon(
-                        imageVector = if(!showConfirmPassword){Icons.Filled.VisibilityOff} else {Icons.Filled.Visibility}, contentDescription = "Eye",
+                        imageVector = if (!showConfirmPassword) {
+                            Icons.Filled.VisibilityOff
+                        } else {
+                            Icons.Filled.Visibility
+                        }, contentDescription = "Eye",
                         modifier = Modifier.clickable {
                             showConfirmPasswordChanged(!showConfirmPassword)
                         }
@@ -405,7 +435,8 @@ fun RegisterContent(
                 }
             )
             Button(
-                onClick = onNextClicked, modifier = Modifier
+                onClick = onNextClicked,
+                modifier = Modifier
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -455,6 +486,6 @@ fun RegisterContentPreview() {
             showConfirmPasswordChanged = {},
             showPasswordChanged = {},
             onBackClicked = {}
-            )
+        )
     }
 }

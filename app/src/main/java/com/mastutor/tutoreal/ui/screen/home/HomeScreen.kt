@@ -64,17 +64,17 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel()
-){
+) {
     SideEffect {
         viewModel.getToken()
     }
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.getHomeProcess()
     }
 
-    viewModel.homeResponse.collectAsState(initial = UiState.Loading).value.let {uiState ->
-        when(uiState){
+    viewModel.homeResponse.collectAsState(initial = UiState.Loading).value.let { uiState ->
+        when (uiState) {
             is UiState.Loading -> {
                 Column(
                     modifier = modifier
@@ -86,40 +86,50 @@ fun HomeScreen(
                     CircularProgressIndicator(color = Color.Black)
                 }
             }
+
             is UiState.Success -> {
                 val profileResponse = uiState.data?.profileResponse?.profile
                 val tutorData = uiState.data?.tutorsResponse?.tutors?.items?.shuffled()?.take(4)
-                val scheduleData = if(uiState.data?.scheduleResponse?.historyData?.isNotEmpty() == true) uiState.data.scheduleResponse.historyData[0] else null
+                val scheduleData =
+                    if (uiState.data?.scheduleResponse?.historyData?.isNotEmpty() == true) uiState.data.scheduleResponse.historyData[0] else null
 
                 if (profileResponse != null) {
                     if (tutorData != null) {
                         HomeContent(
-                            searchOnClick = {navHostController.navigate(Screen.Search.createRoute(0))},
-                            onCategoryClicked = {navHostController.navigate(Screen.Search.createRoute(it + 1))},
+                            searchOnClick = { navHostController.navigate(Screen.Search.createRoute(0)) },
+                            onCategoryClicked = {
+                                navHostController.navigate(
+                                    Screen.Search.createRoute(
+                                        it + 1
+                                    )
+                                )
+                            },
                             categories = CategoriesData.categories,
                             name = profileResponse.nama,
                             imageUrl = profileResponse.photoURL,
-                            onUserClicked = {navHostController.navigate(Screen.Profile.route){
-                                popUpTo(Screen.Home.route){
-                                    saveState = true
+                            onUserClicked = {
+                                navHostController.navigate(Screen.Profile.route) {
+                                    popUpTo(Screen.Home.route) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                                            },
-                            onMatchmakingClicked = {navHostController.navigate(Screen.Matchmaking.route){
-                                popUpTo(Screen.Home.route){
-                                    saveState = true
+                            },
+                            onMatchmakingClicked = {
+                                navHostController.navigate(Screen.Matchmaking.route) {
+                                    popUpTo(Screen.Home.route) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                                                   },
+                            },
                             listTutor = tutorData,
                             nextSchedule = scheduleData,
                             moveToTutorDetail = { id ->
-                                navHostController.navigate(Screen.Tutor.createRoute(id)){
-                                    popUpTo(Screen.Home.route){
+                                navHostController.navigate(Screen.Tutor.createRoute(id)) {
+                                    popUpTo(Screen.Home.route) {
                                         saveState = true
                                     }
                                     launchSingleTop = true
@@ -130,8 +140,12 @@ fun HomeScreen(
                     }
                 }
             }
+
             is UiState.Failure -> {
-                FailureScreen(onRefreshClicked = {viewModel.getHomeProcess()}, logoutExist = true, onLogoutClicked = {viewModel.deleteSession()})
+                FailureScreen(
+                    onRefreshClicked = { viewModel.getHomeProcess() },
+                    logoutExist = true,
+                    onLogoutClicked = { viewModel.deleteSession() })
             }
         }
     }
@@ -142,8 +156,8 @@ fun HomeScreen(
 fun HomeContent(
     modifier: Modifier = Modifier,
     searchOnClick: () -> Unit,
-    onCategoryClicked:(Int) -> Unit,
-    onUserClicked:() -> Unit,
+    onCategoryClicked: (Int) -> Unit,
+    onUserClicked: () -> Unit,
     moveToTutorDetail: (String) -> Unit,
     categories: List<Category>,
     name: String,
@@ -151,22 +165,26 @@ fun HomeContent(
     onMatchmakingClicked: () -> Unit,
     listTutor: List<TutorItem>,
     nextSchedule: HistoryDataItem? = null
-){
-    Column(modifier = modifier
-        .fillMaxSize()
-        ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp)
-            .background(color = MaterialTheme.colorScheme.tertiary),
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(110.dp)
+                .background(color = MaterialTheme.colorScheme.tertiary),
             horizontalArrangement = Arrangement.Center,
-        ){
-            Row(verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier
                     .fillMaxSize()
                     .offset(y = 10.dp)
-            ){
-                Column(verticalArrangement = Arrangement.Center,
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .fillMaxHeight()
@@ -195,68 +213,68 @@ fun HomeContent(
                         .clickable { onUserClicked() })
             }
         }
-        Column(modifier = Modifier
-            .verticalScroll(rememberScrollState())) {
-        Row(horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
             modifier = Modifier
-                .padding(top = 20.dp, start = 10.dp, end = 10.dp)
-                .fillMaxWidth()
-                .height(50.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(color = Color.White)
-                .clickable { searchOnClick() }
+                .verticalScroll(rememberScrollState())
         ) {
-            Icon(
-                imageVector = Icons.Filled.Search,
-                contentDescription = "Search",
-                tint = Color.DarkGray,
+            Row(horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .alpha(0.6F)
-            )
+                    .padding(top = 20.dp, start = 10.dp, end = 10.dp)
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(color = Color.White)
+                    .clickable { searchOnClick() }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search",
+                    tint = Color.DarkGray,
+                    modifier = Modifier
+                        .padding(start = 10.dp, end = 10.dp)
+                        .alpha(0.6F)
+                )
+                Text(
+                    text = "Cari Tutor Kamu",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color.DarkGray,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.alpha(0.6F)
+                )
+            }
             Text(
-                text = "Cari Tutor Kamu",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color.DarkGray,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.alpha(0.6F)
+                text = "Pencocokan Tutor Idealmu",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 8.dp, top = 20.dp, start = 10.dp, end = 10.dp)
             )
-        }
-        Text(
-            text = "Pencocokan Tutor Idealmu",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp, top = 20.dp, start = 10.dp, end = 10.dp)
-        )
-        MatchmakingCardComponent(height = 180, modifier = Modifier
-            .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
-            .clickable {
-                onMatchmakingClicked()
-            })
-        Text(
-            text = "Jadwal Terbaru",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
-        )
-            if(nextSchedule != null){
+            MatchmakingCardComponent(height = 180, modifier = Modifier
+                .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
+                .clickable {
+                    onMatchmakingClicked()
+                })
+            Text(
+                text = "Jadwal Terbaru",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
+            )
+            if (nextSchedule != null) {
                 ScheduleComponent(
                     title = nextSchedule.sessionName.toString(),
                     tutorName = nextSchedule.tutorName.toString(),
                     date = nextSchedule.date.toString(),
-                    status = if(nextSchedule.status.toString() == "OnGoing")
-                    {
+                    status = if (nextSchedule.status.toString() == "OnGoing") {
                         StatusData(status = nextSchedule.status.toString(), color = Color.Yellow)
-                    }
-                    else if (nextSchedule.status.toString() == "Completed")
-                    {
-                        StatusData(status = nextSchedule.status.toString(), color = Color.Green) }
-                    else { StatusData(status = nextSchedule.status.toString(), color = Color.Red) },
+                    } else if (nextSchedule.status.toString() == "Completed") {
+                        StatusData(status = nextSchedule.status.toString(), color = Color.Green)
+                    } else {
+                        StatusData(status = nextSchedule.status.toString(), color = Color.Red)
+                    },
                     modifier = Modifier
                         .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
                 )
-            }
-            else{
+            } else {
                 Box(
                     modifier = Modifier
                         .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
@@ -279,38 +297,41 @@ fun HomeContent(
                     )
                 }
             }
-        Text(
-            text = "Kategori",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
-        )
-        LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
-            itemsIndexed(categories.subList(fromIndex = 1, toIndex = 8)) { idx, category ->
-                CategoryComponentBig(category = category, modifier = Modifier
-                    .padding(start = 5.dp, end = 5.dp), onClick = {onCategoryClicked(idx)})
+            Text(
+                text = "Kategori",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
+            )
+            LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
+                itemsIndexed(categories.subList(fromIndex = 1, toIndex = 8)) { idx, category ->
+                    CategoryComponentBig(category = category,
+                        modifier = Modifier
+                            .padding(start = 5.dp, end = 5.dp),
+                        onClick = { onCategoryClicked(idx) })
+                }
             }
-        }
-        Text(
-            text = "Random Tutor",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
-        )
-            LazyRow(modifier = Modifier.padding(bottom = 20.dp)){
-                items(listTutor){tutor ->
+            Text(
+                text = "Random Tutor",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
+            )
+            LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
+                items(listTutor) { tutor ->
                     TutorComponentBig(
                         photoUrl = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
                         name = tutor.nama,
                         job = tutor.specialization,
-                        onClick = {moveToTutorDetail(tutor.id)},
+                        onClick = { moveToTutorDetail(tutor.id) },
                         modifier = Modifier
                             .padding(start = 5.dp, end = 5.dp)
                     )
 
                 }
             }
-    }
+        }
     }
 }
+
 @Preview(
     device = "id:pixel_5",
     showSystemUi = true,
@@ -318,7 +339,7 @@ fun HomeContent(
     showBackground = true
 )
 @Composable
-fun HomeContentPreview(){
+fun HomeContentPreview() {
     TutorealTheme {
     }
 }

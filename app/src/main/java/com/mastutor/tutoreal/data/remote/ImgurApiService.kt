@@ -1,8 +1,6 @@
 package com.mastutor.tutoreal.data.remote
 
 import com.mastutor.tutoreal.BuildConfig
-import com.mastutor.tutoreal.data.remote.ImgurResponse
-
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

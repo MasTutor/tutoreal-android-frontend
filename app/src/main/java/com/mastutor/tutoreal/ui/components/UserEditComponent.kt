@@ -39,7 +39,7 @@ import com.mastutor.tutoreal.ui.theme.TutorealTheme
 fun UserEditComponent(
     icon: ImageVector,
     data: String,
-    onClick:() -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -48,7 +48,7 @@ fun UserEditComponent(
             .fillMaxWidth()
             .height(88.dp)
             .clip(RoundedCornerShape(10.dp))
-            .clickable {onClick()}
+            .clickable { onClick() }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

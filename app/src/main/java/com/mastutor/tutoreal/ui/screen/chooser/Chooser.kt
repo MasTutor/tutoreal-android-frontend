@@ -43,7 +43,7 @@ fun ChooserScreen(
     //delete later
     viewModel: AuthViewModel = hiltViewModel(),
     navHostController: NavHostController
-){
+) {
     //delete later
     val userExist by viewModel.userExist
 
@@ -51,44 +51,66 @@ fun ChooserScreen(
         viewModel.tryUserExist()
     }
 
-    LaunchedEffect(userExist){
-        if(userExist){
-            navHostController.navigate(Screen.Home.route){
+    LaunchedEffect(userExist) {
+        if (userExist) {
+            navHostController.navigate(Screen.Home.route) {
                 popUpTo(0)
             }
         }
     }
-    Box(modifier = modifier
-        .fillMaxSize()
-        .background(color = MaterialTheme.colorScheme.secondary)){
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier
-            .fillMaxWidth()
-            .align(
-                Alignment.Center
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.secondary)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(
+                    Alignment.Center
+                )
+                .offset(y = (-100).dp)
+                .padding(horizontal = 20.dp)
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.baseline_palette_24),
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .size(240.dp)
             )
-            .offset(y = (-100).dp)
-            .padding(horizontal = 20.dp)) {
-            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.baseline_palette_24), contentDescription = "", tint = MaterialTheme.colorScheme.primary, modifier = Modifier
-                .size(240.dp)
+            Text(
+                text = "Tutoreal",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 42.sp
+                )
             )
-            Text(text = "Tutoreal", style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.primary, fontSize = 42.sp))
 
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(topEnd = 24.dp))
-            .background(color = Color.White)
-            .align(Alignment.BottomCenter)
-            .height(260.dp))
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(topStart = 24.dp))
-            .background(color = MaterialTheme.colorScheme.primary)
-            .align(Alignment.BottomCenter)
-            .height(240.dp))
-        Column(modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(40.dp)){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topEnd = 24.dp))
+                .background(color = Color.White)
+                .align(Alignment.BottomCenter)
+                .height(260.dp)
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = 24.dp))
+                .background(color = MaterialTheme.colorScheme.primary)
+                .align(Alignment.BottomCenter)
+                .height(240.dp)
+        )
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(40.dp)
+        ) {
             Button(
                 onClick = onRegisterClicked,
                 modifier = Modifier
@@ -100,7 +122,7 @@ fun ChooserScreen(
                     contentColor = Color.Black
                 ),
 
-            ) {
+                ) {
                 Text("Register")
             }
             Button(

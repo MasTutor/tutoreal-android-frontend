@@ -43,11 +43,11 @@ fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val currentPageIndex = remember{
+    val currentPageIndex = remember {
         mutableIntStateOf(0)
     }
     val visibleQuestion = QuestionsData.questions[currentPageIndex.intValue]
-    val answer = remember{mutableIntStateOf(3)}
+    val answer = remember { mutableIntStateOf(3) }
     val choices = listOf("Sangat Setuju", "Setuju", "Netral", "Tidak Setuju", "Sangat Tidak Setuju")
     val (selectedChoice, onChoiceSelected) = remember {
         mutableStateOf(choices[2])
@@ -55,24 +55,23 @@ fun SurveyScreen(
     SurveyContent(
         question = visibleQuestion,
         choices = choices, selectedChoice = selectedChoice,
-        onChoiceSelected ={ choice, idx ->
+        onChoiceSelected = { choice, idx ->
             onChoiceSelected(choice)
             answer.intValue = idx + 1
-    },
+        },
         onNextClicked = {
-            if(currentPageIndex.intValue != 24) {
+            if (currentPageIndex.intValue != 24) {
                 viewModel.addAnswers(answer, currentPageIndex)
                 onChoiceSelected(choices[2])
                 answer.intValue = 3
                 currentPageIndex.intValue++
-            }
-            else{
+            } else {
                 viewModel.addAnswers(answer, currentPageIndex)
                 //TODO: add post answer afterwards
             }
         },
 
-    )
+        )
 }
 
 //Stateless and please don't make this shit stateful
@@ -108,7 +107,7 @@ fun SurveyContent(
                 .clip(RoundedCornerShape(8.dp))
 
         )
-        choices.forEachIndexed{ idx ,choice ->
+        choices.forEachIndexed { idx, choice ->
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,

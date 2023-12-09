@@ -16,6 +16,7 @@ private fun createTempFile(context: Context): File {
     val directory = context.cacheDir
     return File(directory, fileName)
 }
+
 suspend fun uriToFile(uri: Uri, context: Context): File = withContext(Dispatchers.IO) {
     val inputStream = context.contentResolver.openInputStream(uri)
     val file = createTempFile(context)
@@ -25,4 +26,10 @@ suspend fun uriToFile(uri: Uri, context: Context): File = withContext(Dispatcher
         }
     }
     return@withContext file
+}
+
+fun separateDate(date: String): Triple<Int, Int, Int> {
+    val (year, month, day) = date.split("-")
+
+    return Triple(year.toInt(), month.toInt(), day.toInt())
 }

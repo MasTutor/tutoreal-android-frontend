@@ -19,14 +19,15 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextFieldDialog(
+    modifier: Modifier = Modifier,
     data: String,
     openDialog: MutableState<Boolean>,
     value: String,
     onValueChanged: (String) -> Unit,
     onSubmitClicked: () -> Unit,
     isNumber: Boolean = false,
-    modifier: Modifier = Modifier
-) {
+
+    ) {
     if (openDialog.value) {
         AlertDialog(
             onDismissRequest = {
@@ -49,7 +50,8 @@ fun TextFieldDialog(
             },
             confirmButton = {
                 Button(
-                    onClick = onSubmitClicked
+                    onClick = onSubmitClicked,
+                    enabled = value.isNotEmpty()
                 ) {
                     Text("Konfirmasi")
                 }

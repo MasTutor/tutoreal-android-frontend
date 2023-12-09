@@ -16,8 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val repository: Repository): ViewModel(){
-    private val _loginResponse: MutableStateFlow<AuthUiState<LoginResponse>> = MutableStateFlow(AuthUiState.Idle)
+class AuthViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+    private val _loginResponse: MutableStateFlow<AuthUiState<LoginResponse>> =
+        MutableStateFlow(AuthUiState.Idle)
     val loginResponse: StateFlow<AuthUiState<LoginResponse>>
         get() = _loginResponse
 
@@ -56,62 +57,66 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     private val _showConfirmPassword = mutableStateOf(false)
     val showConfirmPassword: State<Boolean> get() = _showConfirmPassword
 
-    fun changeShowPassword(boolean: Boolean){
+    fun changeShowPassword(boolean: Boolean) {
         _showPassword.value = boolean
     }
-    fun changeShowPasswordLogin(boolean: Boolean){
+
+    fun changeShowPasswordLogin(boolean: Boolean) {
         _showPasswordLogin.value = boolean
     }
 
-    fun changeShowConfirmPassword(boolean: Boolean){
+    fun changeShowConfirmPassword(boolean: Boolean) {
         _showConfirmPassword.value = boolean
     }
 
 
-    fun changeFullNameError(boolean: Boolean){
+    fun changeFullNameError(boolean: Boolean) {
         _fullNameError.value = boolean
     }
-    fun changeEmailError(boolean: Boolean){
+
+    fun changeEmailError(boolean: Boolean) {
         _emailError.value = boolean
     }
 
-    fun changeEmailErrorLogin(boolean: Boolean){
+    fun changeEmailErrorLogin(boolean: Boolean) {
         _emailErrorLogin.value = boolean
     }
 
-    fun changePasswordError(boolean: Boolean){
+    fun changePasswordError(boolean: Boolean) {
         _passwordError.value = boolean
     }
-    fun changePasswordErrorLogin(boolean: Boolean){
+
+    fun changePasswordErrorLogin(boolean: Boolean) {
         _passwordErrorLogin.value = boolean
     }
-    fun changeConfirmPasswordError(boolean: Boolean){
+
+    fun changeConfirmPasswordError(boolean: Boolean) {
         _confirmPasswordError.value = boolean
     }
 
-    fun changeEmailLogin(email: String){
+    fun changeEmailLogin(email: String) {
         _emailLogin.value = email
     }
 
-    fun tryUserExist(){
+    fun tryUserExist() {
         viewModelScope.launch {
-            repository.getUserExist().collect(){
+            repository.getUserExist().collect {
                 _userExist.value = it
             }
         }
     }
 
-    fun deleteSession(){
+    fun deleteSession() {
         viewModelScope.launch {
             repository.deleteSession()
         }
     }
 
-    fun changePasswordLogin(password: String){
+    fun changePasswordLogin(password: String) {
         _passwordLogin.value = password
     }
 
-    fun login(){
+    fun login() {
         viewModelScope.launch {
             repository.login(email = emailLogin.value, password = passwordLogin.value).collect {
                 _loginResponse.value = it
@@ -120,7 +125,8 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     }
 
 
-    private val _registerResponse: MutableStateFlow<AuthUiState<RegisterResponse>> = MutableStateFlow(AuthUiState.Idle)
+    private val _registerResponse: MutableStateFlow<AuthUiState<RegisterResponse>> =
+        MutableStateFlow(AuthUiState.Idle)
     val registerResponse: StateFlow<AuthUiState<RegisterResponse>>
         get() = _registerResponse
 
@@ -145,9 +151,11 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
     fun changeEmailRegister(email: String) {
         _emailRegister.value = email
     }
+
     fun changeFullNameRegister(fullName: String) {
         _fullNameRegister.value = fullName
     }
+
     fun changeGender(male: Boolean) {
         _male.value = male
     }
@@ -164,7 +172,7 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
         _imageUri.value = uri
     }
 
-    fun register(){
+    fun register() {
         viewModelScope.launch {
             _registerResponse.value = AuthUiState.Load
             val result = imageUri.value.let { repository.uploadImage(it) }
@@ -177,7 +185,7 @@ class AuthViewModel @Inject constructor(private val repository: Repository): Vie
                         password = passwordRegister.value,
                         male = male.value,
                         photoUrl = image
-                    ).collect{
+                    ).collect {
                         _registerResponse.value = it
                     }
                 },

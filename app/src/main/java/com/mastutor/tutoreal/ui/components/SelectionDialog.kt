@@ -1,10 +1,7 @@
 package com.mastutor.tutoreal.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.AlertDialog
@@ -54,7 +51,10 @@ fun SelectionDialog(
                                 onClick = null,
                                 modifier = Modifier.padding(end = 8.dp)
                             )
-                            Text(option.replaceFirstChar { it.uppercaseChar() }, style = TextStyle(fontSize = 16.sp))
+                            Text(
+                                option.replaceFirstChar { it.uppercaseChar() },
+                                style = TextStyle(fontSize = 16.sp)
+                            )
                         }
                         Spacer(Modifier.weight(1F))
                     }

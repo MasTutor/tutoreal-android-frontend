@@ -6,8 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastutor.tutoreal.data.remote.BookResponse
-import com.mastutor.tutoreal.data.remote.ProfileResponse
-import com.mastutor.tutoreal.data.remote.ScheduleResponse
 import com.mastutor.tutoreal.data.remote.TutorDetail
 import com.mastutor.tutoreal.data.remote.TutorResponse
 import com.mastutor.tutoreal.data.repository.Repository
@@ -20,9 +18,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TutorViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+class TutorViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     private val _tutorResponse: MutableStateFlow<UiState<TutorResponse>> = MutableStateFlow(
-        UiState.Loading)
+        UiState.Loading
+    )
     val tutorResponse: StateFlow<UiState<TutorResponse>> = _tutorResponse
 
     private val _tutorData = mutableStateOf(
@@ -32,17 +31,17 @@ class TutorViewModel @Inject constructor(private val repository: Repository): Vi
 
     private val _userToken = mutableStateOf("")
 
-    fun getToken(){
+    fun getToken() {
         viewModelScope.launch {
-            repository.getUserToken().collect(){
+            repository.getUserToken().collect {
                 _userToken.value = it
             }
         }
     }
 
-    fun getTutor(id: String){
+    fun getTutor(id: String) {
         viewModelScope.launch {
-            repository.getTutor(id).collect() { data ->
+            repository.getTutor(id).collect { data ->
                 _tutorResponse.value = data
                 Log.d("Tutor", data.toString())
             }
@@ -67,6 +66,19 @@ class TutorViewModel @Inject constructor(private val repository: Repository): Vi
         _sessionDate.value = date
     }
 
+    private val _titleError = mutableStateOf(true)
+    val titleError: State<Boolean> get() = _titleError
+
+    private val _dateError = mutableStateOf(true)
+    val dateError: State<Boolean> get() = _dateError
+
+    fun changeTitleError(error: Boolean) {
+        _titleError.value = error
+    }
+
+    fun changeDateError(error: Boolean) {
+        _dateError.value = error
+    }
 
     private val _bookResponse: MutableStateFlow<AuthUiState<BookResponse>> =
         MutableStateFlow(AuthUiState.Idle)
