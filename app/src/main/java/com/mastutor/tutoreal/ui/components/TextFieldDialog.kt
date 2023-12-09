@@ -49,7 +49,8 @@ fun TextFieldDialog(
             },
             confirmButton = {
                 Button(
-                    onClick = onSubmitClicked
+                    onClick = onSubmitClicked,
+                    enabled = value.isNotEmpty()
                 ) {
                     Text("Konfirmasi")
                 }
