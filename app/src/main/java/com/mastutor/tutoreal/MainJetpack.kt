@@ -54,6 +54,7 @@ fun MainJetpack(
                 || currentRoute == Screen.Login.route
                 || currentRoute == Screen.RegisterForm.route
                 || currentRoute == Screen.Splash.route
+                || currentRoute == Screen.Tutor.route
                 ) 0.dp else innerPadding.calculateTopPadding(),
             bottom = if(currentRoute == Screen.Chooser.route
                 || currentRoute == Screen.Matchmaking.route

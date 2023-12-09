@@ -61,7 +61,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
         viewModel.getToken()
     }
 
-    LaunchedEffect(userExist){
+    LaunchedEffect(userExist) {
         if(!userExist){
             navHostController.navigate(Screen.Chooser.route){
                 popUpTo(0)
@@ -102,6 +102,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                         onValueChanged = { nameField = it },
                         onSubmitClicked = {
                             viewModel.editProfile("name", nameField)
+                            usernameEdit.value = false
                         }
                     )
 
@@ -113,6 +114,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                         isNumber = true,
                         onSubmitClicked = {
                             viewModel.editProfile("number", numberField)
+                            phoneNumberEdit.value = false
                         }
                     )
 
@@ -127,6 +129,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
                                 "false"
                             }
                             viewModel.editProfile("gender", genderField)
+                            genderEdit.value = false
                         }
                     )
 

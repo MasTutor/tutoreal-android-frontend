@@ -78,9 +78,8 @@ fun TutorScreen(
                             onBackClicked = {
                                 navHostController.navigateUp()
                             },
-                            id = tutor.id,
                             name = tutor.nama,
-                            price = tutor.price.ifEmpty { "69" },
+                            price = tutor.price.ifEmpty { "Rp. 690000" },
                             specialization = tutor.specialization,
                             about = tutor.about,
                             skillsExperience = tutor.skills.ifEmpty { tutor.about },
@@ -105,7 +104,6 @@ fun TutorScreen(
 fun TutorContent(
     modifier: Modifier,
     onBackClicked: () -> Unit,
-    id: String,
     name: String,
     picture: String,
     specialization: String,
@@ -132,7 +130,7 @@ fun TutorContent(
         ) {
             Row(
                 modifier = Modifier
-                    .padding(start = 10.dp)
+                    .padding(top = 30.dp, start = 10.dp)
                     .align(Alignment.TopStart)
                     .offset(y = 10.dp)
                     .clickable { onBackClicked() },
