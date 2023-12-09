@@ -16,15 +16,17 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Female
-import androidx.compose.material.icons.filled.Male
-import androidx.compose.material.icons.rounded.Call
-import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.outlined.Female
+import androidx.compose.material.icons.outlined.Male
+import androidx.compose.material.icons.outlined.PersonOutline
+import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -208,7 +210,7 @@ fun ProfileContent(
         modifier = modifier
             .fillMaxSize()
             .padding(10.dp)
-
+            .verticalScroll(rememberScrollState())
     ) {
         Row(
             modifier = Modifier
@@ -225,7 +227,7 @@ fun ProfileContent(
                 tint = Color.Black
             )
         }
-        Box(modifier = modifier) {
+        Box {
             AsyncImage(
                 model = photoUrl,
                 contentDescription = "User Photo",
@@ -241,7 +243,7 @@ fun ProfileContent(
                 contentPadding = PaddingValues(),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                modifier = modifier
+                modifier = Modifier
                     .offset(x = (-15).dp, y = (-5).dp)
                     .align(Alignment.BottomEnd)
                     .size(55.dp)
@@ -268,19 +270,19 @@ fun ProfileContent(
             modifier = Modifier.padding(bottom = 20.dp)
         )
         UserEditComponent(
-            icon = Icons.Rounded.Person,
+            icon = Icons.Outlined.PersonOutline,
             data = fullName,
             onClick = onFullNameClicked,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         UserEditComponent(
-            icon = Icons.Rounded.Call,
+            icon = Icons.Rounded.PhoneAndroid,
             data = phoneNumber,
             onClick = onPhoneNumberClicked,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         UserEditComponent(
-            icon = if (gender == 1) Icons.Filled.Male else Icons.Filled.Female,
+            icon = if (gender == 1) Icons.Outlined.Male else Icons.Outlined.Female,
             data = if (gender == 1) "Pria" else "Wanita",
             onClick = onGenderClicked,
             modifier = Modifier.padding(bottom = 10.dp)

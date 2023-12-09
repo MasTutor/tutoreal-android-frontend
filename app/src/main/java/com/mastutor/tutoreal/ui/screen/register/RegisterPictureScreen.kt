@@ -145,7 +145,7 @@ fun RegisterPictureScreen(
 
 @Composable
 fun RegisterPictureContent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     name: String,
     imageUri: Uri,
     onEditClicked: () -> Unit,
@@ -186,7 +186,7 @@ fun RegisterPictureContent(
 
         Text(
             "Choose your profile picture",
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
             textAlign = TextAlign.Center
         )
@@ -197,13 +197,13 @@ fun RegisterPictureContent(
         )
 
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .size(354.dp)
                 .clip(RoundedCornerShape(30.dp))
                 .background(Color.White)
         ) {
             Column(
-                modifier = modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -224,13 +224,13 @@ fun RegisterPictureContent(
                     },
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Crop,
-                    modifier = modifier
+                    modifier = Modifier
                         .size(218.dp)
                         .clip(CircleShape)
                         .clickable { onEditClicked() }
                 )
 
-                Spacer(modifier = modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
                     name,

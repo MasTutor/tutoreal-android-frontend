@@ -179,7 +179,7 @@ fun HomeContent(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .offset(y = 10.dp)
             ) {
@@ -247,7 +247,12 @@ fun HomeContent(
             Text(
                 text = "Pencocokan Tutor Idealmu",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 8.dp, top = 20.dp, start = 10.dp, end = 10.dp)
+                modifier = Modifier.padding(bottom = 1.dp, top = 20.dp, start = 10.dp, end = 10.dp)
+            )
+            Text(
+                text = "Isi 25 survey kepribadian",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp).alpha(0.5f)
             )
             MatchmakingCardComponent(height = 180, modifier = Modifier
                 .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
@@ -257,7 +262,12 @@ fun HomeContent(
             Text(
                 text = "Jadwal Terbaru",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+            )
+            Text(
+                text = "Jadwal terbarumu akan tampil disini",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp).alpha(0.5f)
             )
             if (nextSchedule != null) {
                 ScheduleComponent(
@@ -265,11 +275,11 @@ fun HomeContent(
                     tutorName = nextSchedule.tutorName.toString(),
                     date = nextSchedule.date.toString(),
                     status = if (nextSchedule.status.toString() == "OnGoing") {
-                        StatusData(status = nextSchedule.status.toString(), color = Color.Yellow)
+                        StatusData(status = "Diproses", color = Color.Yellow)
                     } else if (nextSchedule.status.toString() == "Completed") {
-                        StatusData(status = nextSchedule.status.toString(), color = Color.Green)
+                        StatusData(status = "Diterima", color = Color.Green)
                     } else {
-                        StatusData(status = nextSchedule.status.toString(), color = Color.Red)
+                        StatusData(status = "Ditolak", color = Color.Red)
                     },
                     modifier = Modifier
                         .padding(bottom = 20.dp, start = 10.dp, end = 10.dp)
@@ -300,7 +310,12 @@ fun HomeContent(
             Text(
                 text = "Kategori",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+            )
+            Text(
+                text = "Kategori-kategori tutor",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp).alpha(0.5f)
             )
             LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
                 itemsIndexed(categories.subList(fromIndex = 1, toIndex = 8)) { idx, category ->
@@ -313,7 +328,12 @@ fun HomeContent(
             Text(
                 text = "Random Tutor",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp)
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+            )
+            Text(
+                text = "Tutor terpilih secara acak",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp).alpha(0.5f)
             )
             LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
                 items(listTutor) { tutor ->

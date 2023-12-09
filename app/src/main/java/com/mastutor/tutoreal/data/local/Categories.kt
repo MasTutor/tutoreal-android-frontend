@@ -1,15 +1,15 @@
 package com.mastutor.tutoreal.data.local
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Biotech
-import androidx.compose.material.icons.filled.Brush
-import androidx.compose.material.icons.filled.Calculate
-import androidx.compose.material.icons.filled.ChatBubble
-import androidx.compose.material.icons.filled.Computer
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.outlined.Biotech
+import androidx.compose.material.icons.outlined.Calculate
+import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material.icons.outlined.Colorize
+import androidx.compose.material.icons.outlined.CorporateFare
+import androidx.compose.material.icons.outlined.LibraryMusic
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Movie
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class Category(
@@ -23,48 +23,48 @@ object CategoriesData {
         Category(
             id = "",
             name = "All",
-            icon = Icons.Filled.List
+            icon = Icons.Outlined.List
         ),
 
         Category(
             id = "Technology",
             name = "Teknologi",
-            icon = Icons.Filled.Computer
+            icon = Icons.Outlined.CorporateFare
         ),
         Category(
             id = "Arts",
             name = "Seni",
-            icon = Icons.Filled.Brush
+            icon = Icons.Outlined.Colorize
         ),
         Category(
             id = "Multimedia",
             name = "Multimedia",
-            icon = Icons.Filled.Movie
+            icon = Icons.Outlined.Movie
         ),
         Category(
             id = "Music",
             name = "Musik",
-            icon = Icons.Filled.MusicNote
+            icon = Icons.Outlined.LibraryMusic
         ),
         Category(
             id = "Social",
             name = "Sosial",
-            icon = Icons.Filled.ChatBubble
+            icon = Icons.Outlined.Chat
         ),
         Category(
             id = "Math",
             name = "Matematika",
-            icon = Icons.Filled.Calculate
+            icon = Icons.Outlined.Calculate
         ),
         Category(
             id = "Science",
             name = "Sains",
-            icon = Icons.Filled.Biotech
+            icon = Icons.Outlined.Biotech
         ),
         Category(
             id = "Language",
             name = "Bahasa",
-            icon = Icons.Filled.Translate
+            icon = Icons.Outlined.Translate
         ),
     )
 }
