@@ -26,3 +26,9 @@ suspend fun uriToFile(uri: Uri, context: Context): File = withContext(Dispatcher
     }
     return@withContext file
 }
+
+fun separateDate(date: String): Triple<Int, Int, Int> {
+    val (year, month, day) = date.split("-")
+
+    return Triple(year.toInt(), month.toInt(), day.toInt())
+}

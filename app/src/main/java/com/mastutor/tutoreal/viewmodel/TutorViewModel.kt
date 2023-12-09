@@ -67,6 +67,19 @@ class TutorViewModel @Inject constructor(private val repository: Repository): Vi
         _sessionDate.value = date
     }
 
+    private val _titleError = mutableStateOf(true)
+    val titleError: State<Boolean> get() = _titleError
+
+    private val _dateError = mutableStateOf(true)
+    val dateError: State<Boolean> get() = _dateError
+
+    fun changeTitleError(error: Boolean) {
+        _titleError.value = error
+    }
+
+    fun changeDateError(error: Boolean) {
+        _dateError.value = error
+    }
 
     private val _bookResponse: MutableStateFlow<AuthUiState<BookResponse>> =
         MutableStateFlow(AuthUiState.Idle)
