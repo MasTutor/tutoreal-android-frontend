@@ -87,7 +87,7 @@ fun MatchTutorComponent(
                         .weight(1F)
                 )
                 Text(
-                    text = "IDR $price/Sesi",
+                    text = "Rp. $price/Sesi",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

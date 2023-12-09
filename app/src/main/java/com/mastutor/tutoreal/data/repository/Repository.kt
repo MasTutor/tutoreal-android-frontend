@@ -236,12 +236,14 @@ class Repository @Inject constructor(
                     name: String? = null,
                     gender: Boolean? = null,
                     nomor: String? = null,
+                    picture: String? = null
     ): Flow<UiState<ProfileResponse>> {
 
         val jsonObject = JSONObject()
         jsonObject.put("fullname", name)
         jsonObject.put("hasPenis", gender)
         jsonObject.put("noTelp", nomor)
+        jsonObject.put("PhotoURL", picture)
         val requestBody =
             jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
 

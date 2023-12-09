@@ -86,7 +86,7 @@ fun MainJetpack(
                 )
             }
             composable(Screen.Schedule.route){
-                ScheduleScreen()
+                ScheduleScreen(navHostController = navHostController)
             }
             composable(Screen.Survey.route){
                 SurveyScreen()
