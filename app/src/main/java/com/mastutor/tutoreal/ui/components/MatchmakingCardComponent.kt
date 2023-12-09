@@ -16,8 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,10 +40,6 @@ fun MatchmakingCardComponent(
                 model = "https://i.imgur.com/LXAIL9h.jpeg",
                 contentDescription = "Teaching",
                 contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(
-                    color = MaterialTheme.colorScheme.primary,
-                    blendMode = BlendMode.Hardlight
-                ),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxSize()

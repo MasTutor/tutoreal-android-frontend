@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
@@ -35,7 +37,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -221,7 +222,7 @@ fun BookingScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingContent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     sessionTitle: String,
     sessionTitleError: Boolean,
     name: String,
@@ -241,38 +242,32 @@ fun BookingContent(
             .background(color = MaterialTheme.colorScheme.background)
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .align(Alignment.Start)
+                    .padding(top = 10.dp, bottom = 40.dp)
                     .clickable { onBackClicked() }
-                    .padding(top = 10.dp),
+                    ,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Arrow Forward",
-                    modifier = Modifier.padding(end = 8.dp),
+                    modifier = Modifier.padding(end = 8.dp, ),
                     tint = Color.Black
                 )
             }
             Text(
-                "Jadwalkan Sesi Anda!",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp),
-                textAlign = TextAlign.Center
-            )
-            Text(
                 "Judul Sesi Anda",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
             TextField(
+                shape = RoundedCornerShape(8.dp),
                 value = sessionTitle,
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
@@ -292,13 +287,20 @@ fun BookingContent(
                         )
                     )
                 },
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 5.dp)
+                    .padding(bottom = 5.dp),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.TextFields, contentDescription = "Name", tint = Color.Black)
+                },
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
             )
             Text(
                 "Tutor Anda",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
             TutorComponent(
                 photoUrl = picture,
@@ -306,49 +308,51 @@ fun BookingContent(
                 job = job,
                 price = price,
                 onClick = {},
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 5.dp)
             )
             Text(
                 "Pilih Tanggal Anda",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
 
             Box(
-                modifier = modifier
-                    .background(Color.White)
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
                     .clickable(onClick = onDateClicked)
-                    .padding(start = 5.dp)
+                    .background(Color.White)
                     .fillMaxWidth()
+                    .padding(start = 5.dp)
                     .height(64.dp)
-                    .clip(RoundedCornerShape(5.dp))
+
             ) {
-                Text(
-                    date.ifEmpty { "Tekan untuk memilih tanggal!" },
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = if (date.isEmpty()) FontWeight.Normal else FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = if (dateError) MaterialTheme.colorScheme.error else Color.Black
-                    ),
-                    modifier = modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 10.dp)
-                )
+                Row(modifier = Modifier.align(Alignment.CenterStart)){
+                    Icon(imageVector = Icons.Outlined.DateRange, contentDescription = "date", tint = Color.Black, modifier = Modifier.padding(end = 20.dp, start = 10.dp))
+                    Text(
+                        date.ifEmpty { "Tekan untuk memilih tanggal!" },
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            color = if (dateError) MaterialTheme.colorScheme.error else Color.Black
+                        ),
+                    )
+                }
+
             }
 
-            Spacer(modifier = modifier.weight(1F))
+            Spacer(modifier = Modifier.weight(1F))
         }
 
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
                 .background(Color.White)
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(bottom = 5.dp)
         ) {
-            Column(modifier = modifier.padding(start = 10.dp, end = 10.dp, bottom = 40.dp)) {
+            Column(modifier = Modifier.padding(start = 10.dp, end = 10.dp, bottom = 40.dp)) {
                 Divider(
                     color = Color.LightGray,
                     modifier = Modifier
@@ -358,7 +362,7 @@ fun BookingContent(
                 )
 
                 Row(
-                    modifier
+                    Modifier
                         .fillMaxWidth()
                         .padding(start = 5.dp, end = 5.dp, bottom = 10.dp)
                 ) {
@@ -367,7 +371,7 @@ fun BookingContent(
                             fontWeight = FontWeight.Normal
                         ), color = Color.Gray
                     )
-                    Spacer(modifier.weight(1F))
+                    Spacer(Modifier.weight(1F))
                     Text(price, color = Color.Black)
                 }
 
@@ -378,7 +382,7 @@ fun BookingContent(
                     shape = RoundedCornerShape(8.dp),
                     enabled = (!sessionTitleError && !dateError)
                 ) {
-                    Text("Konfirmasi Pemesanan")
+                    Text("Jadwalkan Sesi")
                 }
             }
         }

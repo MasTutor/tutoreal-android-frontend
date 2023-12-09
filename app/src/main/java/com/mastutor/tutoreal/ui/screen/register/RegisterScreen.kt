@@ -158,7 +158,7 @@ fun RegisterContent(
             .fillMaxSize()
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .height(170.dp)
                 .background(color = MaterialTheme.colorScheme.tertiary),
@@ -204,7 +204,7 @@ fun RegisterContent(
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 10.dp, end = 10.dp, top = 20.dp)
         ) {

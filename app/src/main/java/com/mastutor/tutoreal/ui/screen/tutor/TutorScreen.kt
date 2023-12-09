@@ -127,7 +127,7 @@ fun TutorContent(
             .padding(bottom = 10.dp)
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(390.dp)
                 .clip(RoundedCornerShape(bottomEndPercent = 10, bottomStartPercent = 10))
@@ -156,7 +156,7 @@ fun TutorContent(
                 )
             }
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -184,7 +184,7 @@ fun TutorContent(
                 Button(
                     onClick = { onBookClicked() },
                     shape = RoundedCornerShape(15),
-                    modifier = modifier.padding(top = 20.dp)
+                    modifier = Modifier.padding(top = 20.dp)
                 ) {
                     Text(
                         "Pesan Sesi $price",
@@ -201,7 +201,7 @@ fun TutorContent(
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(15.dp),
-                modifier = modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center)
             ) {
                 tabs.forEachIndexed { index, title ->
                     Button(
@@ -220,14 +220,13 @@ fun TutorContent(
 
         when (tabIndex) {
             0 -> AboutSection(
-                modifier = modifier,
                 name = name,
                 about = about,
                 skillsExperience = skillsExperience,
                 category = category
             )
 
-            1 -> ReviewSection(modifier = modifier)
+            1 -> ReviewSection()
         }
 
     }
@@ -235,7 +234,7 @@ fun TutorContent(
 
 @Composable
 fun AboutSection(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     name: String,
     about: String,
     skillsExperience: String,
@@ -247,7 +246,7 @@ fun AboutSection(
             .padding(top = 20.dp, start = 15.dp, end = 15.dp)
     ) {
         Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
@@ -262,7 +261,7 @@ fun AboutSection(
             )
             CategoryComponentBig(
                 category = category,
-                onClick = {}, modifier = modifier.padding(bottom = 5.dp)
+                onClick = {}, modifier = Modifier.padding(bottom = 5.dp)
             )
 
             Text(
@@ -279,14 +278,14 @@ fun AboutSection(
 }
 
 @Composable
-fun ReviewSection(modifier: Modifier) {
+fun ReviewSection(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp, start = 15.dp, end = 15.dp)
     ) {
         Text(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
             text = "No Reviews",
             textAlign = TextAlign.Center,

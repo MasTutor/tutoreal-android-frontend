@@ -23,6 +23,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -94,9 +95,11 @@ fun ChooserScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topEnd = 24.dp))
-                .background(color = Color.White)
+                .alpha(0.8f)
+                .background(color = MaterialTheme.colorScheme.primary)
                 .align(Alignment.BottomCenter)
                 .height(260.dp)
+
         )
         Box(
             modifier = Modifier

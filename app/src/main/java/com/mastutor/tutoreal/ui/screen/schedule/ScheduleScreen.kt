@@ -90,7 +90,7 @@ fun ScheduleContent(
     schedules: List<HistoryDataItem?>?
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 10.dp, top = 5.dp)
             .offset(y = 5.dp)
             .clickable { onBackClicked() },
@@ -125,17 +125,17 @@ fun ScheduleContent(
                                 date = schedule.date.toString(),
                                 status = if (schedule.status.toString() == "OnGoing") {
                                     StatusData(
-                                        status = schedule.status.toString(),
+                                        status = "Diproses",
                                         color = Color.Yellow
                                     )
                                 } else if (schedule.status.toString() == "Completed") {
                                     StatusData(
-                                        status = schedule.status.toString(),
+                                        status = "Diterima",
                                         color = Color.Green
                                     )
                                 } else {
                                     StatusData(
-                                        status = schedule.status.toString(),
+                                        status = "Ditolak",
                                         color = Color.Red
                                     )
                                 },
