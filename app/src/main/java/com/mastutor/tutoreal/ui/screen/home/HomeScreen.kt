@@ -89,7 +89,7 @@ fun HomeScreen(
 
             is UiState.Success -> {
                 val profileResponse = uiState.data?.profileResponse?.profile
-                val tutorData = uiState.data?.tutorsResponse?.tutors?.items?.shuffled()?.take(4)
+                val tutorData = uiState.data?.tutorsResponse
                 val scheduleData =
                     if (uiState.data?.scheduleResponse?.historyData?.isNotEmpty() == true) uiState.data.scheduleResponse.historyData[0] else null
 

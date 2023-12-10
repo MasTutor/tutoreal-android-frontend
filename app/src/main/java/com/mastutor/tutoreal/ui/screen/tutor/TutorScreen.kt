@@ -43,6 +43,7 @@ import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.local.CategoriesData
 import com.mastutor.tutoreal.data.local.Category
 import com.mastutor.tutoreal.ui.components.CategoryComponentBig
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.viewmodel.TutorViewModel
@@ -91,7 +92,12 @@ fun TutorScreen(
                             tabIndex = tabIndex,
                             category = it,
                             onTabSelected = { index -> tabIndex = index },
-                            onBookClicked = moveToBookScreen
+                            onBookClicked = moveToBookScreen,
+                            categoryOnClick = {categoryIdx ->
+                                navHostController.navigate(Screen.Search.createRoute(categoryIdx = categoryIdx)){
+                                    popUpTo(Screen.Home.route)
+                                }
+                            }
                         )
                     }
                 }
@@ -118,7 +124,8 @@ fun TutorContent(
     tabs: List<String>,
     tabIndex: Int,
     onTabSelected: (Int) -> Unit,
-    onBookClicked: () -> Unit
+    onBookClicked: () -> Unit,
+    categoryOnClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -223,7 +230,8 @@ fun TutorContent(
                 name = name,
                 about = about,
                 skillsExperience = skillsExperience,
-                category = category
+                category = category,
+                categoryOnClick = categoryOnClick
             )
 
             1 -> ReviewSection()
@@ -238,7 +246,8 @@ fun AboutSection(
     name: String,
     about: String,
     skillsExperience: String,
-    category: Category
+    category: Category,
+    categoryOnClick: (Int) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -261,7 +270,7 @@ fun AboutSection(
             )
             CategoryComponentBig(
                 category = category,
-                onClick = {}, modifier = Modifier.padding(bottom = 5.dp)
+                onClick = {categoryOnClick(category.idx)}, modifier = Modifier.padding(bottom = 5.dp)
             )
 
             Text(

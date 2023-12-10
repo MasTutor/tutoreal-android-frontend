@@ -89,9 +89,8 @@ fun MainJetpack(
             }
             composable(Screen.Matchmaking.route) {
                 MatchmakingOnboardingScreen(
-                    onBackClicked = { /*TODO*/ },
+                    onBackClicked = {navHostController.navigateUp() },
                     onNextClicked = { navHostController.navigate(Screen.Survey.route) },
-                    navHostController = navHostController
                 )
             }
             composable(Screen.Schedule.route) {
