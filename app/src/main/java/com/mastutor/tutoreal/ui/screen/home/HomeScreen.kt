@@ -318,7 +318,7 @@ fun HomeContent(
                 modifier = Modifier.padding(bottom = 8.dp, start = 10.dp, end = 10.dp).alpha(0.5f)
             )
             LazyRow(modifier = Modifier.padding(bottom = 20.dp)) {
-                itemsIndexed(categories.subList(fromIndex = 1, toIndex = 8)) { idx, category ->
+                itemsIndexed(categories.subList(fromIndex = 1, toIndex = 9)) { idx, category ->
                     CategoryComponentBig(category = category,
                         modifier = Modifier
                             .padding(start = 5.dp, end = 5.dp),
