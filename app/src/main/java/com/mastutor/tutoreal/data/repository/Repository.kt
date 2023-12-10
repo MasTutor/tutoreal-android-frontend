@@ -197,7 +197,7 @@ class Repository @Inject constructor(
             try {
                 emit(UiState.Loading)
                 val responseProfile = tutorealApiService.getProfile(token)
-                val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100)
+                val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100).tutors.items.shuffled().take(4)
                 val responseSchedule = tutorealApiService.getSchedule(token)
                 emit(
                     UiState.Success(

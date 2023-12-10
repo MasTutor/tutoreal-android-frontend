@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 
@@ -39,7 +38,6 @@ fun MatchmakingOnboardingScreen(
     onBackClicked: () -> Unit,
     onNextClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    navHostController: NavHostController
 ) {
     Box(
         modifier = modifier

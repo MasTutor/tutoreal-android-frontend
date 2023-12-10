@@ -15,7 +15,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 data class Category(
     val id: String,
     val name: String,
-    val icon: ImageVector
+    val icon: ImageVector,
+    val idx: Int
 )
 
 object CategoriesData {
@@ -23,48 +24,57 @@ object CategoriesData {
         Category(
             id = "",
             name = "All",
-            icon = Icons.Outlined.List
+            icon = Icons.Outlined.List,
+            idx = 0
         ),
 
         Category(
             id = "Technology",
             name = "Teknologi",
-            icon = Icons.Outlined.CorporateFare
+            icon = Icons.Outlined.CorporateFare,
+            idx = 1
         ),
         Category(
             id = "Arts",
             name = "Seni",
-            icon = Icons.Outlined.Colorize
+            icon = Icons.Outlined.Colorize,
+            idx = 2
         ),
         Category(
             id = "Multimedia",
             name = "Multimedia",
-            icon = Icons.Outlined.Movie
+            icon = Icons.Outlined.Movie,
+            idx = 3
         ),
         Category(
             id = "Music",
             name = "Musik",
-            icon = Icons.Outlined.LibraryMusic
+            icon = Icons.Outlined.LibraryMusic,
+            idx = 4
         ),
         Category(
             id = "Social",
             name = "Sosial",
-            icon = Icons.Outlined.Chat
+            icon = Icons.Outlined.Chat,
+            idx = 5
         ),
         Category(
             id = "Math",
             name = "Matematika",
-            icon = Icons.Outlined.Calculate
+            icon = Icons.Outlined.Calculate,
+            idx = 6
         ),
         Category(
             id = "Science",
             name = "Sains",
-            icon = Icons.Outlined.Biotech
+            icon = Icons.Outlined.Biotech,
+            idx = 7
         ),
         Category(
             id = "Language",
             name = "Bahasa",
-            icon = Icons.Outlined.Translate
+            icon = Icons.Outlined.Translate,
+            idx = 8
         ),
     )
 }
