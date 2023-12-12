@@ -31,16 +31,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.mastutor.tutoreal.data.local.Question
 import com.mastutor.tutoreal.data.local.QuestionsData
+import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
 import com.mastutor.tutoreal.viewmodel.SurveyViewModel
 
 //Stateful
 @Composable
 fun SurveyScreen(
-    viewModel: SurveyViewModel = hiltViewModel()
+    viewModel: SurveyViewModel = hiltViewModel(),
+    navHostController: NavHostController
 ) {
     val context = LocalContext.current
     val currentPageIndex = remember {
@@ -67,7 +70,13 @@ fun SurveyScreen(
                 currentPageIndex.intValue++
             } else {
                 viewModel.addAnswers(answer, currentPageIndex)
-                //TODO: add post answer afterwards
+                navHostController.navigate(Screen.MatchmakingResult.route){
+                    popUpTo(Screen.Matchmaking.route) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
         },
 

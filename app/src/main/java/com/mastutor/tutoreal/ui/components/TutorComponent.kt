@@ -38,14 +38,17 @@ fun MatchTutorComponent(
     photoUrl: String,
     name: String,
     job: String,
-    price: Long,
+    price: String,
     percentage: Double,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(140.dp)
-            .padding(10.dp),
+            .clip(CircleShape)
+            .clickable(onClick = onClick)
+        ,
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = CircleShape
     ) {
@@ -72,6 +75,8 @@ fun MatchTutorComponent(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.width(120.dp)
+
                 )
                 Text(
                     text = job,
@@ -87,7 +92,7 @@ fun MatchTutorComponent(
                         .weight(1F)
                 )
                 Text(
-                    text = "Rp. $price/Sesi",
+                    text = "$price/Sesi",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -151,6 +156,7 @@ fun TutorComponent(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.width(120.dp)
                 )
                 Text(
                     text = job,
@@ -249,8 +255,9 @@ fun TutorComponentPreview() {
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",
                 name = "Jim Burton",
                 job = "Con Artist",
-                price = 200000,
+                price = "Rp 30.000",
                 percentage = 98.0,
+                onClick = {}
             )
             TutorComponentBig(
                 photoUrl = "https://images.pexels.com/photos/1674666/pexels-photo-1674666.jpeg",

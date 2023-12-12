@@ -8,5 +8,4 @@ data class HomeDataHelper(
     val profileResponse: ProfileResponse,
     val tutorsResponse: List<TutorItem>,
     val scheduleResponse: ScheduleResponse
-    //TODO: Add History Response
 )
