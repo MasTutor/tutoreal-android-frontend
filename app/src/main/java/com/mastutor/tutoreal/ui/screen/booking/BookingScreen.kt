@@ -87,7 +87,7 @@ fun BookingScreen(
         val (y, m, d) = separateDate(date)
         val localeIndonesian = Locale("id", "ID")
         cal.set(Calendar.YEAR, y)
-        cal.set(Calendar.MONTH, m)
+        cal.set(Calendar.MONTH, m - 1)
         cal.set(Calendar.DAY_OF_MONTH, d)
         cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, localeIndonesian)?.toString() + ", "
     } else {
