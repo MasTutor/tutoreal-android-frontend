@@ -24,6 +24,7 @@ import com.mastutor.tutoreal.ui.screen.chooser.ChooserScreen
 import com.mastutor.tutoreal.ui.screen.home.HomeScreen
 import com.mastutor.tutoreal.ui.screen.login.LoginScreen
 import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingOnboardingScreen
+import com.mastutor.tutoreal.ui.screen.matchmaking.MatchmakingResultScreen
 import com.mastutor.tutoreal.ui.screen.profile.ProfileScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterPictureScreen
 import com.mastutor.tutoreal.ui.screen.register.RegisterScreen
@@ -96,8 +97,11 @@ fun MainJetpack(
             composable(Screen.Schedule.route) {
                 ScheduleScreen(navHostController = navHostController)
             }
+            composable(route = Screen.MatchmakingResult.route){
+                MatchmakingResultScreen(navHostController = navHostController)
+            }
             composable(Screen.Survey.route) {
-                SurveyScreen()
+                SurveyScreen(navHostController = navHostController)
             }
             composable(
                 route = Screen.Search.route,
@@ -172,6 +176,8 @@ fun NavGraphBuilder.tutorGraph(navController: NavHostController) {
                 navHostController = navController
             )
         }
+
+
 
     }
 }

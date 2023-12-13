@@ -17,6 +17,7 @@ import com.mastutor.tutoreal.data.remote.ScheduleResponse
 import com.mastutor.tutoreal.data.remote.TutorResponse
 import com.mastutor.tutoreal.data.remote.TutorealApiService
 import com.mastutor.tutoreal.data.remote.datahelper.HomeDataHelper
+import com.mastutor.tutoreal.data.remote.datahelper.ShittyHelper
 import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.util.uriToFile
@@ -32,6 +33,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
+import kotlin.random.Random
 
 class Repository @Inject constructor(
     private val tutorealApiService: TutorealApiService,
@@ -209,6 +211,30 @@ class Repository @Inject constructor(
                     )
                 )
             } catch (e: Exception) {
+                emit(UiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getShitty(): Flow<UiState<List<ShittyHelper>>> {
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100).tutors.items.shuffled().take(5)
+                val percent0 = Math.round(Random.nextDouble(90.00, 100.00) * 1000.0) / 1000.0
+                val percent1 = Math.round(Random.nextDouble(80.00, percent0) * 1000.0) / 1000.0
+                val percent2 = Math.round(Random.nextDouble(70.00, percent1) * 1000.0) / 1000.0
+                val percent3 = Math.round(Random.nextDouble(65.00, percent2) * 1000.0) / 1000.0
+                val percent4 = Math.round(Random.nextDouble(60.00, percent3) * 1000.0) / 1000.0
+                val listItem = listOf(
+                    ShittyHelper(responseTutors[0], percent0),
+                    ShittyHelper(responseTutors[1], percent1),
+                    ShittyHelper(responseTutors[2], percent2),
+                    ShittyHelper(responseTutors[3], percent3),
+                    ShittyHelper(responseTutors[0], percent4)
+                )
+                emit(UiState.Success(listItem))
+            }catch(e: Exception){
                 emit(UiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)

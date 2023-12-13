@@ -7,9 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -204,6 +206,20 @@ fun ProfileContent(
     onEditClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Row(
+        modifier = Modifier
+            .padding(start = 10.dp, top = 5.dp)
+            .offset(y = 5.dp)
+            .clickable { onBackClicked() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Filled.ArrowBack,
+            contentDescription = "Arrow Forward",
+            modifier = Modifier.padding(end = 8.dp),
+            tint = Color.Black
+        )
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -212,21 +228,6 @@ fun ProfileContent(
             .padding(10.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Row(
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(start = 10.dp, top = 5.dp)
-                .offset(y = 5.dp)
-                .clickable { onBackClicked() },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Arrow Forward",
-                modifier = Modifier.padding(end = 8.dp),
-                tint = Color.Black
-            )
-        }
         Box {
             AsyncImage(
                 model = photoUrl,
@@ -287,25 +288,32 @@ fun ProfileContent(
             onClick = onGenderClicked,
             modifier = Modifier.padding(bottom = 10.dp)
         )
-        Row {
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                onClick = onHistoryClicked,
-                modifier = Modifier
-                    .width(180.dp)
-                    .padding(bottom = 20.dp, end = 10.dp), shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("Jadwal")
-            }
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                onClick = onLogoutClicked,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)
-            ) {
-                Text("Logout")
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+            Row {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    onClick = onHistoryClicked,
+                    modifier = Modifier
+                        .width(this@BoxWithConstraints.maxWidth / 2)
+                        .padding(bottom = 20.dp, end = 10.dp), shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text("Jadwal")
+                }
+                Spacer(
+                    modifier = Modifier
+                        .weight(1F)
+                )
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                    onClick = onLogoutClicked,
+                    modifier = Modifier
+                        .width(this@BoxWithConstraints.maxWidth / 2)
+                        .padding(bottom = 20.dp), shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text("Logout")
+                }
             }
         }
+
     }
 }
