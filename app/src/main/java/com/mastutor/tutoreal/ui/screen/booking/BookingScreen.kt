@@ -80,7 +80,7 @@ fun BookingScreen(
     val cal = Calendar.getInstance()
     datePicker.datePicker.minDate = cal.timeInMillis
     datePicker.setOnDateSetListener { _, year, month, dayOfMonth ->
-        viewModel.changeDate("$year-$month-$dayOfMonth")
+        viewModel.changeDate("$year-${month+1}-$dayOfMonth")
         viewModel.changeDateError(false)
     }
     day = (if (date.isNotEmpty()) {
@@ -95,10 +95,9 @@ fun BookingScreen(
     }).toString()
 
     AlertDialog(text = "OK!", openDialog = successDialog, onSubmitClicked = {
+        successDialog.value = false
         navHostController.navigate(Screen.Schedule.route) {
-            popUpTo(Screen.Book.route) {
-                inclusive = true
-            }
+            popUpTo(Screen.Home.route)
         }
     })
 
