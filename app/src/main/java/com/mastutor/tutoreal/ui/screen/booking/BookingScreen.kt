@@ -95,7 +95,7 @@ fun BookingScreen(
     }).toString()
 
     AlertDialog(text = "OK!", openDialog = successDialog, onSubmitClicked = {
-        navHostController.navigate(Screen.Home.route) {
+        navHostController.navigate(Screen.Schedule.route) {
             popUpTo(Screen.Book.route) {
                 inclusive = true
             }
