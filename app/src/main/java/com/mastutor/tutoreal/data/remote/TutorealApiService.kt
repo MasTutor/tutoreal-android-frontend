@@ -49,4 +49,10 @@ interface TutorealApiService {
         @Header("Authorization") token: String,
         @Body requestBody: RequestBody
     ): BookResponse
+
+    @POST("/user/personality")
+    suspend fun postPersona(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    ): LoginResponse
 }

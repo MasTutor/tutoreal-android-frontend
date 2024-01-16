@@ -1,5 +1,6 @@
 package com.mastutor.tutoreal.ui.screen.survey
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +15,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +42,7 @@ import com.mastutor.tutoreal.data.local.Question
 import com.mastutor.tutoreal.data.local.QuestionsData
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.theme.TutorealTheme
+import com.mastutor.tutoreal.util.AuthUiState
 import com.mastutor.tutoreal.viewmodel.SurveyViewModel
 
 //Stateful
@@ -45,6 +51,9 @@ fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
+    SideEffect {
+        viewModel.getToken()
+    }
     val context = LocalContext.current
     val currentPageIndex = remember {
         mutableIntStateOf(0)
@@ -55,21 +64,42 @@ fun SurveyScreen(
     val (selectedChoice, onChoiceSelected) = remember {
         mutableStateOf(choices[2])
     }
-    SurveyContent(
-        question = visibleQuestion,
-        choices = choices, selectedChoice = selectedChoice,
-        onChoiceSelected = { choice, idx ->
-            onChoiceSelected(choice)
-            answer.intValue = idx + 1
-        },
-        onNextClicked = {
-            if (currentPageIndex.intValue != 24) {
-                viewModel.addAnswers(answer, currentPageIndex)
-                onChoiceSelected(choices[2])
-                answer.intValue = 3
-                currentPageIndex.intValue++
-            } else {
-                viewModel.addAnswers(answer, currentPageIndex)
+    viewModel.personaResponse.collectAsState(initial = AuthUiState.Idle).value.let {uiState ->
+        when(uiState){
+            is AuthUiState.Idle ->{
+                SurveyContent(
+                    question = visibleQuestion,
+                    choices = choices, selectedChoice = selectedChoice,
+                    onChoiceSelected = { choice, idx ->
+                        onChoiceSelected(choice)
+                        answer.intValue = idx + 1
+                    },
+                    onNextClicked = {
+                        if (currentPageIndex.intValue != 24) {
+                            viewModel.addAnswers(answer, currentPageIndex)
+                            onChoiceSelected(choices[2])
+                            answer.intValue = 3
+                            currentPageIndex.intValue++
+                        } else {
+                            viewModel.addAnswers(answer, currentPageIndex)
+                            viewModel.postPersona()
+                        }
+                    },
+
+                    )
+            }
+            is AuthUiState.Load -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Loading")
+                    CircularProgressIndicator(color = Color.Black)
+                }
+            }
+            is AuthUiState.Success -> {
                 navHostController.navigate(Screen.MatchmakingResult.route){
                     popUpTo(Screen.Matchmaking.route) {
                         saveState = true
@@ -78,9 +108,38 @@ fun SurveyScreen(
                     restoreState = true
                 }
             }
-        },
+            is AuthUiState.Failure -> {
+                SurveyContent(
+                    question = visibleQuestion,
+                    choices = choices, selectedChoice = selectedChoice,
+                    onChoiceSelected = { choice, idx ->
+                        onChoiceSelected(choice)
+                        answer.intValue = idx + 1
+                    },
+                    onNextClicked = {
+                        if (currentPageIndex.intValue != 24) {
+                            viewModel.addAnswers(answer, currentPageIndex)
+                            onChoiceSelected(choices[2])
+                            answer.intValue = 3
+                            currentPageIndex.intValue++
+                        } else {
+                            viewModel.addAnswers(answer, currentPageIndex)
+                            viewModel.postPersona()
+                        }
+                    },
 
-        )
+                    )
+                LaunchedEffect(key1 = true) {
+                    Toast.makeText(
+                        context,
+                        "Gagal cek koneksi internet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
 }
 
 //Stateless and please don't make this shit stateful

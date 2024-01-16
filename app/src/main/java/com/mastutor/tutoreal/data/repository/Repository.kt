@@ -268,6 +268,24 @@ class Repository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    fun postPersona(token: String, persona:List<Int>): Flow<AuthUiState<LoginResponse>>{
+        val jsonObject = JSONObject()
+        val stringPersona = persona.joinToString(separator = ",", prefix = "[", postfix = "]")
+        jsonObject.put("Persona", stringPersona)
+        val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                emit(AuthUiState.Idle)
+                emit(AuthUiState.Load)
+                val responsePersona = tutorealApiService.postPersona(token, requestBody)
+                emit(AuthUiState.Success(responsePersona))
+            }catch (e: Exception) {
+                emit(AuthUiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun editProfile(
         token: String,
         name: String? = null,
