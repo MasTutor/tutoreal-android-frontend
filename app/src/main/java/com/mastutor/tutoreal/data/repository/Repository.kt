@@ -221,7 +221,7 @@ class Repository @Inject constructor(
             try {
                 emit(UiState.Loading)
                 val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100).tutors.items.shuffled().take(5)
-                val percent0 = Math.round(Random.nextDouble(90.00, 100.00) * 1000.0) / 1000.0
+                val percent0 = Math.round(Random.nextDouble(90.00, 98.00) * 1000.0) / 1000.0
                 val percent1 = Math.round(Random.nextDouble(80.00, percent0) * 1000.0) / 1000.0
                 val percent2 = Math.round(Random.nextDouble(70.00, percent1) * 1000.0) / 1000.0
                 val percent3 = Math.round(Random.nextDouble(65.00, percent2) * 1000.0) / 1000.0
