@@ -221,7 +221,7 @@ class Repository @Inject constructor(
             try {
                 emit(UiState.Loading)
                 val responseTutors = tutorealApiService.searchTutor(page = 1, size = 100).tutors.items.shuffled().take(5)
-                val percent0 = Math.round(Random.nextDouble(90.00, 100.00) * 1000.0) / 1000.0
+                val percent0 = Math.round(Random.nextDouble(90.00, 98.00) * 1000.0) / 1000.0
                 val percent1 = Math.round(Random.nextDouble(80.00, percent0) * 1000.0) / 1000.0
                 val percent2 = Math.round(Random.nextDouble(70.00, percent1) * 1000.0) / 1000.0
                 val percent3 = Math.round(Random.nextDouble(65.00, percent2) * 1000.0) / 1000.0
@@ -263,6 +263,24 @@ class Repository @Inject constructor(
                 val responseHistory = tutorealApiService.newHistory(token, requestBody)
                 emit(AuthUiState.Success(responseHistory))
             } catch (e: Exception) {
+                emit(AuthUiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun postPersona(token: String, persona:List<Int>): Flow<AuthUiState<LoginResponse>>{
+        val jsonObject = JSONObject()
+        val stringPersona = persona.joinToString(separator = ",", prefix = "[", postfix = "]")
+        jsonObject.put("Persona", stringPersona)
+        val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                emit(AuthUiState.Idle)
+                emit(AuthUiState.Load)
+                val responsePersona = tutorealApiService.postPersona(token, requestBody)
+                emit(AuthUiState.Success(responsePersona))
+            }catch (e: Exception) {
                 emit(AuthUiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
