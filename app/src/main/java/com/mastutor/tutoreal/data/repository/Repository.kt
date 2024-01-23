@@ -11,6 +11,7 @@ import com.mastutor.tutoreal.data.remote.BookResponse
 import com.mastutor.tutoreal.data.remote.ImgurApiService
 import com.mastutor.tutoreal.data.remote.ImgurResponse
 import com.mastutor.tutoreal.data.remote.LoginResponse
+import com.mastutor.tutoreal.data.remote.MatchedResponse
 import com.mastutor.tutoreal.data.remote.ProfileResponse
 import com.mastutor.tutoreal.data.remote.RegisterResponse
 import com.mastutor.tutoreal.data.remote.ScheduleResponse
@@ -52,6 +53,8 @@ class Repository @Inject constructor(
             )
         }
     ).flow
+
+
 
     fun getUserExist(): Flow<Boolean> {
         return sessionPreferences.getUserExist()
@@ -238,6 +241,21 @@ class Repository @Inject constructor(
                 emit(UiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
+    }
+    fun getMatchedUser(token: String, category: String? = null): Flow<UiState<MatchedResponse>>{
+        return flow{
+
+            emit(UiState.Loading)
+            val responseMatched = tutorealApiService.matchmaking(token, category)
+            if(responseMatched.error == "true"){
+                emit(UiState.Failure(java.lang.Exception()))
+            }else{
+                emit(UiState.Success(responseMatched))
+            }
+
+
+        }.flowOn(Dispatchers.IO)
+
     }
 
     fun newHistory(

@@ -77,4 +77,54 @@ object CategoriesData {
             idx = 8
         ),
     )
+    val categoriesNoAll = listOf(
+        Category(
+            id = "Technology",
+            name = "Teknologi",
+            icon = Icons.Outlined.CorporateFare,
+            idx = 1
+        ),
+        Category(
+            id = "Arts",
+            name = "Seni",
+            icon = Icons.Outlined.Colorize,
+            idx = 2
+        ),
+        Category(
+            id = "Multimedia",
+            name = "Multimedia",
+            icon = Icons.Outlined.Movie,
+            idx = 3
+        ),
+        Category(
+            id = "Music",
+            name = "Musik",
+            icon = Icons.Outlined.LibraryMusic,
+            idx = 4
+        ),
+        Category(
+            id = "Social",
+            name = "Sosial",
+            icon = Icons.Outlined.Chat,
+            idx = 5
+        ),
+        Category(
+            id = "Math",
+            name = "Matematika",
+            icon = Icons.Outlined.Calculate,
+            idx = 6
+        ),
+        Category(
+            id = "Science",
+            name = "Sains",
+            icon = Icons.Outlined.Biotech,
+            idx = 7
+        ),
+        Category(
+            id = "Language",
+            name = "Bahasa",
+            icon = Icons.Outlined.Translate,
+            idx = 8
+        ),
+    )
 }

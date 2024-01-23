@@ -39,7 +39,7 @@ fun MatchTutorComponent(
     name: String,
     job: String,
     price: String,
-    percentage: Double,
+    percentage: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -109,7 +109,7 @@ fun MatchTutorComponent(
                     .background(color = MaterialTheme.colorScheme.primary)
                     .size(78.dp)
             ) {
-                Text(text = "$percentage%", color = Color.White)
+                Text(text = percentage, color = Color.White)
             }
         }
     }
@@ -256,7 +256,7 @@ fun TutorComponentPreview() {
                 name = "Jim Burton",
                 job = "Con Artist",
                 price = "Rp 30.000",
-                percentage = 98.0,
+                percentage = "58.00%",
                 onClick = {}
             )
             TutorComponentBig(
