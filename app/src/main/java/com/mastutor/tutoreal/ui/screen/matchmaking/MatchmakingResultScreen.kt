@@ -1,12 +1,15 @@
 package com.mastutor.tutoreal.ui.screen.matchmaking
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -14,7 +17,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,71 +32,116 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mastutor.tutoreal.data.remote.datahelper.ShittyHelper
+import com.mastutor.tutoreal.data.local.CategoriesData
+import com.mastutor.tutoreal.data.remote.DataItemMatched
+import com.mastutor.tutoreal.ui.components.CategoryComponentSmall
 import com.mastutor.tutoreal.ui.components.MatchTutorComponent
 import com.mastutor.tutoreal.ui.navigation.screen.Screen
 import com.mastutor.tutoreal.ui.screen.failure.FailureScreen
 import com.mastutor.tutoreal.util.UiState
 import com.mastutor.tutoreal.viewmodel.ShittyViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MatchmakingResultScreen(modifier: Modifier = Modifier, viewModel: ShittyViewModel = hiltViewModel(), navHostController: NavHostController) {
-    LaunchedEffect(key1 = true) {
-        viewModel.getShitty()
+    SideEffect {
+        viewModel.getToken()
     }
 
-    viewModel.shittyResponse.collectAsState(initial = UiState.Loading).value.let {uiState ->
-        when(uiState){
-            is UiState.Loading -> {
-                Column(
-                    modifier = modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = "Loading")
-                    CircularProgressIndicator(color = Color.Black)
-                }
-            }
-            is UiState.Success -> {
-                uiState.data?.let {
-                    MatchmakingResultContent(
-                        modifier = modifier,
-                        tutorData = it,
-                        onClick = {id ->
-                            navHostController.navigate(Screen.Tutor.createRoute(id)) {
-                                popUpTo(Screen.Home.route) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+    var selectedCategory: String? by remember {
+        mutableStateOf("Technology")
+    }
+    val selectedCategoryIdx = remember { mutableIntStateOf(0) }
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.getShitty()
+        viewModel.getMatched(selectedCategory)
+    }
+    Column(modifier = Modifier.fillMaxSize()) {
+
+
+        LazyRow(
+            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
+            state = lazyListState,
+            flingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
+        ) {
+            itemsIndexed(CategoriesData.categoriesNoAll) { index, category ->
+                CategoryComponentSmall(
+                    category = category,
+                    modifier = Modifier.padding(start = 5.dp, end = 5.dp),
+                    isSelected = index == selectedCategoryIdx.intValue,
+                    onClick = {
+                        selectedCategory = category.id
+                        if (selectedCategoryIdx.intValue != index) {
+                            viewModel.getMatched(selectedCategory)
                         }
-                    )
-                }
+                        selectedCategoryIdx.intValue = index
+                        coroutineScope.launch {
+                            lazyListState.animateScrollToItem(index)
+                        }
+                    }
+                )
             }
-            is UiState.Failure -> {
-                FailureScreen(
-                    onRefreshClicked = { viewModel.getShitty() })
+        }
+
+        viewModel.matchedResponse.collectAsState(initial = UiState.Loading).value.let { uiState ->
+            when (uiState) {
+                is UiState.Loading -> {
+                    Column(
+                        modifier = modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "Loading")
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+
+                is UiState.Success -> {
+                    uiState.data?.let {
+                        MatchmakingResultContent(
+                            modifier = modifier.fillMaxSize(),
+                            tutorData = it.data,
+                            onClick = { id ->
+                                navHostController.navigate(Screen.Tutor.createRoute(id)) {
+                                    popUpTo(Screen.Home.route) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+
+                            },
+
+                            )
+                    }
+                }
+
+                is UiState.Failure -> {
+                    FailureScreen(
+                        onRefreshClicked = { viewModel.getMatched(selectedCategory) })
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MatchmakingResultContent(
     modifier: Modifier,
-   /* imageUrl: String,
-    onBackClicked: () -> Unit,
-    onUserClicked: () -> Unit,*/
-    tutorData: List<ShittyHelper>,
-    onClick: (String) -> Unit
+    /* imageUrl: String,
+     onBackClicked: () -> Unit,
+     onUserClicked: () -> Unit,*/
+    tutorData: List<DataItemMatched>,
+    onClick: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.background)
-            .fillMaxWidth()
             .verticalScroll(rememberScrollState())
     ) {
         /*Row(
@@ -140,12 +195,12 @@ fun MatchmakingResultContent(
         Column(modifier = Modifier.padding(top = 15.dp)) {
             tutorData.forEach { tutor ->
                 MatchTutorComponent(
-                    photoUrl = tutor.tutorResponse.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
-                    name = tutor.tutorResponse.nama,
-                    job = tutor.tutorResponse.specialization,
-                    price = tutor.tutorResponse.price.ifEmpty { "Rp. 30.000" },
-                    percentage = tutor.percentage,
-                    onClick = {onClick(tutor.tutorResponse.id)},
+                    photoUrl = tutor.picture.ifEmpty { "https://data.1freewallpapers.com/detail/face-surprise-emotions-vector-art-minimalism.jpg" },
+                    name = tutor.nama,
+                    job = tutor.specialization,
+                    price = tutor.price.ifEmpty { "Rp. 30.000" },
+                    percentage = tutor.accuracy,
+                    onClick = {onClick(tutor.id)},
                     modifier = Modifier.padding(5.dp)
                 )
 

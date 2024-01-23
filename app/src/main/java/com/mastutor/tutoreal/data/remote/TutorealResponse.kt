@@ -217,3 +217,54 @@ data class HistoryDataItem(
     @field:SerializedName("status")
     val status: String? = null
 )
+
+data class MatchedResponse(
+
+    @field:SerializedName("data")
+    val data: List<DataItemMatched>,
+
+    @field:SerializedName("error")
+    val error: String? = null,
+
+    @field:SerializedName("message")
+    val message: String? = null
+)
+
+data class DataItemMatched(
+
+    @field:SerializedName("Specialization")
+    val specialization: String,
+
+    @field:SerializedName("Nama")
+    val nama: String,
+
+    @field:SerializedName("hasPenis")
+    val hasPenis: Int,
+
+    @field:SerializedName("AgesRanges")
+    val agesRanges: String,
+
+    @field:SerializedName("Categories")
+    val categories: String,
+
+    @field:SerializedName("UserId")
+    val userId: String,
+
+    @field:SerializedName("AboutMe")
+    val aboutMe: String,
+
+    @field:SerializedName("price")
+    val price: String,
+
+    @field:SerializedName("accuracy")
+    val accuracy: String,
+
+    @field:SerializedName("id")
+    val id: String,
+
+    @field:SerializedName("SkillsAndExperiences")
+    val skillsAndExperiences: String,
+
+    @field:SerializedName("picture")
+    val picture: String
+)

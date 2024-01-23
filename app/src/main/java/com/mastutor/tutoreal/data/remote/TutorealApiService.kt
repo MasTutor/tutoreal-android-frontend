@@ -55,4 +55,10 @@ interface TutorealApiService {
         @Header("Authorization") token: String,
         @Body requestBody: RequestBody
     ): LoginResponse
+
+    @GET("/user/matchmaking")
+    suspend fun matchmaking(
+        @Header("Authorization") token: String,
+        @Query("category") category: String? = null
+    ): MatchedResponse
 }
