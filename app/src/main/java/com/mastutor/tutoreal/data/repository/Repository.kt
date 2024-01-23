@@ -244,13 +244,16 @@ class Repository @Inject constructor(
     }
     fun getMatchedUser(token: String, category: String? = null): Flow<UiState<MatchedResponse>>{
         return flow{
-
-            emit(UiState.Loading)
-            val responseMatched = tutorealApiService.matchmaking(token, category)
-            if(responseMatched.error == "true"){
-                emit(UiState.Failure(java.lang.Exception()))
-            }else{
-                emit(UiState.Success(responseMatched))
+            try {
+                emit(UiState.Loading)
+                val responseMatched = tutorealApiService.matchmaking(token, category)
+                if (responseMatched.error == "true") {
+                    emit(UiState.Failure(java.lang.Exception()))
+                } else {
+                    emit(UiState.Success(responseMatched))
+                }
+            }catch(e: Exception){
+                emit(UiState.Failure(e))
             }
 
 
